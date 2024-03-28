@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.navigation.compose.rememberNavController
+import de.malteharms.check.data.SCREEN_INNER_PADDING
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.ui.components.FloatingBottomNavigation
 
@@ -53,7 +54,7 @@ fun App() {
         Box(modifier = Modifier
             .padding(top = innerPadding.calculateTopPadding())
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(SCREEN_INNER_PADDING.dp)
         ) {
             Navigation(navController)
         }

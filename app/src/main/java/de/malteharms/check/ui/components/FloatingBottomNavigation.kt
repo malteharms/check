@@ -23,17 +23,25 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.platform.LocalConfiguration
 import de.malteharms.check.data.getBottomNavigationItems
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-
+import de.malteharms.check.data.NAVIGATION_BAR_BOTTOM_PADDING
+import de.malteharms.check.data.NAVIGATION_BAR_CORNER_RADIUS
+import de.malteharms.check.data.NAVIGATION_BAR_INNER_HEIGHT
+import de.malteharms.check.data.NAVIGATION_BAR_TEXT_SIZE
+import de.malteharms.check.data.NAVIGATION_BAR_WIDTH_IN_PERCENT
 
 
 @Composable
@@ -44,7 +52,7 @@ fun FloatingBottomNavigation(
 
     val configuration = LocalConfiguration.current
     val screenWidth: Int = configuration.screenWidthDp
-    val navigationWith: Double = screenWidth * 0.7
+    val navigationWith: Double = screenWidth * NAVIGATION_BAR_WIDTH_IN_PERCENT
 
     var selectedIcon by remember { mutableIntStateOf(0) }
 
@@ -54,12 +62,12 @@ fun FloatingBottomNavigation(
     ) {
         Box(
             modifier = Modifier
-                .padding(bottom = 30.dp)
+                .padding(bottom = NAVIGATION_BAR_BOTTOM_PADDING.dp)
                 .align(Alignment.TopCenter)
-                .clip(shape = RoundedCornerShape(15.dp))
+                .clip(shape = RoundedCornerShape(NAVIGATION_BAR_CORNER_RADIUS.dp))
                 .background(blue80)
                 .width(navigationWith.dp)
-                .height(40.dp)
+                .height(NAVIGATION_BAR_INNER_HEIGHT.dp)
                 .shadow(30.dp, ambientColor = Color.Black)
 
         ) {
@@ -74,19 +82,32 @@ fun FloatingBottomNavigation(
                         MaterialTheme.colorScheme.primary
                     } else Color.White
 
-                    Image(
-                        painter = painterResource(id = item.icon),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(color),
-                        modifier = Modifier
-                            .clickable {
-                                // update the inner state to change icon color
-                                selectedIcon = index
+                    Column (
+                        modifier = Modifier.fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Bottom
+                    ){
+                        Image(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color),
+                            modifier = Modifier
+                                .clickable {
+                                    // update the inner state to change icon color
+                                    selectedIcon = index
 
-                                // navigate to the new selected page
-                                navController.navigate(item.route)
-                            } // clickable
-                    ) // Image
+                                    // navigate to the new selected page
+                                    navController.navigate(item.route)
+                                } // clickable
+                        ) // Image
+
+                        Text(
+                            text = item.label,
+                            color = Color.White,
+                            fontSize = NAVIGATION_BAR_TEXT_SIZE.sp
+                        )
+                    }
+
                 } // items
             } // Row
         } // Box

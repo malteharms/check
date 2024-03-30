@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.platform.LocalConfiguration
 import de.malteharms.check.data.getBottomNavigationItems
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -92,6 +93,7 @@ fun FloatingBottomNavigation(
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(color),
                             modifier = Modifier
+                                .size(25.dp)
                                 .clickable {
                                     // update the inner state to change icon color
                                     selectedIcon = index

@@ -27,6 +27,11 @@ fun getBottomNavigationItems() : List<NavigationItem> {
             route = Screens.TodoRoute.route
         ),
         NavigationItem(
+            label = "Reminder",
+            icon = R.drawable.ic_alarm,
+            route = Screens.ReminderRoute.route
+        ),
+        NavigationItem(
             label = "Food",
             icon = R.drawable.ic_drink,
             route = Screens.FoodRoute.route

@@ -31,6 +31,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderPage(navController: NavController) {
+    // todo remove navController
 
     val sampleItem = ReminderData(
         id = 1,

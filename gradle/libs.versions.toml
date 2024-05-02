@@ -5,6 +5,7 @@ androidx-junit = "1.1.5"
 compose-bom = "2024.02.02"
 core-ktx = "1.12.0"
 dagger-hilt = "2.44"
+datetime = "0.8.1-rc"
 espresso-core = "3.5.1"
 hilt-android = "2.44"
 hilt-android-compiler = "2.44"
@@ -28,6 +29,7 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "datetime" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android-compiler" }
 junit = { module = "junit:junit", version.ref = "junit" }

@@ -69,6 +69,9 @@ dependencies {
     // navigation
     implementation(libs.androidx.navigation.compose)
 
+    // date picker
+    implementation(libs.datetime)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -21,9 +21,21 @@ import androidx.navigation.compose.rememberNavController
 import de.malteharms.check.data.SCREEN_INNER_PADDING
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.ui.components.FloatingBottomNavigation
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
 
 
 class MainActivity : ComponentActivity() {
+
+    private val client = HttpClient(CIO) {
+        install(Logging)
+        install(WebSockets)
+    }
+
+    private val realtimeMessagingClient = KtorRealtimeMessagingClient(client)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

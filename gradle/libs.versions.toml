@@ -10,6 +10,7 @@ espresso-core = "3.5.1"
 hilt-android = "2.44"
 hilt-android-compiler = "2.44"
 junit = "4.13.2"
+kotlinSerialization = "1.8.10"
 kotlinxSerializationJson = "1.5.1"
 ktorVersion = "2.3.7"
 lifecycle-runtime-ktx = "2.7.0"
@@ -35,6 +36,7 @@ datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", vers
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android-compiler" }
 junit = { module = "junit:junit", version.ref = "junit" }
+kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlinSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorVersion" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }

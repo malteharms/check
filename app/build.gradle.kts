@@ -4,6 +4,8 @@ plugins {
 
     kotlin("kapt")
     alias(libs.plugins.daggerHilt)
+
+    id("kotlinx-serialization")
 }
 
 android {

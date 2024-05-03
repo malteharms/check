@@ -34,8 +34,6 @@ class MainActivity : ComponentActivity() {
         install(WebSockets)
     }
 
-    private val realtimeMessagingClient = KtorRealtimeMessagingClient(client)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

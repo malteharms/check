@@ -1,34 +1,25 @@
 package de.malteharms.check.pages.reminder.presentation.components
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePicker
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,49 +31,34 @@ import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import de.malteharms.check.pages.reminder.data.ReminderData
-import de.malteharms.check.pages.reminder.domain.validateNewReminderEntry
+import de.malteharms.check.pages.reminder.data.ReminderItem
+import de.malteharms.check.pages.reminder.domain.ReminderEvent
+import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
+import de.malteharms.check.pages.reminder.domain.convertTimestampToDateString
+import de.malteharms.check.pages.reminder.domain.getCurrentTimestamp
+import de.malteharms.check.pages.reminder.presentation.getAddOrUpdateButtonText
 import de.malteharms.check.ui.components.LeadingIconWithText
 import de.malteharms.check.ui.theme.blue80
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun ReminderBottomSheet(item: ReminderData?) {
+fun ReminderBottomSheet(
+    item: ReminderItem?,
+    onEvent: (ReminderEvent) -> Unit
+) {
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            if (item == null) {
-                // Add new reminder
-                AddReminderItemBottomSheet()
-
-            } else {
-                // Edit existing reminder
-                EditReminderItemBottomSheet(item)
-            }
-        }
+    var title by remember {
+        mutableStateOf(TextFieldValue(text = item?.title ?: ""))
     }
-}
 
+    var pickedDate by remember {
+        mutableLongStateOf(item?.dueDate ?: getCurrentTimestamp())
+    }
 
-@Composable
-fun AddReminderItemBottomSheet() {
-    var title by remember { mutableStateOf(TextFieldValue("")) }
-
-    var pickedDate by remember { mutableStateOf(LocalDate.now()) }
     val formattedDate by remember {
         derivedStateOf {
-            DateTimeFormatter
-                .ofPattern("dd. MMM yyyy")
-                .format(pickedDate)
+            convertTimestampToDateString(pickedDate)
         }
     }
 
@@ -96,7 +72,7 @@ fun AddReminderItemBottomSheet() {
         TextField(
             value = title,
             onValueChange = { newText -> title = newText },
-            placeholder = { Text(text = "Titel") },
+            placeholder = { Text(text = "Titel", color = Color.LightGray) },
             modifier = Modifier.background(Color.Transparent),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
@@ -115,13 +91,34 @@ fun AddReminderItemBottomSheet() {
 
     Spacer(modifier = Modifier.height(20.dp))
 
-    // Add logic to pick an icon (e.g., IconButton with selection functionality)
+    Row (
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround
+    ){
+        if (item != null) {
+            Button(
+                onClick = {
+                    onEvent(ReminderEvent.RemoveItem(item))
+                    onEvent(ReminderEvent.HideDialog)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Text(text = "Reminder Löschen")
+            }
+        }
 
-    Button(
-        onClick = { /* todo validate and send item to server */ },
-        colors = ButtonDefaults.buttonColors(containerColor = blue80)
-    ) {
-        Text("Erinnerung hinzufügen")
+        Button(
+            onClick = {
+                onEvent(ReminderEvent.SetTitle(title.text))
+                onEvent(ReminderEvent.SetDueDate(pickedDate))
+
+                onEvent(ReminderEvent.SaveItem)
+                onEvent(ReminderEvent.HideDialog)
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = blue80)
+        ) {
+            Text(text = getAddOrUpdateButtonText(isItemNew = item == null))
+        }
     }
 
     // date picker
@@ -138,42 +135,6 @@ fun AddReminderItemBottomSheet() {
             initialDate = currentDate,
             title = "Wähle ein Datum",
             allowedDateValidator = { it.isAfter(currentDate) }
-        ) {
-            pickedDate = it
-        }
-    }
-}
-
-
-@Composable
-fun EditReminderItemBottomSheet(item: ReminderData) {
-    val (titleState, setTitleState) = remember { mutableStateOf("") }
-    val (descriptionState, setDescriptionState) = remember { mutableStateOf("") }
-
-    // todo show existing values inside the text box
-
-    Text(text = "Titel:")
-    OutlinedTextField(
-        value = titleState,
-        onValueChange = setTitleState,
-        label = { Text("") }, // No label for existing title
-        modifier = Modifier.fillMaxWidth()
-    )
-    Text(text = "Kategorie:")
-    Text(text = item.iconId.toString()) // Assuming iconId is an Int
-    // Disable icon selection for existing reminders (optional)
-    Text(text = "Beschreibung:")
-    OutlinedTextField(
-        value = descriptionState,
-        onValueChange = setDescriptionState,
-        label = { Text("") }, // No label for existing description
-        modifier = Modifier.fillMaxWidth()
-    )
-    Text(text = "Fällig am:")
-
-    // todo add date picker here
-
-    Button(onClick = { /* Update reminder logic */ }) {
-        Text("Erinnerung aktualisieren")
+        ) { pickedDate = convertLocalDateToTimestamp(it) }
     }
 }

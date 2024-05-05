@@ -1,6 +1,8 @@
 package de.malteharms.check.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,14 +14,18 @@ import de.malteharms.check.pages.cash.ui.Cash
 import de.malteharms.check.pages.food.ui.Food
 import de.malteharms.check.pages.home.ui.Home
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
+import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.ui.SettingsPage
 import de.malteharms.check.pages.todo.ui.Todo
 import de.malteharms.check.pages.welcome.ui.Welcome
 
 @Composable
 fun Navigation(
-    navController: NavHostController
+    navController: NavHostController,
+    reminderViewModel: ReminderViewModel
 ) {
+    val reminderState by reminderViewModel.state.collectAsState()
+
     NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {
 
         // navigation graph for authentication procedure
@@ -45,7 +51,14 @@ fun Navigation(
             composable(Screens.HomeRoute.route) { Home(navController) }
             composable(Screens.CashRoute.route) { Cash(navController = navController) }
             composable(Screens.TodoRoute.route) { Todo(navController = navController) }
-            composable(Screens.ReminderRoute.route) { ReminderPage(navController = navController) }
+
+            composable(Screens.ReminderRoute.route) {
+                ReminderPage(
+                    state = reminderState,
+                    onEvent = reminderViewModel::onEvent
+                )
+            }
+
             composable(Screens.FoodRoute.route) { Food(navController = navController) }
 
         }

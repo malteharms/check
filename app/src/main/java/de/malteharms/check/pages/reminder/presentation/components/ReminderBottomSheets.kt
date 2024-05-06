@@ -71,7 +71,10 @@ fun ReminderBottomSheet(
         Icon(imageVector = Icons.Default.Edit, contentDescription = null)
         TextField(
             value = title,
-            onValueChange = { newText -> title = newText },
+            onValueChange = { newText ->
+                title = newText
+                onEvent(ReminderEvent.SetTitle(newText.text))
+            },
             placeholder = { Text(text = "Titel", color = Color.LightGray) },
             modifier = Modifier.background(Color.Transparent),
             colors = TextFieldDefaults.colors(
@@ -99,6 +102,10 @@ fun ReminderBottomSheet(
             Button(
                 onClick = {
                     onEvent(ReminderEvent.RemoveItem(item))
+
+                    // this hide dialog is necessary, because the
+                    // bottom sheet would not close correctly
+                    // the reason isn't known yet
                     onEvent(ReminderEvent.HideDialog)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
@@ -109,11 +116,7 @@ fun ReminderBottomSheet(
 
         Button(
             onClick = {
-                onEvent(ReminderEvent.SetTitle(title.text))
-                onEvent(ReminderEvent.SetDueDate(pickedDate))
-
                 onEvent(ReminderEvent.SaveItem)
-                onEvent(ReminderEvent.HideDialog)
             },
             colors = ButtonDefaults.buttonColors(containerColor = blue80)
         ) {
@@ -135,6 +138,9 @@ fun ReminderBottomSheet(
             initialDate = currentDate,
             title = "Wähle ein Datum",
             allowedDateValidator = { it.isAfter(currentDate) }
-        ) { pickedDate = convertLocalDateToTimestamp(it) }
+        ) {
+            pickedDate = convertLocalDateToTimestamp(it)
+            onEvent(ReminderEvent.SetDueDate(pickedDate))
+        }
     }
 }

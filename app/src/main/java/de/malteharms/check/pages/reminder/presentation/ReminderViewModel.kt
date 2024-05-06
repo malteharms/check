@@ -42,14 +42,27 @@ class ReminderViewModel(
     fun onEvent(event: ReminderEvent) {
         when (event) {
 
-            is ReminderEvent.RemoveItem -> {
-                viewModelScope.launch {
-                    dao.removeReminderItem(reminderItem = event.item)
-                }
+            ReminderEvent.ShowNewDialog -> {
+                _reminderState.update { it.copy(
+                    isAddingItem = true
+                ) }
+            }
+
+            ReminderEvent.ShowEditDialog -> {
+                _reminderState.update { it.copy(
+                    isEditingItem = true
+                ) }
+            }
+
+            ReminderEvent.HideDialog -> {
+                _reminderState.update { it.copy(
+                    isAddingItem = false,
+                    isEditingItem = false
+                ) }
             }
 
             ReminderEvent.SaveItem -> {
-                val title = state.value.title
+                val title = state.value.title.trim()
                 val dueDate = state.value.dueDate
 
                 if (title.isBlank() || dueDate == 0L) {
@@ -73,7 +86,7 @@ class ReminderViewModel(
                 _reminderState.update { it.copy(
                     isAddingItem = false,
                     title = "",
-                    dueDate = 0L
+                    dueDate = getCurrentTimestamp()
                 ) }
 
             }
@@ -97,7 +110,26 @@ class ReminderViewModel(
                 viewModelScope.launch {
                     dao.updateReminderItem(updatedReminderItem)
                 }
+
+                _reminderState.update { it.copy(
+                    isAddingItem = false,
+                    title = "",
+                    dueDate = getCurrentTimestamp()
+                ) }
             }
+
+            is ReminderEvent.RemoveItem -> {
+                viewModelScope.launch {
+                    dao.removeReminderItem(reminderItem = event.item)
+                }
+
+                _reminderState.update { it.copy(
+                    isAddingItem = false,
+                    title = "",
+                    dueDate = getCurrentTimestamp()
+                ) }
+            }
+
 
             is ReminderEvent.SetTitle -> {
                 _reminderState.update { it.copy(
@@ -108,25 +140,6 @@ class ReminderViewModel(
             is ReminderEvent.SetDueDate -> {
                 _reminderState.update { it.copy(
                     dueDate = event.dueDate
-                ) }
-            }
-
-            ReminderEvent.ShowNewDialog -> {
-                _reminderState.update { it.copy(
-                    isAddingItem = true
-                ) }
-            }
-
-            ReminderEvent.ShowEditDialog -> {
-                _reminderState.update { it.copy(
-                    isEditingItem = true
-                ) }
-            }
-
-            ReminderEvent.HideDialog -> {
-                _reminderState.update { it.copy(
-                    isAddingItem = false,
-                    isEditingItem = false
                 ) }
             }
 

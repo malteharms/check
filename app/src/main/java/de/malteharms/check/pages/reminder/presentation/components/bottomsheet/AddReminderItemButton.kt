@@ -1,4 +1,4 @@
-package de.malteharms.check.pages.reminder.presentation.components
+package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons

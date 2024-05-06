@@ -1,5 +1,6 @@
 package de.malteharms.check.pages.reminder.presentation
 
+import de.malteharms.check.pages.reminder.data.ReminderCategory
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.pages.reminder.domain.convertTimestampToLocalDate
 import de.malteharms.check.pages.reminder.domain.daysBetween
@@ -56,5 +57,15 @@ fun getSortTypeRepresentation(sortType: ReminderSortType): String {
     return when(sortType) {
         ReminderSortType.TITLE -> "Titel"
         ReminderSortType.DUE_DATE -> "Fällig am"
+    }
+}
+
+fun getCategoryRepresentation(category: ReminderCategory): String {
+    return when(category) {
+        ReminderCategory.GENERAL -> "Allgemein"
+        ReminderCategory.BIRTHDAY -> "Geburtstag"
+        ReminderCategory.AUTOMATIC_RENEW -> "Automatische Erneuerung"
+        ReminderCategory.MANUAL_RENEW -> "Maneuelle Erneuerung"
+        ReminderCategory.IMPORTANT_APPOINTMENT -> "Wichtiger Termin"
     }
 }

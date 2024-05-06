@@ -9,7 +9,7 @@ import de.malteharms.check.pages.reminder.data.ReminderItem
 
 @Database(
     entities = [ReminderItem::class],
-    version = 1,
+    version = 4,
     exportSchema = false
 )
 abstract class CheckDatabase: RoomDatabase() {

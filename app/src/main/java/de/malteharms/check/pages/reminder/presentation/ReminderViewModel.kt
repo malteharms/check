@@ -3,6 +3,7 @@ package de.malteharms.check.pages.reminder.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.data.database.CheckDao
+import de.malteharms.check.pages.reminder.data.ReminderCategory
 import de.malteharms.check.pages.reminder.data.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.data.ReminderSortType
@@ -48,8 +49,11 @@ class ReminderViewModel(
                 ) }
             }
 
-            ReminderEvent.ShowEditDialog -> {
+            is ReminderEvent.ShowEditDialog -> {
                 _reminderState.update { it.copy(
+                    title = event.item.title,
+                    dueDate = event.item.dueDate,
+                    category = event.item.category,
                     isEditingItem = true
                 ) }
             }
@@ -64,6 +68,7 @@ class ReminderViewModel(
             ReminderEvent.SaveItem -> {
                 val title = state.value.title.trim()
                 val dueDate = state.value.dueDate
+                val category = state.value.category
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -74,6 +79,7 @@ class ReminderViewModel(
                 val newReminderItem = ReminderItem(
                     title = title,
                     dueDate = dueDate,
+                    category = category,
                     lastUpdate = currentTimestamp,
                     creationDate = currentTimestamp
                 )
@@ -85,7 +91,9 @@ class ReminderViewModel(
                 // reset to the default state
                 _reminderState.update { it.copy(
                     isAddingItem = false,
+                    isEditingItem = false,
                     title = "",
+                    category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
 
@@ -94,6 +102,7 @@ class ReminderViewModel(
             is ReminderEvent.UpdateItem -> {
                 val title = state.value.title
                 val dueDate = state.value.dueDate
+                val category = state.value.category
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -103,6 +112,7 @@ class ReminderViewModel(
                     id = event.itemToUpdate.id,
                     title = title,
                     dueDate = dueDate,
+                    category = category,
                     creationDate = event.itemToUpdate.creationDate,
                     lastUpdate = getCurrentTimestamp()
                 )
@@ -113,7 +123,9 @@ class ReminderViewModel(
 
                 _reminderState.update { it.copy(
                     isAddingItem = false,
+                    isEditingItem = false,
                     title = "",
+                    category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
             }
@@ -125,7 +137,9 @@ class ReminderViewModel(
 
                 _reminderState.update { it.copy(
                     isAddingItem = false,
+                    isEditingItem = false,
                     title = "",
+                    category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
             }
@@ -140,6 +154,12 @@ class ReminderViewModel(
             is ReminderEvent.SetDueDate -> {
                 _reminderState.update { it.copy(
                     dueDate = event.dueDate
+                ) }
+            }
+
+            is ReminderEvent.SetCategory -> {
+                _reminderState.update { it.copy(
+                    category = event.category
                 ) }
             }
 

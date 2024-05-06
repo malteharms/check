@@ -18,7 +18,7 @@ fun LeadingIconWithText(
     modifier: Modifier
 ) {
     Row (
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
         Icon(imageVector = icon, contentDescription = null)

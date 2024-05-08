@@ -38,7 +38,7 @@ import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddReminderItemButton
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
-import de.malteharms.check.pages.reminder.presentation.components.ReminderItem
+import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
 import de.malteharms.check.ui.theme.blue60
 
 
@@ -53,13 +53,6 @@ fun ReminderPage(
     var currentEditItem: ReminderItem? by remember {
         mutableStateOf(null)
     }
-
-    val reminderItemModifier: Modifier = Modifier
-        .clip(shape = CircleShape)
-        .fillMaxWidth()
-        .background(blue60)
-        .padding(5.dp)
-        .padding(horizontal = 10.dp)
 
     Scaffold (
         floatingActionButton = {
@@ -106,13 +99,12 @@ fun ReminderPage(
 
             items(state.items) { reminderItem ->
 
-                ReminderItem(
-                    modifier = reminderItemModifier.clickable {
+                ReminderItemRow(
+                    item = reminderItem,
+                    onClick =  {
                         currentEditItem = reminderItem
                         onEvent(ReminderEvent.ShowEditDialog(reminderItem))
-                    },
-                    title = reminderItem.title,
-                    due = reminderItem.dueDate
+                    }
                 )
             }
         }

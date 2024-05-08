@@ -18,5 +18,4 @@ data class ReminderItem(
     val creationDate: Long,
     val lastUpdate: Long,
 
-
     )

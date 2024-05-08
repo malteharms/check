@@ -2,6 +2,7 @@ package de.malteharms.check.pages.reminder.domain
 
 import de.malteharms.check.pages.reminder.data.ReminderCategory
 import de.malteharms.check.pages.reminder.data.ReminderItem
+import de.malteharms.check.pages.reminder.data.ReminderNotification
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 
 
@@ -14,6 +15,7 @@ sealed interface ReminderEvent {
     data class SetTitle(val title: String): ReminderEvent
     data class SetDueDate(val dueDate: Long): ReminderEvent
     data class SetCategory(val category: ReminderCategory): ReminderEvent
+    data class SetNotification(val notification: ReminderNotification?): ReminderEvent
 
     data object ShowNewDialog: ReminderEvent
     data class ShowEditDialog(val item: ReminderItem): ReminderEvent

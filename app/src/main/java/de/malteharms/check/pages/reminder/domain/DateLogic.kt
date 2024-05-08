@@ -1,5 +1,6 @@
 package de.malteharms.check.pages.reminder.domain
 
+import de.malteharms.check.pages.reminder.data.ReminderNotificationRange
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -22,6 +23,18 @@ fun getDeviceTimeZone(): ZoneId {
 
 fun daysBetween(dateToReach: LocalDate, today: LocalDate = LocalDate.now()): Period {
     return today.until(dateToReach)
+}
+
+// TODO Test this method
+fun calculateNotificationDate(
+    dueDate: LocalDate,
+    valueForNotification: Int,
+    daysOrMonths: ReminderNotificationRange
+): LocalDate {
+    return when (daysOrMonths) {
+        ReminderNotificationRange.DAYS -> dueDate.minusDays(valueForNotification.toLong())
+        ReminderNotificationRange.MONTHS -> dueDate.minusMonths(valueForNotification.toLong())
+    }
 }
 
 /* Timestamp <-> LocalDate */

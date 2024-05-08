@@ -69,6 +69,7 @@ class ReminderViewModel(
                 val title = state.value.title.trim()
                 val dueDate = state.value.dueDate
                 val category = state.value.category
+                val notification = state.value.notification
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -80,6 +81,7 @@ class ReminderViewModel(
                     title = title,
                     dueDate = dueDate,
                     category = category,
+                    notification = notification?.exportForDatabase(),
                     lastUpdate = currentTimestamp,
                     creationDate = currentTimestamp
                 )
@@ -93,6 +95,7 @@ class ReminderViewModel(
                     isAddingItem = false,
                     isEditingItem = false,
                     title = "",
+                    notification = null,
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -103,6 +106,7 @@ class ReminderViewModel(
                 val title = state.value.title
                 val dueDate = state.value.dueDate
                 val category = state.value.category
+                val notification = state.value.notification
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -113,6 +117,7 @@ class ReminderViewModel(
                     title = title,
                     dueDate = dueDate,
                     category = category,
+                    notification = notification?.exportForDatabase(),
                     creationDate = event.itemToUpdate.creationDate,
                     lastUpdate = getCurrentTimestamp()
                 )
@@ -125,6 +130,7 @@ class ReminderViewModel(
                     isAddingItem = false,
                     isEditingItem = false,
                     title = "",
+                    notification = null,
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -139,6 +145,7 @@ class ReminderViewModel(
                     isAddingItem = false,
                     isEditingItem = false,
                     title = "",
+                    notification = null,
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -167,6 +174,11 @@ class ReminderViewModel(
                 _reminderSortType.value = event.sortType
             }
 
+            is ReminderEvent.SetNotification -> {
+                _reminderState.update { it.copy(
+                    notification = event.notification
+                ) }
+            }
         }
     }
 

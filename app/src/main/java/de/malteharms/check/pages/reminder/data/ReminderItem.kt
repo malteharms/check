@@ -11,6 +11,7 @@ data class ReminderItem(
 
     val title: String,
     val category: ReminderCategory = ReminderCategory.GENERAL,
+    val notification: String? = null,
 
     val todoRelation: Int? = null,
 

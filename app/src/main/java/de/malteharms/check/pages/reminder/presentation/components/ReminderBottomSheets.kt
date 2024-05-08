@@ -39,6 +39,8 @@ import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
 import de.malteharms.check.pages.reminder.domain.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.domain.getCurrentTimestamp
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice
+import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableNotificationRow
+import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableTitleRow
 import de.malteharms.check.pages.reminder.presentation.getAddOrUpdateButtonText
 import de.malteharms.check.ui.components.LeadingIconWithText
 import de.malteharms.check.ui.theme.blue80
@@ -50,6 +52,7 @@ fun ReminderBottomSheet(
     item: ReminderItem?,
     onEvent: (ReminderEvent) -> Unit
 ) {
+    val dateDialogState = rememberMaterialDialogState()
 
     var title by remember {
         mutableStateOf(TextFieldValue(text = item?.title ?: ""))
@@ -65,13 +68,20 @@ fun ReminderBottomSheet(
         }
     }
 
-    val dateDialogState = rememberMaterialDialogState()
+    var notification by remember {
+        mutableStateOf(item?.notification)
+    }
+
+    val editableRowModifier = Modifier.fillMaxWidth()
+    val editableRowAlignment = Alignment.CenterVertically
+    val editableRowArrangement = Arrangement.spacedBy(10.dp)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
             .padding(top = 16.dp, bottom = 16.dp, start = 20.dp, end = 20.dp),
     ) {
+
         // category row
         CategoryChoice(
             item = item,
@@ -79,33 +89,36 @@ fun ReminderBottomSheet(
         )
 
         // title row
-        Row (
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Icon(imageVector = Icons.Default.Edit, contentDescription = null)
-            TextField(
-                value = title,
-                onValueChange = { newText ->
-                    title = newText
-                    onEvent(ReminderEvent.SetTitle(newText.text))
-                },
-                placeholder = { Text(text = "Titel", color = Color.LightGray) },
-                modifier = Modifier.background(Color.Transparent),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
-        }
+        EditableTitleRow(
+            modifier = editableRowModifier,
+            alignment = editableRowAlignment,
+            arrangement = editableRowArrangement,
+            title = title.text,
+            onValueChange = { newText ->
+                title = TextFieldValue(newText)
+                onEvent(ReminderEvent.SetTitle(newText))
+            }
+        )
 
         // date picker row
-        LeadingIconWithText(
-            icon = Icons.Default.DateRange,
-            text = formattedDate,
-            modifier = Modifier.clickable { dateDialogState.show() }
+        Row(
+            modifier = editableRowModifier.clickable { dateDialogState.show() },
+            verticalAlignment = editableRowAlignment,
+            horizontalArrangement = editableRowArrangement
+        ) {
+            Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
+            Text(text = formattedDate)
+        }
+
+        EditableNotificationRow(
+            modifier = editableRowModifier,
+            alignment = editableRowAlignment,
+            arrangement = editableRowArrangement,
+            date = notification,
+            onValueChange = { newText ->
+                title = TextFieldValue(newText)
+                onEvent(ReminderEvent.SetTitle(newText))
+            }
         )
 
 

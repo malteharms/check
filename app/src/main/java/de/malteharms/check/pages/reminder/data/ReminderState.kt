@@ -12,7 +12,11 @@ data class ReminderState (
     val title: String = "",
     val dueDate: Long = getCurrentTimestamp(),
     val category: ReminderCategory = ReminderCategory.GENERAL,
+
     val notifications: List<ReminderNotification> = listOf(),
+    val newNotifications: List<ReminderNotification> = listOf(),
+    val notificationsToDelete: List<ReminderNotification> = listOf(),
+
     val isAddingItem: Boolean = false,
     val isEditingItem: Boolean = false,
     val sortType: ReminderSortType = ReminderSortType.DUE_DATE

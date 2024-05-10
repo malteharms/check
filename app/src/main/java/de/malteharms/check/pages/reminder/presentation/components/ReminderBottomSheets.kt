@@ -3,6 +3,7 @@ package de.malteharms.check.pages.reminder.presentation.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,12 +26,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import de.malteharms.check.pages.reminder.data.database.ReminderCategory
 import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
 import de.malteharms.check.pages.reminder.domain.convertTimestampToDateString
@@ -69,7 +73,7 @@ fun ReminderBottomSheet(
         mutableStateOf(notifications)
     }
 
-    val editableRowModifier = Modifier.fillMaxWidth()
+    val editableRowModifier = Modifier.fillMaxWidth().height(40.dp)
     val editableRowAlignment = Alignment.CenterVertically
     val editableRowArrangement = Arrangement.spacedBy(10.dp)
 
@@ -165,8 +169,35 @@ fun ReminderBottomSheet(
         }
     }
 
-
-
-
 }
 
+
+@Preview
+@Composable
+fun ReminderBottomSheetPreview() {
+
+    val sampleItem = ReminderItem(
+        id = -1,
+        title = "Perso",
+        category = ReminderCategory.AUTOMATIC_RENEW,
+        todoRelation = null,
+        dueDate = 1715363412L,
+        creationDate = 1715363412L,
+        lastUpdate = 1715363412L
+    )
+
+    val sampleNotification = listOf(
+        ReminderNotification(
+            reminderItem = -1,
+            valueBeforeDue = 5,
+            interval = ReminderNotificationInterval.DAYS,
+            notificationDate = 1715795411L
+        )
+    )
+
+    ReminderBottomSheet(
+        item = sampleItem,
+        notifications = sampleNotification,
+        onEvent = {  }
+    )
+}

@@ -81,7 +81,7 @@ class ReminderViewModel(
                 val dueDate = state.value.dueDate
                 val category = state.value.category
 
-                val notifications = state.value.notifications
+                val notifications = state.value.newNotifications
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -124,6 +124,8 @@ class ReminderViewModel(
                     isEditingItem = false,
                     title = "",
                     notifications = listOf(),
+                    newNotifications = listOf(),
+                    notificationsToDelete = listOf(),
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -135,7 +137,8 @@ class ReminderViewModel(
                 val dueDate = state.value.dueDate
                 val category = state.value.category
 
-                val notifications = state.value.notifications
+                val newNotifications = state.value.newNotifications
+                val notificationsToRemove = state.value.notificationsToDelete
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -153,16 +156,19 @@ class ReminderViewModel(
                 viewModelScope.launch {
                     dao.updateReminderItem(updatedReminderItem)
 
-                    notifications.forEach {reminderNotification ->
+                    newNotifications.forEach {reminderNotification ->
                         dao.insertReminderNotification(
                             ReminderNotification(
-                                id = reminderNotification.id,
                                 reminderItem = event.itemToUpdate.id,
                                 valueBeforeDue = reminderNotification.valueBeforeDue,
                                 interval = reminderNotification.interval,
                                 notificationDate = reminderNotification.notificationDate
                             )
                         )
+                    }
+
+                    notificationsToRemove.forEach { reminderNotification ->
+                        dao.removeReminderNotification(reminderNotification)
                     }
                 }
 
@@ -171,6 +177,8 @@ class ReminderViewModel(
                     isEditingItem = false,
                     title = "",
                     notifications = listOf(),
+                    newNotifications = listOf(),
+                    notificationsToDelete = listOf(),
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -187,6 +195,8 @@ class ReminderViewModel(
                     isEditingItem = false,
                     title = "",
                     notifications = listOf(),
+                    newNotifications = listOf(),
+                    notificationsToDelete = listOf(),
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -217,13 +227,15 @@ class ReminderViewModel(
 
             is ReminderEvent.AddNotification -> {
                 _reminderState.update { it.copy(
-                    notifications = it.notifications.plus(event.notification)
+                    notifications = it.notifications.plus(event.notification),
+                    newNotifications = it.newNotifications.plus(event.notification)
                 ) }
             }
 
             is ReminderEvent.RemoveNotification -> {
                 _reminderState.update { it.copy(
-                    notifications = it.notifications.minus(event.notification)
+                    notifications = it.notifications.minus(event.notification),
+                    notificationsToDelete = it.notificationsToDelete.plus(event.notification)
                 ) }
             }
         }

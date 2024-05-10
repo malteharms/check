@@ -1,14 +1,12 @@
 package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -30,7 +28,6 @@ import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
-import de.malteharms.check.pages.reminder.presentation.getNotificationText
 import de.malteharms.check.ui.components.LargeDropdownMenu
 
 @Composable
@@ -50,42 +47,43 @@ fun EditableNotificationRow(
         mutableStateOf(notifications)
     }
 
+    LazyColumn {
 
-    Row (
-        modifier = modifier,
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = arrangement
-    ){
+        itemsIndexed(currentNotifications) {index, item ->
 
-        Icon(imageVector = Icons.Default.Notifications, contentDescription = null)
-
-        Column(
-        ) {
-            currentNotifications.forEach {notification ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = getNotificationText(notification))
-                    Icon(
-                        imageVector = Icons.Default.Delete, 
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            currentNotifications -= notification
-                            onEvent(ReminderEvent.RemoveNotification(notification)) 
-                        }
-                    )
+            DisplayedNotificationRow(
+                modifier = modifier,
+                arrangement = arrangement,
+                isFirstRow = index == 0,
+                currentNotification = item,
+                openAddReminderDialog = { showNotificationDialog = true },
+                removeNotification = {
+                    currentNotifications -= item
+                    onEvent(ReminderEvent.RemoveNotification(item))
                 }
-            }
-            
-            TextButton(onClick = { showNotificationDialog = true }) {
-                Text("+ Neue Benachrichtigung")
-            }
+            )
+
         }
 
+        item {
+            DisplayedNotificationRow(
+                modifier = modifier,
+                arrangement = arrangement,
+                isFirstRow = currentNotifications.isEmpty(),
+                currentNotification = null,
+                openAddReminderDialog = { showNotificationDialog = true },
+                removeNotification = {
+                    if (currentNotifications.isNotEmpty()) {
+                        currentNotifications -= currentNotifications[0]
+                        onEvent(ReminderEvent.RemoveNotification(currentNotifications[0]))
+                    }
+                }
+            )
+        }
 
     }
+
+
 
     if (showNotificationDialog) {
 
@@ -144,6 +142,8 @@ fun EditableNotificationRow(
                             interval = interval,
                             notificationDate = -1 // will be set on save
                         )
+
+                        // todo just add the notification if the date is not in the past or today
 
                         currentNotifications += newReminderNotification
                         onEvent(ReminderEvent.AddNotification(newReminderNotification))

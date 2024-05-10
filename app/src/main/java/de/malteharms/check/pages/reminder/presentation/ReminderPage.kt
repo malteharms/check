@@ -1,18 +1,14 @@
 package de.malteharms.check.pages.reminder.presentation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.BottomSheetDefaults
@@ -30,26 +26,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.pages.reminder.data.ReminderItem
+import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.pages.reminder.data.ReminderState
+import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddReminderItemButton
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
 import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
-import de.malteharms.check.ui.theme.blue60
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderPage(
    state: ReminderState,
+   getNotifications: (Long) -> List<ReminderNotification>,
    onEvent: (ReminderEvent) -> Unit
 ) {
 
     val sheetState = rememberModalBottomSheetState()
+
     var currentEditItem: ReminderItem? by remember {
         mutableStateOf(null)
     }
@@ -122,7 +119,11 @@ fun ReminderPage(
             sheetState = sheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
-            ReminderBottomSheet(item = currentEditItem, onEvent = onEvent)
+            ReminderBottomSheet(
+                item = currentEditItem,
+                notifications = getNotifications(currentEditItem!!.id),
+                onEvent = onEvent
+            )
         }
     }
 
@@ -138,7 +139,11 @@ fun ReminderPage(
             sheetState = sheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
-            ReminderBottomSheet(item = null, onEvent = onEvent)
+            ReminderBottomSheet(
+                item = null,
+                notifications = listOf(),
+                onEvent = onEvent
+            )
         }
     }
 }

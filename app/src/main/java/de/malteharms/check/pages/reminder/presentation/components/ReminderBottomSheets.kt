@@ -1,6 +1,5 @@
 package de.malteharms.check.pages.reminder.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,13 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -33,7 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import de.malteharms.check.pages.reminder.data.ReminderItem
+import de.malteharms.check.pages.reminder.data.database.ReminderItem
+import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
 import de.malteharms.check.pages.reminder.domain.convertTimestampToDateString
@@ -42,7 +39,6 @@ import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.Ca
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableNotificationRow
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableTitleRow
 import de.malteharms.check.pages.reminder.presentation.getAddOrUpdateButtonText
-import de.malteharms.check.ui.components.LeadingIconWithText
 import de.malteharms.check.ui.theme.blue80
 import java.time.LocalDate
 
@@ -50,6 +46,7 @@ import java.time.LocalDate
 @Composable
 fun ReminderBottomSheet(
     item: ReminderItem?,
+    notifications: List<ReminderNotification>,
     onEvent: (ReminderEvent) -> Unit
 ) {
     val dateDialogState = rememberMaterialDialogState()
@@ -68,8 +65,8 @@ fun ReminderBottomSheet(
         }
     }
 
-    var notification by remember {
-        mutableStateOf(item?.notification)
+    val currentNotifications by remember {
+        mutableStateOf(notifications)
     }
 
     val editableRowModifier = Modifier.fillMaxWidth()
@@ -112,15 +109,10 @@ fun ReminderBottomSheet(
 
         EditableNotificationRow(
             modifier = editableRowModifier,
-            alignment = editableRowAlignment,
             arrangement = editableRowArrangement,
-            date = notification,
-            onValueChange = { newText ->
-                title = TextFieldValue(newText)
-                onEvent(ReminderEvent.SetTitle(newText))
-            }
+            notifications = currentNotifications,
+            onEvent = onEvent
         )
-
 
         // bottom row to display event buttons
         Spacer(modifier = Modifier.height(20.dp))
@@ -132,11 +124,6 @@ fun ReminderBottomSheet(
                 Button(
                     onClick = {
                         onEvent(ReminderEvent.RemoveItem(item))
-
-                        // this hide dialog is necessary, because the
-                        // bottom sheet would not close correctly
-                        // the reason isn't known yet
-                        onEvent(ReminderEvent.HideDialog)
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {

@@ -14,8 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.pages.reminder.data.ReminderCategory
-import de.malteharms.check.pages.reminder.data.ReminderItem
+import de.malteharms.check.pages.reminder.data.database.ReminderCategory
+import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getCategoryRepresentation
 @Composable

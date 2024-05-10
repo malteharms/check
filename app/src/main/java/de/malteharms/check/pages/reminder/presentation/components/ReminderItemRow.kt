@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.pages.reminder.data.ReminderCategory
-import de.malteharms.check.pages.reminder.data.ReminderItem
+import de.malteharms.check.pages.reminder.data.database.ReminderCategory
+import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import de.malteharms.check.ui.theme.blue60
@@ -80,6 +80,7 @@ fun ReminderItemRowPreview() {
         creationDate = 1715105986L,
         lastUpdate = 1715105986L,
         todoRelation = null
-    ))
+    )
+    )
 
 }

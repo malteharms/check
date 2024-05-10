@@ -55,6 +55,7 @@ fun Navigation(
             composable(Screens.ReminderRoute.route) {
                 ReminderPage(
                     state = reminderState,
+                    getNotifications = reminderViewModel::getNotifications,
                     onEvent = reminderViewModel::onEvent
                 )
             }

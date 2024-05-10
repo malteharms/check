@@ -1,6 +1,6 @@
 package de.malteharms.check.pages.reminder.domain
 
-import de.malteharms.check.pages.reminder.data.ReminderNotificationRange
+import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -29,11 +29,11 @@ fun daysBetween(dateToReach: LocalDate, today: LocalDate = LocalDate.now()): Per
 fun calculateNotificationDate(
     dueDate: LocalDate,
     valueForNotification: Int,
-    daysOrMonths: ReminderNotificationRange
+    daysOrMonths: ReminderNotificationInterval
 ): LocalDate {
     return when (daysOrMonths) {
-        ReminderNotificationRange.DAYS -> dueDate.minusDays(valueForNotification.toLong())
-        ReminderNotificationRange.MONTHS -> dueDate.minusMonths(valueForNotification.toLong())
+        ReminderNotificationInterval.DAYS -> dueDate.minusDays(valueForNotification.toLong())
+        ReminderNotificationInterval.MONTHS -> dueDate.minusMonths(valueForNotification.toLong())
     }
 }
 

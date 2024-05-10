@@ -3,11 +3,15 @@ package de.malteharms.check.pages.reminder.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.data.database.CheckDao
-import de.malteharms.check.pages.reminder.data.ReminderCategory
-import de.malteharms.check.pages.reminder.data.ReminderItem
+import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.data.ReminderSortType
+import de.malteharms.check.pages.reminder.data.database.ReminderCategory
+import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
+import de.malteharms.check.pages.reminder.domain.calculateNotificationDate
+import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
+import de.malteharms.check.pages.reminder.domain.convertTimestampToLocalDate
 import de.malteharms.check.pages.reminder.domain.getCurrentTimestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,10 +54,17 @@ class ReminderViewModel(
             }
 
             is ReminderEvent.ShowEditDialog -> {
+
+                var notifications: List<ReminderNotification> = listOf()
+                viewModelScope.launch {
+                     notifications = dao.getNotificationsForReminderItem(event.item.id)
+                }
+
                 _reminderState.update { it.copy(
                     title = event.item.title,
                     dueDate = event.item.dueDate,
                     category = event.item.category,
+                    notifications = notifications,
                     isEditingItem = true
                 ) }
             }
@@ -69,7 +80,8 @@ class ReminderViewModel(
                 val title = state.value.title.trim()
                 val dueDate = state.value.dueDate
                 val category = state.value.category
-                val notification = state.value.notification
+
+                val notifications = state.value.notifications
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -81,13 +93,29 @@ class ReminderViewModel(
                     title = title,
                     dueDate = dueDate,
                     category = category,
-                    notification = notification?.exportForDatabase(),
                     lastUpdate = currentTimestamp,
                     creationDate = currentTimestamp
                 )
 
                 viewModelScope.launch {
-                    dao.insertReminderItem(newReminderItem)
+                    val newItemId = dao.insertReminderItem(newReminderItem)
+
+                    notifications.forEach {reminderNotification ->
+                        val notificationLocaldate = calculateNotificationDate(
+                            dueDate = convertTimestampToLocalDate(dueDate),
+                            valueForNotification = reminderNotification.valueBeforeDue,
+                            daysOrMonths = reminderNotification.interval
+                        )
+
+                        dao.insertReminderNotification(
+                            ReminderNotification(
+                                reminderItem = newItemId,
+                                valueBeforeDue = reminderNotification.valueBeforeDue,
+                                interval = reminderNotification.interval,
+                                notificationDate = convertLocalDateToTimestamp(notificationLocaldate)
+                            )
+                        )
+                    }
                 }
 
                 // reset to the default state
@@ -95,7 +123,7 @@ class ReminderViewModel(
                     isAddingItem = false,
                     isEditingItem = false,
                     title = "",
-                    notification = null,
+                    notifications = listOf(),
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -106,7 +134,8 @@ class ReminderViewModel(
                 val title = state.value.title
                 val dueDate = state.value.dueDate
                 val category = state.value.category
-                val notification = state.value.notification
+
+                val notifications = state.value.notifications
 
                 if (title.isBlank() || dueDate == 0L) {
                     return
@@ -117,20 +146,31 @@ class ReminderViewModel(
                     title = title,
                     dueDate = dueDate,
                     category = category,
-                    notification = notification?.exportForDatabase(),
                     creationDate = event.itemToUpdate.creationDate,
                     lastUpdate = getCurrentTimestamp()
                 )
 
                 viewModelScope.launch {
                     dao.updateReminderItem(updatedReminderItem)
+
+                    notifications.forEach {reminderNotification ->
+                        dao.insertReminderNotification(
+                            ReminderNotification(
+                                id = reminderNotification.id,
+                                reminderItem = event.itemToUpdate.id,
+                                valueBeforeDue = reminderNotification.valueBeforeDue,
+                                interval = reminderNotification.interval,
+                                notificationDate = reminderNotification.notificationDate
+                            )
+                        )
+                    }
                 }
 
                 _reminderState.update { it.copy(
                     isAddingItem = false,
                     isEditingItem = false,
                     title = "",
-                    notification = null,
+                    notifications = listOf(),
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -139,13 +179,14 @@ class ReminderViewModel(
             is ReminderEvent.RemoveItem -> {
                 viewModelScope.launch {
                     dao.removeReminderItem(reminderItem = event.item)
+                    dao.removeReminderNotificationsForReminderItem(event.item.id)
                 }
 
                 _reminderState.update { it.copy(
                     isAddingItem = false,
                     isEditingItem = false,
                     title = "",
-                    notification = null,
+                    notifications = listOf(),
                     category = ReminderCategory.GENERAL,
                     dueDate = getCurrentTimestamp()
                 ) }
@@ -174,13 +215,22 @@ class ReminderViewModel(
                 _reminderSortType.value = event.sortType
             }
 
-            is ReminderEvent.SetNotification -> {
+            is ReminderEvent.AddNotification -> {
                 _reminderState.update { it.copy(
-                    notification = event.notification
+                    notifications = it.notifications.plus(event.notification)
+                ) }
+            }
+
+            is ReminderEvent.RemoveNotification -> {
+                _reminderState.update { it.copy(
+                    notifications = it.notifications.minus(event.notification)
                 ) }
             }
         }
     }
 
+    fun getNotifications(itemId: Long): List<ReminderNotification> {
+        return dao.getNotificationsForReminderItem(itemId)
+    }
 
 }

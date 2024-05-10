@@ -1,7 +1,9 @@
 package de.malteharms.check.pages.reminder.presentation
 
-import de.malteharms.check.pages.reminder.data.ReminderCategory
 import de.malteharms.check.pages.reminder.data.ReminderSortType
+import de.malteharms.check.pages.reminder.data.database.ReminderCategory
+import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.convertTimestampToLocalDate
 import de.malteharms.check.pages.reminder.domain.daysBetween
 import java.time.LocalDate
@@ -17,14 +19,14 @@ fun getTextForDurationInDays(dueTimestamp: Long): String {
 
     // handle values for years
     if (periodBetweenTodayAndDue.years > 0 || periodBetweenTodayAndDue.years < 0) {
-        dayText = "${periodBetweenTodayAndDue.years} Jahre(n)"
+        dayText = "${periodBetweenTodayAndDue.years} Jahren"
         prefix = if (periodBetweenTodayAndDue.years > 0) {
             "in"
         } else "vor"
     }
 
     else if (periodBetweenTodayAndDue.months > 0 || periodBetweenTodayAndDue.months < 0) {
-        dayText = "${periodBetweenTodayAndDue.months} Monate(n)"
+        dayText = "${periodBetweenTodayAndDue.months} Monaten"
         prefix = if (periodBetweenTodayAndDue.months > 0) {
             "in"
         } else "vor"
@@ -35,7 +37,7 @@ fun getTextForDurationInDays(dueTimestamp: Long): String {
             -1 -> "Gestern"
             0 -> "Heute"
             1 -> "Morgen"
-            else -> "${periodBetweenTodayAndDue.days} Tage(n)"
+            else -> "${periodBetweenTodayAndDue.days} Tagen"
         }
 
         prefix = when (periodBetweenTodayAndDue.days) {
@@ -67,5 +69,23 @@ fun getCategoryRepresentation(category: ReminderCategory): String {
         ReminderCategory.AUTOMATIC_RENEW -> "Automatische Erneuerung"
         ReminderCategory.MANUAL_RENEW -> "Maneuelle Erneuerung"
         ReminderCategory.IMPORTANT_APPOINTMENT -> "Wichtiger Termin"
+    }
+}
+
+fun getNotificationText(notification: ReminderNotification): String {
+    val value = notification.valueBeforeDue
+
+    val interval = when(notification.interval) {
+        ReminderNotificationInterval.DAYS -> if(value == 1) { "Tag" } else "Tage"
+        ReminderNotificationInterval.MONTHS -> if(value == 1) { "Monat" } else "Monate"
+    }
+
+    return "$value $interval vorher"
+}
+
+fun getNotificationIntervalRepresentation(interval: ReminderNotificationInterval): String {
+    return when(interval) {
+        ReminderNotificationInterval.DAYS -> "Tage"
+        ReminderNotificationInterval.MONTHS -> "Monate"
     }
 }

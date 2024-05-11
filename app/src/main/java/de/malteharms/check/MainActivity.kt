@@ -180,7 +180,7 @@ class MainActivity : ComponentActivity() {
 
     private fun getTime(): Long {
         // Get selected time from TimePicker and DatePicker
-        val minute = 16
+        val minute = 30
         val hour = 11
         val day = 11
         val month = 4

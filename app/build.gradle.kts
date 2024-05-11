@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrainsKotlin)
 
     kotlin("kapt")
-    alias(libs.plugins.daggerHilt)
 
     id("kotlinx-serialization")
 }
@@ -69,10 +68,6 @@ dependencies {
     // room database
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
-
-    // dependency injection
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
 
     // navigation
     implementation(libs.androidx.navigation.compose)

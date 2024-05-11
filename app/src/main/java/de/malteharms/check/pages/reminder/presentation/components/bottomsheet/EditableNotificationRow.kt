@@ -1,5 +1,7 @@
 package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,11 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
 import de.malteharms.check.ui.components.LargeDropdownMenu
+
 
 @Composable
 fun EditableNotificationRow(
@@ -87,6 +91,8 @@ fun EditableNotificationRow(
 
     if (showNotificationDialog) {
 
+
+
         var value by remember {
             mutableStateOf(TextFieldValue("1"))
         }
@@ -140,6 +146,7 @@ fun EditableNotificationRow(
                             reminderItem = -1,  // will be set on save
                             valueBeforeDue = value.text.toInt(),
                             interval = interval,
+                            notificationId = -1, // will be set on save
                             notificationDate = -1 // will be set on save
                         )
 

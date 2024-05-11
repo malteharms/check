@@ -31,7 +31,7 @@
         </activity>
 
         <receiver
-            android:name=".data.notification.Notification"
+            android:name=".data.notification.ReminderNotificationReceiver"
             android:enabled="true"/>
 
     </application>

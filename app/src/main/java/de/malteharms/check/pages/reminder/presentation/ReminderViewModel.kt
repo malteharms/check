@@ -1,8 +1,12 @@
 package de.malteharms.check.pages.reminder.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.data.database.CheckDao
+import de.malteharms.check.data.internal.NotificationResult
+import de.malteharms.check.data.internal.NotificationState
+import de.malteharms.check.data.notification.NotificationChannel
 import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.data.ReminderSortType
@@ -22,9 +26,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
+const val TAG = "ReminderViewModel"
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReminderViewModel(
-    private val dao: CheckDao
+    private val dao: CheckDao,
+    private val scheduleNotification: (NotificationChannel, String, String, Long) -> NotificationResult
 ): ViewModel() {
 
     private val _reminderSortType = MutableStateFlow(ReminderSortType.DUE_DATE)
@@ -98,38 +106,20 @@ class ReminderViewModel(
                 )
 
                 viewModelScope.launch {
-                    val newItemId = dao.insertReminderItem(newReminderItem)
+                    // add reminder item into database
+                    val newItemId: Long = dao.insertReminderItem(newReminderItem)
 
+                    // add notifications to database and schedule them
                     notifications.forEach {reminderNotification ->
-                        val notificationLocaldate = calculateNotificationDate(
-                            dueDate = convertTimestampToLocalDate(dueDate),
-                            valueForNotification = reminderNotification.valueBeforeDue,
-                            daysOrMonths = reminderNotification.interval
-                        )
-
-                        dao.insertReminderNotification(
-                            ReminderNotification(
-                                reminderItem = newItemId,
-                                valueBeforeDue = reminderNotification.valueBeforeDue,
-                                interval = reminderNotification.interval,
-                                notificationDate = convertLocalDateToTimestamp(notificationLocaldate)
-                            )
+                        handleNotification(
+                            newItemId,
+                            newReminderItem,
+                            reminderNotification
                         )
                     }
                 }
 
-                // reset to the default state
-                _reminderState.update { it.copy(
-                    isAddingItem = false,
-                    isEditingItem = false,
-                    title = "",
-                    notifications = listOf(),
-                    newNotifications = listOf(),
-                    notificationsToDelete = listOf(),
-                    category = ReminderCategory.GENERAL,
-                    dueDate = getCurrentTimestamp()
-                ) }
-
+                reset()
             }
 
             is ReminderEvent.UpdateItem -> {
@@ -156,32 +146,23 @@ class ReminderViewModel(
                 viewModelScope.launch {
                     dao.updateReminderItem(updatedReminderItem)
 
-                    newNotifications.forEach {reminderNotification ->
-                        dao.insertReminderNotification(
-                            ReminderNotification(
-                                reminderItem = event.itemToUpdate.id,
-                                valueBeforeDue = reminderNotification.valueBeforeDue,
-                                interval = reminderNotification.interval,
-                                notificationDate = reminderNotification.notificationDate
-                            )
-                        )
+                    // remove deleted notifications
+                    notificationsToRemove.forEach { reminderNotification ->
+                        // todo remove notification from scheduled ones
+                        dao.removeReminderNotification(reminderNotification)
                     }
 
-                    notificationsToRemove.forEach { reminderNotification ->
-                        dao.removeReminderNotification(reminderNotification)
+                    // add new notifications to database and schedule them
+                    newNotifications.forEach {reminderNotification ->
+                        handleNotification(
+                            event.itemToUpdate.id,
+                            updatedReminderItem,
+                            reminderNotification
+                        )
                     }
                 }
 
-                _reminderState.update { it.copy(
-                    isAddingItem = false,
-                    isEditingItem = false,
-                    title = "",
-                    notifications = listOf(),
-                    newNotifications = listOf(),
-                    notificationsToDelete = listOf(),
-                    category = ReminderCategory.GENERAL,
-                    dueDate = getCurrentTimestamp()
-                ) }
+                reset()
             }
 
             is ReminderEvent.RemoveItem -> {
@@ -190,16 +171,7 @@ class ReminderViewModel(
                     dao.removeReminderNotificationsForReminderItem(event.item.id)
                 }
 
-                _reminderState.update { it.copy(
-                    isAddingItem = false,
-                    isEditingItem = false,
-                    title = "",
-                    notifications = listOf(),
-                    newNotifications = listOf(),
-                    notificationsToDelete = listOf(),
-                    category = ReminderCategory.GENERAL,
-                    dueDate = getCurrentTimestamp()
-                ) }
+                reset()
             }
 
 
@@ -243,6 +215,56 @@ class ReminderViewModel(
 
     fun getNotifications(itemId: Long): List<ReminderNotification> {
         return dao.getNotificationsForReminderItem(itemId)
+    }
+
+    private suspend fun handleNotification(
+        id: Long,
+        reminderReference: ReminderItem,
+        reminderNotification: ReminderNotification
+    ) {
+        // calculate the date, where notification needs to be thrown
+        val notificationLocalDate = calculateNotificationDate(
+            dueDate = convertTimestampToLocalDate(reminderReference.dueDate),
+            valueForNotification = reminderNotification.valueBeforeDue,
+            daysOrMonths = reminderNotification.interval
+        )
+
+        // schedule notification for each item
+        val result: NotificationResult = scheduleNotification(
+            NotificationChannel.REMINDER,
+            "Reminder >> ${reminderReference.title}",
+            getTextForDurationInDays(reminderReference.dueDate),
+            convertLocalDateToTimestamp(notificationLocalDate)
+        )
+
+        if (result.state != NotificationState.SUCCESS) {
+            Log.w(TAG, "Because notification could not be scheduled, notification will not be saved")
+            return
+        }
+
+        // add notification to database
+        dao.insertReminderNotification(
+            ReminderNotification(
+                reminderItem = id,
+                valueBeforeDue = reminderNotification.valueBeforeDue,
+                interval = reminderNotification.interval,
+                notificationId = result.notificationId,
+                notificationDate = convertLocalDateToTimestamp(notificationLocalDate)
+            )
+        )
+    }
+
+    private fun reset() {
+        _reminderState.update { it.copy(
+            title = "",
+            category = ReminderCategory.GENERAL,
+            notifications = listOf(),
+            newNotifications = listOf(),
+            notificationsToDelete = listOf(),
+            isAddingItem = false,
+            isEditingItem = false,
+            dueDate = getCurrentTimestamp()
+        ) }
     }
 
 }

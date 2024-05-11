@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlin)
 
+    alias(libs.plugins.daggerHilt)
+
     kotlin("kapt")
 
     id("kotlinx-serialization")
@@ -64,6 +66,12 @@ dependencies {
     implementation(libs.androidx.compose.material3)
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // dependency injection
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    kapt(libs.hilt.android.compiler)
+
 
     // room database
     implementation(libs.androidx.room.ktx)

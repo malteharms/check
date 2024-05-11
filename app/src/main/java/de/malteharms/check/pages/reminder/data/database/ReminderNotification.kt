@@ -12,6 +12,7 @@ data class ReminderNotification(
     val valueBeforeDue: Int,
     val interval: ReminderNotificationInterval,
 
+    val notificationId: Int,
     val notificationDate: Long
 )
 

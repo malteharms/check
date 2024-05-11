@@ -14,7 +14,7 @@ import de.malteharms.check.pages.reminder.data.database.ReminderNotification
     entities = [
         ReminderItem::class, ReminderNotification::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class CheckDatabase: RoomDatabase() {

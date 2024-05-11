@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -73,7 +74,9 @@ fun ReminderBottomSheet(
         mutableStateOf(notifications)
     }
 
-    val editableRowModifier = Modifier.fillMaxWidth().height(40.dp)
+    val editableRowModifier = Modifier
+        .fillMaxWidth()
+        .height(40.dp)
     val editableRowAlignment = Alignment.CenterVertically
     val editableRowArrangement = Arrangement.spacedBy(10.dp)
 

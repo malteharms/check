@@ -92,8 +92,6 @@ fun EditableNotificationRow(
 
     if (showNotificationDialog) {
 
-
-
         var value by remember {
             mutableStateOf(TextFieldValue("1"))
         }

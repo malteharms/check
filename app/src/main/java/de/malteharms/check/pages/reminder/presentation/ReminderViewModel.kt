@@ -15,7 +15,7 @@ import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.pages.reminder.data.database.ReminderCategory
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
-import de.malteharms.check.pages.reminder.domain.calculateNotificationDate
+import de.malteharms.check.pages.reminder.data.calculateNotificationDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,13 +27,15 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
-const val TAG = "ReminderViewModel"
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReminderViewModel(
     private val dao: CheckDao,
     private val notificationScheduler: AlarmScheduler
 ): ViewModel() {
+
+    companion object {
+        private val TAG: String? = ReminderViewModel::class.simpleName
+    }
 
     private val _reminderSortType = MutableStateFlow(ReminderSortType.DUE_DATE)
     private val _reminderItems = _reminderSortType
@@ -56,12 +58,14 @@ class ReminderViewModel(
         when (event) {
 
             ReminderEvent.ShowNewDialog -> {
+                Log.i(TAG, "Open 'new reminder' sheet")
                 _reminderState.update { it.copy(
                     isAddingItem = true
                 ) }
             }
 
             is ReminderEvent.ShowEditDialog -> {
+                Log.i(TAG, "Open 'edit reminder' sheet")
 
                 var notifications: List<ReminderNotification> = listOf()
                 viewModelScope.launch {
@@ -78,6 +82,8 @@ class ReminderViewModel(
             }
 
             ReminderEvent.HideDialog -> {
+                Log.i(TAG, "Hide add / edit reminder sheet")
+
                 _reminderState.update { it.copy(
                     isAddingItem = false,
                     isEditingItem = false
@@ -92,6 +98,7 @@ class ReminderViewModel(
                 val notifications = state.value.newNotifications
 
                 if (title.isBlank()) {
+                    Log.w(TAG, "Cannot save reminder item with due date $dueDate, because the title is empty!")
                     return
                 }
 
@@ -108,6 +115,7 @@ class ReminderViewModel(
                 viewModelScope.launch {
                     // add reminder item into database
                     val newItemId: Long = dao.insertReminderItem(newReminderItem)
+                    Log.i(TAG, "Inserted reminder $title with id $newItemId")
 
                     // add notifications to database and schedule them
                     notifications.forEach {reminderNotification ->
@@ -119,7 +127,7 @@ class ReminderViewModel(
                     }
                 }
 
-                reset()
+                resetState()
             }
 
             is ReminderEvent.UpdateItem -> {
@@ -131,6 +139,7 @@ class ReminderViewModel(
                 val notificationsToRemove = state.value.notificationsToDelete
 
                 if (title.isBlank()) {
+                    Log.w(TAG, "Cannot update reminder item with due date $dueDate, because the title is empty!")
                     return
                 }
 
@@ -144,7 +153,9 @@ class ReminderViewModel(
                 )
 
                 viewModelScope.launch {
+                    // update reminder item in database
                     dao.updateReminderItem(updatedReminderItem)
+                    Log.i(TAG, "Updated reminder $title with id ${event.itemToUpdate.id}")
 
                     // remove deleted notifications
                     notificationsToRemove.forEach { reminderNotification ->
@@ -152,6 +163,8 @@ class ReminderViewModel(
                         notificationScheduler.cancel(reminderNotification.notificationId)
                         // remove reminder from database
                         dao.removeReminderNotification(reminderNotification)
+
+                        Log.i(TAG, "Removed and canceled notification scheduled for ${reminderNotification.notificationDate}")
                     }
 
                     // add new notifications to database and schedule them
@@ -164,16 +177,17 @@ class ReminderViewModel(
                     }
                 }
 
-                reset()
+                resetState()
             }
 
             is ReminderEvent.RemoveItem -> {
                 viewModelScope.launch {
-                    dao.removeReminderItem(reminderItem = event.item)
                     dao.removeReminderNotificationsForReminderItem(event.item.id)
+                    dao.removeReminderItem(reminderItem = event.item)
                 }
 
-                reset()
+                Log.i(TAG, "Removed all data which is related to reminder item ID ${event.item.id}")
+                resetState()
             }
 
 
@@ -187,12 +201,14 @@ class ReminderViewModel(
                 _reminderState.update { it.copy(
                     dueDate = event.dueDate
                 ) }
+                Log.i(TAG, "Due date changed to ${event.dueDate}")
             }
 
             is ReminderEvent.SetCategory -> {
                 _reminderState.update { it.copy(
                     category = event.category
                 ) }
+                Log.i(TAG, "Category changed to ${event.category}")
             }
 
             is ReminderEvent.SortItems -> {
@@ -231,13 +247,15 @@ class ReminderViewModel(
             daysOrMonths = reminderNotification.interval
         )
 
+        Log.i(TAG, "Calculated $notificationDate as notification date")
+
         // schedule notification for each item
         val result: NotificationResult = notificationScheduler.schedule(
             AlarmItem(
                 channel = NotificationChannel.REMINDER,
-                time = reminderReference.dueDate,
-                title = reminderReference.title,
-                message = getTextForDurationInDays(reminderReference.dueDate)
+                time = notificationDate,
+                title = "Reminder >> ${reminderReference.title}",
+                message = "in ${reminderNotification.valueBeforeDue} ${getNotificationIntervalRepresentation(reminderNotification.interval)}"
             )
         )
 
@@ -256,19 +274,22 @@ class ReminderViewModel(
                 notificationDate = notificationDate
             )
         )
+
+        Log.i(TAG, "Inserted notification at $notificationDate with nId ${result.notificationId}")
     }
 
-    private fun reset() {
+    private fun resetState() {
         _reminderState.update { it.copy(
             title = "",
+            dueDate = LocalDateTime.now(),
             category = ReminderCategory.GENERAL,
             notifications = listOf(),
             newNotifications = listOf(),
             notificationsToDelete = listOf(),
             isAddingItem = false,
-            isEditingItem = false,
-            dueDate = LocalDateTime.now()
+            isEditingItem = false
         ) }
+        Log.i(TAG, "Reset internal cache for current reminder item")
     }
 
 }

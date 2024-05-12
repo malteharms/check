@@ -3,7 +3,6 @@ package de.malteharms.check.pages.reminder.data
 import de.malteharms.check.pages.reminder.data.database.ReminderCategory
 import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
-import de.malteharms.check.pages.reminder.domain.getCurrentTimestamp
 import java.time.LocalDateTime
 
 

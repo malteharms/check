@@ -33,11 +33,13 @@ import io.ktor.client.plugins.websocket.WebSockets
 
 class MainActivity : ComponentActivity() {
 
+    // todo: Implement websocket
     private val client = HttpClient(CIO) {
         install(Logging)
         install(WebSockets)
     }
 
+    // todo: outsource to Dagger Hilt
     private val db by lazy {
         CheckDatabase.getDatabase(this)
     }
@@ -60,7 +62,9 @@ class MainActivity : ComponentActivity() {
             }
         )
 
-        // UI Begin
+        // this will set the size of the application to the whole screen
+        // otherwise the page would be interrupted on the bottom of the screen
+        // where the navigation slider is located
         enableEdgeToEdge()
 
         setContent {

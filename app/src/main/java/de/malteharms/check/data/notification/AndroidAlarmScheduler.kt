@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import de.malteharms.check.data.NOTIFICATION_ID
 import de.malteharms.check.data.NOTIFICATION_MESSAGE
 import de.malteharms.check.data.NOTIFICATION_TITLE
@@ -19,10 +20,15 @@ class AndroidAlarmScheduler(
     private val context: Context
 ): AlarmScheduler {
 
+    companion object {
+        private val TAG: String? = AndroidAlarmScheduler::class.simpleName
+    }
+
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
     override fun schedule(item: AlarmItem): NotificationResult {
         val nId: Int = Random.nextInt(1, Int.MAX_VALUE)
+        Log.i(TAG, "Created notification ID $nId for notification title ${item.title}")
 
         val intent: Intent = when (item.channel) {
             NotificationChannel.REMINDER -> Intent(context, ReminderNotificationReceiver::class.java)
@@ -41,6 +47,7 @@ class AndroidAlarmScheduler(
             pendingIntent
         )
 
+        Log.i(TAG, "Scheduled notification with ID $nId at ${item.time}")
         return NotificationResult(NotificationState.SUCCESS, nId)
     }
 
@@ -53,6 +60,7 @@ class AndroidAlarmScheduler(
             )
         )
 
+        Log.i(TAG, "Canceled notification with ID $nId from operating system")
         return NotificationResult(NotificationState.SUCCESS, nId)
     }
 

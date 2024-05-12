@@ -3,7 +3,6 @@ package de.malteharms.check.pages.reminder.presentation.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -37,9 +34,7 @@ import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
-import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
-import de.malteharms.check.pages.reminder.domain.convertTimestampToDateString
-import de.malteharms.check.pages.reminder.domain.getCurrentTimestamp
+import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableNotificationRow
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableTitleRow

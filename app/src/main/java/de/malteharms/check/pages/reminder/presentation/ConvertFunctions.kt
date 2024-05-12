@@ -5,9 +5,8 @@ import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.pages.reminder.data.database.ReminderCategory
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
-import de.malteharms.check.pages.reminder.domain.timeBetween
+import de.malteharms.check.pages.reminder.data.timeBetween
 import java.time.LocalDateTime
-import java.time.Period
 
 
 fun getTextForDurationInDays(due: LocalDateTime): String {

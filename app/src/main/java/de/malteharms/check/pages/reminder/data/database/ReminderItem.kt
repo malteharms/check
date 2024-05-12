@@ -2,6 +2,7 @@ package de.malteharms.check.pages.reminder.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 
 @Entity(tableName = "reminder_items")
@@ -14,9 +15,10 @@ data class ReminderItem(
 
     val todoRelation: Int? = null,
 
-    val dueDate: Long,
-    val creationDate: Long,
-    val lastUpdate: Long
+    // todo: implement migration strategy for LocalDateTime
+    val dueDate: LocalDateTime,
+    val creationDate: LocalDateTime,
+    val lastUpdate: LocalDateTime
 )
 
 enum class ReminderCategory {

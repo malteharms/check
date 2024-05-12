@@ -46,6 +46,7 @@ import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.Ed
 import de.malteharms.check.pages.reminder.presentation.getAddOrUpdateButtonText
 import de.malteharms.check.ui.theme.blue80
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 @Composable
@@ -56,21 +57,21 @@ fun ReminderBottomSheet(
 ) {
     val dateDialogState = rememberMaterialDialogState()
 
-    var title by remember {
+    var title: TextFieldValue by remember {
         mutableStateOf(TextFieldValue(text = item?.title ?: ""))
     }
 
-    var pickedDate by remember {
-        mutableLongStateOf(item?.dueDate ?: getCurrentTimestamp())
+    var pickedDate: LocalDateTime by remember {
+        mutableStateOf(item?.dueDate ?: LocalDateTime.now())
     }
 
-    val formattedDate by remember {
+    val formattedDate: String by remember {
         derivedStateOf {
             convertTimestampToDateString(pickedDate)
         }
     }
 
-    val currentNotifications by remember {
+    val currentNotifications: List<ReminderNotification> by remember {
         mutableStateOf(notifications)
     }
 
@@ -165,8 +166,8 @@ fun ReminderBottomSheet(
                 initialDate = currentDate,
                 title = "Wähle ein Datum",
                 allowedDateValidator = { it.isAfter(currentDate) }
-            ) {
-                pickedDate = convertLocalDateToTimestamp(it)
+            ) { newDate: LocalDate ->
+                pickedDate = newDate.atStartOfDay()
                 onEvent(ReminderEvent.SetDueDate(pickedDate))
             }
         }
@@ -184,9 +185,9 @@ fun ReminderBottomSheetPreview() {
         title = "Perso",
         category = ReminderCategory.AUTOMATIC_RENEW,
         todoRelation = null,
-        dueDate = 1715363412L,
-        creationDate = 1715363412L,
-        lastUpdate = 1715363412L
+        dueDate = LocalDateTime.now(),
+        creationDate = LocalDateTime.now(),
+        lastUpdate = LocalDateTime.now()
     )
 
     val sampleNotification = listOf(
@@ -194,7 +195,8 @@ fun ReminderBottomSheetPreview() {
             reminderItem = -1,
             valueBeforeDue = 5,
             interval = ReminderNotificationInterval.DAYS,
-            notificationDate = 1715795411L
+            notificationId = -1,
+            notificationDate = LocalDateTime.now().plusSeconds(5)
         )
     )
 

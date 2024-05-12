@@ -4,6 +4,7 @@ import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.pages.reminder.data.database.ReminderCategory
+import java.time.LocalDateTime
 
 
 sealed interface ReminderEvent {
@@ -13,7 +14,7 @@ sealed interface ReminderEvent {
     data class RemoveItem(val item: ReminderItem): ReminderEvent
 
     data class SetTitle(val title: String): ReminderEvent
-    data class SetDueDate(val dueDate: Long): ReminderEvent
+    data class SetDueDate(val dueDate: LocalDateTime): ReminderEvent
     data class SetCategory(val category: ReminderCategory): ReminderEvent
 
     data class AddNotification(val notification: ReminderNotification): ReminderEvent

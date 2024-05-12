@@ -1,6 +1,5 @@
 package de.malteharms.check.data.notification
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,7 +14,6 @@ import de.malteharms.check.data.NOTIFICATION_TITLE
 
 class ReminderNotificationReceiver : BroadcastReceiver() {
 
-    @SuppressLint("ServiceCast")
     override fun onReceive(context: Context, intent: Intent) {
         val notification = NotificationCompat.Builder(context, NOTIFICATION_REMINDER_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_check)

@@ -2,6 +2,7 @@ package de.malteharms.check.pages.reminder.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(tableName = "reminder_notifications")
 data class ReminderNotification(
@@ -13,7 +14,7 @@ data class ReminderNotification(
     val interval: ReminderNotificationInterval,
 
     val notificationId: Int,
-    val notificationDate: Long
+    val notificationDate: LocalDateTime     // todo: migrate datatype
 )
 
 enum class ReminderNotificationInterval {

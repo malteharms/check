@@ -1,18 +1,17 @@
 package de.malteharms.check.pages.reminder.presentation
 
+import de.malteharms.check.data.TimePeriod
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.pages.reminder.data.database.ReminderCategory
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
-import de.malteharms.check.pages.reminder.domain.convertTimestampToLocalDate
-import de.malteharms.check.pages.reminder.domain.daysBetween
-import java.time.LocalDate
+import de.malteharms.check.pages.reminder.domain.timeBetween
+import java.time.LocalDateTime
 import java.time.Period
 
 
-fun getTextForDurationInDays(dueTimestamp: Long): String {
-    val localDateOfDueTimestamp: LocalDate = convertTimestampToLocalDate(dueTimestamp)
-    val periodBetweenTodayAndDue: Period = daysBetween(dateToReach = localDateOfDueTimestamp)
+fun getTextForDurationInDays(due: LocalDateTime): String {
+    val periodBetweenTodayAndDue: TimePeriod = timeBetween(dateToReach = due)
 
     val prefix: String
     val dayText: String
@@ -34,9 +33,9 @@ fun getTextForDurationInDays(dueTimestamp: Long): String {
 
     else {
         dayText = when (periodBetweenTodayAndDue.days) {
-            -1 -> "Gestern"
-            0 -> "Heute"
-            1 -> "Morgen"
+            -1L -> "Gestern"
+            0L -> "Heute"
+            1L -> "Morgen"
             else -> "${periodBetweenTodayAndDue.days} Tagen"
         }
 

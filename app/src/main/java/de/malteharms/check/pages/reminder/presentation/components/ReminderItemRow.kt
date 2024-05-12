@@ -24,6 +24,7 @@ import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import de.malteharms.check.ui.theme.blue60
+import java.time.LocalDateTime
 
 
 @Composable
@@ -72,15 +73,16 @@ fun ReminderItemRow(
 fun ReminderItemRowPreview() {
 
     ReminderItemRow(
-        {  }, ReminderItem(
-        id = 0,
-        title = "Personalausweis",
-        dueDate = 1715105986L,
-        category = ReminderCategory.MANUAL_RENEW,
-        creationDate = 1715105986L,
-        lastUpdate = 1715105986L,
-        todoRelation = null
-    )
+        {  },
+        ReminderItem(
+            id = 0,
+            title = "Personalausweis",
+            dueDate = LocalDateTime.now().plusDays(1),
+            category = ReminderCategory.MANUAL_RENEW,
+            creationDate = LocalDateTime.now(),
+            lastUpdate = LocalDateTime.now(),
+            todoRelation = null
+        )
     )
 
 }

@@ -1,12 +1,13 @@
 package de.malteharms.check.pages.reminder.domain
 
+import de.malteharms.check.data.TimePeriod
 import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
-import java.time.Period
+import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.Date
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 import java.util.TimeZone
 
@@ -21,16 +22,20 @@ fun getDeviceTimeZone(): ZoneId {
     return TimeZone.getDefault().toZoneId()
 }
 
-fun daysBetween(dateToReach: LocalDate, today: LocalDate = LocalDate.now()): Period {
-    return today.until(dateToReach)
+fun timeBetween(dateToReach: LocalDateTime, today: LocalDateTime = LocalDateTime.now()): TimePeriod {
+    return TimePeriod(
+        days = today.until(dateToReach, ChronoUnit.DAYS),
+        months = today.until(dateToReach, ChronoUnit.MONTHS),
+        years = today.until(dateToReach, ChronoUnit.YEARS),
+    )
 }
 
 // TODO Test this method
 fun calculateNotificationDate(
-    dueDate: LocalDate,
+    dueDate: LocalDateTime,
     valueForNotification: Int,
     daysOrMonths: ReminderNotificationInterval
-): LocalDate {
+): LocalDateTime {
     return when (daysOrMonths) {
         ReminderNotificationInterval.DAYS -> dueDate.minusDays(valueForNotification.toLong())
         ReminderNotificationInterval.MONTHS -> dueDate.minusMonths(valueForNotification.toLong())
@@ -50,8 +55,7 @@ fun convertLocalDateToTimestamp(date: LocalDate): Long {
 }
 
 /* Timestamp <-> String */
-fun convertTimestampToDateString(timestamp: Long): String {
+fun convertTimestampToDateString(date: LocalDateTime): String {
     val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
-    val date = Date(timestamp * 1000)
     return formatter.format(date)
 }

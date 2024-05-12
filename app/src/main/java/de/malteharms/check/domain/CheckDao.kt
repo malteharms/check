@@ -1,4 +1,4 @@
-package de.malteharms.check.data.database
+package de.malteharms.check.domain
 
 import androidx.room.Dao
 import androidx.room.Delete

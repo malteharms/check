@@ -32,6 +32,7 @@ import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInte
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
 import de.malteharms.check.ui.components.LargeDropdownMenu
+import java.time.LocalDateTime
 
 
 @Composable
@@ -147,7 +148,7 @@ fun EditableNotificationRow(
                             valueBeforeDue = value.text.toInt(),
                             interval = interval,
                             notificationId = -1, // will be set on save
-                            notificationDate = -1 // will be set on save
+                            notificationDate = LocalDateTime.MAX // will be set on save
                         )
 
                         // todo just add the notification if the date is not in the past or today

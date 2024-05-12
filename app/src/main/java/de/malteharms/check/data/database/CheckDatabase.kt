@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import de.malteharms.check.data.database.converter.LocalDateTimeConverter
+import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 
@@ -14,9 +16,10 @@ import de.malteharms.check.pages.reminder.data.database.ReminderNotification
     entities = [
         ReminderItem::class, ReminderNotification::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
+@TypeConverters(LocalDateTimeConverter::class)
 abstract class CheckDatabase: RoomDatabase() {
     abstract fun itemDao(): CheckDao
 

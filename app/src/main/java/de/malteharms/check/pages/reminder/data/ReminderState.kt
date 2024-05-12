@@ -4,13 +4,14 @@ import de.malteharms.check.pages.reminder.data.database.ReminderCategory
 import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.getCurrentTimestamp
+import java.time.LocalDateTime
 
 
 data class ReminderState (
 
     val items: List<ReminderItem> = emptyList(),
     val title: String = "",
-    val dueDate: Long = getCurrentTimestamp(),
+    val dueDate: LocalDateTime = LocalDateTime.now(),
     val category: ReminderCategory = ReminderCategory.GENERAL,
 
     val notifications: List<ReminderNotification> = listOf(),

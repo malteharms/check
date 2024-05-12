@@ -1,8 +1,6 @@
 package de.malteharms.check
 
-import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
-import de.malteharms.check.pages.reminder.domain.convertTimestampToLocalDate
-import de.malteharms.check.pages.reminder.domain.daysBetween
+import de.malteharms.check.pages.reminder.domain.timeBetween
 import org.junit.Assert
 import org.junit.Test
 import java.time.LocalDate
@@ -15,7 +13,7 @@ class DateUtilityTest {
         val dateInPast = LocalDate.of(2024, 5, 10)
 
         val expectedRange = 5
-        val actualRange = daysBetween(
+        val actualRange = timeBetween(
             dateToReach = dateInPast,
             today = currentDate
         )
@@ -29,7 +27,7 @@ class DateUtilityTest {
         val dateInPast = LocalDate.of(2024, 5, 5)
 
         val expectedRange = 0
-        val actualRange = daysBetween(
+        val actualRange = timeBetween(
             dateToReach = dateInPast,
             today = currentDate
         )
@@ -43,7 +41,7 @@ class DateUtilityTest {
         val dateInPast = LocalDate.of(2024, 5, 1)
 
         val expectedRange = -5
-        val actualRange = daysBetween(
+        val actualRange = timeBetween(
             dateToReach = dateInPast,
             today = currentDate
         )
@@ -58,7 +56,7 @@ class DateUtilityTest {
         val dayInPast = LocalDate.of(2028, 6, 28)
 
         val expectedRange = 1516
-        val actualRange = daysBetween(
+        val actualRange = timeBetween(
             dateToReach = dayInPast,
             today = currentDate
         )

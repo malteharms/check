@@ -3,10 +3,12 @@ package de.malteharms.check.pages.reminder.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.malteharms.check.data.database.CheckDao
-import de.malteharms.check.data.internal.NotificationResult
-import de.malteharms.check.data.internal.NotificationState
-import de.malteharms.check.data.notification.NotificationChannel
+import de.malteharms.check.domain.CheckDao
+import de.malteharms.check.data.NotificationResult
+import de.malteharms.check.data.NotificationState
+import de.malteharms.check.data.notification.dataclasses.AlarmItem
+import de.malteharms.check.data.notification.dataclasses.NotificationChannel
+import de.malteharms.check.domain.AlarmScheduler
 import de.malteharms.check.pages.reminder.data.database.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.data.ReminderSortType
@@ -14,9 +16,6 @@ import de.malteharms.check.pages.reminder.data.database.ReminderCategory
 import de.malteharms.check.pages.reminder.data.database.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.domain.calculateNotificationDate
-import de.malteharms.check.pages.reminder.domain.convertLocalDateToTimestamp
-import de.malteharms.check.pages.reminder.domain.convertTimestampToLocalDate
-import de.malteharms.check.pages.reminder.domain.getCurrentTimestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,6 +24,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 
 const val TAG = "ReminderViewModel"
@@ -32,7 +32,7 @@ const val TAG = "ReminderViewModel"
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReminderViewModel(
     private val dao: CheckDao,
-    private val scheduleNotification: (NotificationChannel, String, String, Long) -> NotificationResult
+    private val notificationScheduler: AlarmScheduler
 ): ViewModel() {
 
     private val _reminderSortType = MutableStateFlow(ReminderSortType.DUE_DATE)
@@ -91,18 +91,18 @@ class ReminderViewModel(
 
                 val notifications = state.value.newNotifications
 
-                if (title.isBlank() || dueDate == 0L) {
+                if (title.isBlank()) {
                     return
                 }
 
-                val currentTimestamp: Long = getCurrentTimestamp()
+                val now: LocalDateTime = LocalDateTime.now()
 
                 val newReminderItem = ReminderItem(
                     title = title,
                     dueDate = dueDate,
                     category = category,
-                    lastUpdate = currentTimestamp,
-                    creationDate = currentTimestamp
+                    lastUpdate = now,
+                    creationDate = now
                 )
 
                 viewModelScope.launch {
@@ -123,14 +123,14 @@ class ReminderViewModel(
             }
 
             is ReminderEvent.UpdateItem -> {
-                val title = state.value.title
-                val dueDate = state.value.dueDate
-                val category = state.value.category
+                val title: String = state.value.title
+                val dueDate: LocalDateTime = state.value.dueDate
+                val category: ReminderCategory = state.value.category
 
                 val newNotifications = state.value.newNotifications
                 val notificationsToRemove = state.value.notificationsToDelete
 
-                if (title.isBlank() || dueDate == 0L) {
+                if (title.isBlank()) {
                     return
                 }
 
@@ -140,7 +140,7 @@ class ReminderViewModel(
                     dueDate = dueDate,
                     category = category,
                     creationDate = event.itemToUpdate.creationDate,
-                    lastUpdate = getCurrentTimestamp()
+                    lastUpdate = LocalDateTime.now()
                 )
 
                 viewModelScope.launch {
@@ -148,7 +148,9 @@ class ReminderViewModel(
 
                     // remove deleted notifications
                     notificationsToRemove.forEach { reminderNotification ->
-                        // todo remove notification from scheduled ones
+                        // cancel already scheduled notification
+                        notificationScheduler.cancel(reminderNotification.notificationId)
+                        // remove reminder from database
                         dao.removeReminderNotification(reminderNotification)
                     }
 
@@ -223,18 +225,20 @@ class ReminderViewModel(
         reminderNotification: ReminderNotification
     ) {
         // calculate the date, where notification needs to be thrown
-        val notificationLocalDate = calculateNotificationDate(
-            dueDate = convertTimestampToLocalDate(reminderReference.dueDate),
+        val notificationDate: LocalDateTime = calculateNotificationDate(
+            dueDate = reminderReference.dueDate,
             valueForNotification = reminderNotification.valueBeforeDue,
             daysOrMonths = reminderNotification.interval
         )
 
         // schedule notification for each item
-        val result: NotificationResult = scheduleNotification(
-            NotificationChannel.REMINDER,
-            "Reminder >> ${reminderReference.title}",
-            getTextForDurationInDays(reminderReference.dueDate),
-            convertLocalDateToTimestamp(notificationLocalDate)
+        val result: NotificationResult = notificationScheduler.schedule(
+            AlarmItem(
+                channel = NotificationChannel.REMINDER,
+                time = reminderReference.dueDate,
+                title = reminderReference.title,
+                message = getTextForDurationInDays(reminderReference.dueDate)
+            )
         )
 
         if (result.state != NotificationState.SUCCESS) {
@@ -249,7 +253,7 @@ class ReminderViewModel(
                 valueBeforeDue = reminderNotification.valueBeforeDue,
                 interval = reminderNotification.interval,
                 notificationId = result.notificationId,
-                notificationDate = convertLocalDateToTimestamp(notificationLocalDate)
+                notificationDate = notificationDate
             )
         )
     }
@@ -263,7 +267,7 @@ class ReminderViewModel(
             notificationsToDelete = listOf(),
             isAddingItem = false,
             isEditingItem = false,
-            dueDate = getCurrentTimestamp()
+            dueDate = LocalDateTime.now()
         ) }
     }
 

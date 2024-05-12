@@ -40,7 +40,7 @@ fun getTextForDurationInDays(due: LocalDateTime): String {
 
         prefix = when (periodBetweenTodayAndDue.days) {
             in Int.MIN_VALUE..-2 -> "vor"
-            in Int.MAX_VALUE..Int.MAX_VALUE -> "in"
+            in 2..Int.MAX_VALUE -> "in"
             else -> ""
         }
     }

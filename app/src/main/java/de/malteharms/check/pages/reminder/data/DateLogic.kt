@@ -14,7 +14,7 @@ import java.util.TimeZone
 
 
 /* Utility */
-fun timeBetween(dateToReach: LocalDateTime, today: LocalDateTime = LocalDateTime.now()): TimePeriod {
+fun timeBetween(dateToReach: LocalDateTime, today: LocalDateTime = LocalDate.now().atStartOfDay()): TimePeriod {
     return TimePeriod(
         days = today.until(dateToReach, ChronoUnit.DAYS),
         months = today.until(dateToReach, ChronoUnit.MONTHS),

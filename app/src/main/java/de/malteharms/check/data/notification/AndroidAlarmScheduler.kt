@@ -26,9 +26,8 @@ class AndroidAlarmScheduler(
 
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
-    override fun schedule(item: AlarmItem): NotificationResult {
-        val nId: Int = Random.nextInt(1, Int.MAX_VALUE)
-        Log.i(TAG, "Created notification ID $nId for notification title ${item.title}")
+    override fun schedule(notificationId: Int?, item: AlarmItem): NotificationResult {
+        val nId: Int = notificationId ?: Random.nextInt(1, Int.MAX_VALUE)
 
         val intent: Intent = when (item.channel) {
             NotificationChannel.REMINDER -> Intent(context, ReminderNotificationReceiver::class.java)
@@ -47,7 +46,7 @@ class AndroidAlarmScheduler(
             pendingIntent
         )
 
-        Log.i(TAG, "Scheduled notification with ID $nId at ${item.time}")
+        Log.i(TAG, "Scheduled notification with ID $nId at ${item.time} for title ${item.title}")
         return NotificationResult(NotificationState.SUCCESS, nId)
     }
 

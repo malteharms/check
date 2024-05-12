@@ -135,7 +135,7 @@ class ReminderViewModel(
                 val dueDate: LocalDateTime = state.value.dueDate
                 val category: ReminderCategory = state.value.category
 
-                val newNotifications = state.value.newNotifications
+                val notifications = state.value.notifications
                 val notificationsToRemove = state.value.notificationsToDelete
 
                 if (title.isBlank()) {
@@ -167,8 +167,8 @@ class ReminderViewModel(
                         Log.i(TAG, "Removed and canceled notification scheduled for ${reminderNotification.notificationDate}")
                     }
 
-                    // add new notifications to database and schedule them
-                    newNotifications.forEach {reminderNotification ->
+                    // (add new) / (update existing) notifications to database and schedule them
+                    notifications.forEach {reminderNotification ->
                         handleNotification(
                             event.itemToUpdate.id,
                             updatedReminderItem,
@@ -240,6 +240,8 @@ class ReminderViewModel(
         reminderReference: ReminderItem,
         reminderNotification: ReminderNotification
     ) {
+        val newNotifications: List<ReminderNotification> = state.value.newNotifications
+
         // calculate the date, where notification needs to be thrown
         val notificationDate: LocalDateTime = calculateNotificationDate(
             dueDate = reminderReference.dueDate,
@@ -251,6 +253,8 @@ class ReminderViewModel(
 
         // schedule notification for each item
         val result: NotificationResult = notificationScheduler.schedule(
+            // use the existing nId, if scheduling is already saved
+            if (reminderNotification.notificationId == -1) null else reminderNotification.notificationId,
             AlarmItem(
                 channel = NotificationChannel.REMINDER,
                 time = notificationDate,

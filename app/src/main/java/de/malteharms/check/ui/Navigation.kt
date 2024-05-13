@@ -15,7 +15,7 @@ import de.malteharms.check.pages.food.ui.Food
 import de.malteharms.check.pages.home.ui.Home
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
-import de.malteharms.check.pages.settings.ui.SettingsPage
+import de.malteharms.check.pages.settings.presentation.SettingsPage
 import de.malteharms.check.pages.todo.ui.Todo
 import de.malteharms.check.pages.welcome.ui.Welcome
 
@@ -54,6 +54,7 @@ fun Navigation(
 
             composable(Screens.ReminderRoute.route) {
                 ReminderPage(
+                    navController = navController,
                     state = reminderState,
                     getNotifications = reminderViewModel::getNotifications,
                     onEvent = reminderViewModel::onEvent

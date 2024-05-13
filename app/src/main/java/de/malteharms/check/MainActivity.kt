@@ -44,7 +44,6 @@ class MainActivity : ComponentActivity() {
         CheckDatabase.getDatabase(this)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -76,14 +75,12 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     Scaffold(
-                        topBar = { TopBar() },
                         bottomBar = { FloatingBottomNavigation( navController, getBottomNavigationItems() ) },
                         modifier = Modifier.fillMaxSize()
                     ) {  innerPadding ->
                         Box(modifier = Modifier
                             .padding(top = innerPadding.calculateTopPadding())
                             .fillMaxSize()
-                            .padding(SCREEN_INNER_PADDING.dp)
                         ) {
                             Navigation(
                                 navController,

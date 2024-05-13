@@ -11,6 +11,8 @@ import de.malteharms.check.data.NOTIFICATION_ID
 import de.malteharms.check.data.NOTIFICATION_MESSAGE
 import de.malteharms.check.data.NOTIFICATION_REMINDER_CHANNEL_ID
 import de.malteharms.check.data.NOTIFICATION_TITLE
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 
 class ReminderNotificationReceiver : BroadcastReceiver() {
@@ -28,9 +30,11 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        val timestamp = LocalDateTime.now().plusSeconds(5).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000
+
         intent.getIntExtra(NOTIFICATION_ID, 0).let {
             manager.notify(it, notification)
-            Log.i(TAG, "Notified notification ID $it")
+            Log.i(TAG, "Notified notification ID $it at milies timstamp $timestamp")
         }
     }
 }

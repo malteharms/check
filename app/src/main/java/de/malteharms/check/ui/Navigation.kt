@@ -15,16 +15,20 @@ import de.malteharms.check.pages.food.ui.Food
 import de.malteharms.check.pages.home.ui.Home
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
+import de.malteharms.check.pages.settings.data.SettingsState
 import de.malteharms.check.pages.settings.presentation.SettingsPage
+import de.malteharms.check.pages.settings.presentation.SettingsViewModel
 import de.malteharms.check.pages.todo.ui.Todo
 import de.malteharms.check.pages.welcome.ui.Welcome
 
 @Composable
 fun Navigation(
     navController: NavHostController,
-    reminderViewModel: ReminderViewModel
+    reminderViewModel: ReminderViewModel,
+    settingsViewModel: SettingsViewModel
 ) {
     val reminderState by reminderViewModel.state.collectAsState()
+    val settingsState: SettingsState by settingsViewModel.state.collectAsState()
 
     NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {
 
@@ -45,7 +49,13 @@ fun Navigation(
         ) {
             // general pages available in main route
             composable(Screens.ProfileRoute.route) { ProfilePage(navController) }
-            composable(Screens.SettingsRoute.route) { SettingsPage(navController) }
+            composable(Screens.SettingsRoute.route) {
+                SettingsPage(
+                    navController = navController,
+                    state = settingsState,
+                    onEvent = settingsViewModel::onEvent
+                )
+            }
 
             // pages available through bottom navigation
             composable(Screens.HomeRoute.route) { Home(navController) }

@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import de.malteharms.check.pages.reminder.data.database.ReminderCategory
-import de.malteharms.check.pages.reminder.data.database.ReminderItem
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
-import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
+import de.malteharms.check.data.database.tables.ReminderCategory
+import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice

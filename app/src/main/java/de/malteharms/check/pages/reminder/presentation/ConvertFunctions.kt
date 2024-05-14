@@ -2,9 +2,9 @@ package de.malteharms.check.pages.reminder.presentation
 
 import de.malteharms.check.data.TimePeriod
 import de.malteharms.check.pages.reminder.data.ReminderSortType
-import de.malteharms.check.pages.reminder.data.database.ReminderCategory
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
-import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
+import de.malteharms.check.data.database.tables.ReminderCategory
+import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.data.timeBetween
 import java.time.LocalDateTime
 

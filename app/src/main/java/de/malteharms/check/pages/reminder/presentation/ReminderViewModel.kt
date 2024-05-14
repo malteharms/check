@@ -9,11 +9,11 @@ import de.malteharms.check.data.NotificationState
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.domain.AlarmScheduler
-import de.malteharms.check.pages.reminder.data.database.ReminderItem
+import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.data.ReminderSortType
-import de.malteharms.check.pages.reminder.data.database.ReminderCategory
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import de.malteharms.check.data.database.tables.ReminderCategory
+import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.data.calculateNotificationDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi

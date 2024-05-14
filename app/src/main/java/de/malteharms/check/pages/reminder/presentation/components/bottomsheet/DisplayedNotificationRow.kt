@@ -12,8 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
-import de.malteharms.check.pages.reminder.domain.ReminderEvent
+import de.malteharms.check.data.database.tables.ReminderNotification
 
 @Composable
 fun DisplayedNotificationRow(

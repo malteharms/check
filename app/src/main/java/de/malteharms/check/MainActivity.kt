@@ -23,7 +23,10 @@ import de.malteharms.check.data.SCREEN_INNER_PADDING
 import de.malteharms.check.data.database.CheckDatabase
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.data.notification.AndroidAlarmScheduler
+import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
+import de.malteharms.check.pages.settings.data.getAllSettings
+import de.malteharms.check.pages.settings.presentation.SettingsViewModel
 import de.malteharms.check.ui.components.FloatingBottomNavigation
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -61,6 +64,16 @@ class MainActivity : ComponentActivity() {
             }
         )
 
+        val settingsViewModel by viewModels<SettingsViewModel>(
+            factoryProducer = {
+                object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return SettingsViewModel(db.itemDao()) as T
+                    }
+                }
+            }
+        )
+
         // this will set the size of the application to the whole screen
         // otherwise the page would be interrupted on the bottom of the screen
         // where the navigation slider is located
@@ -84,7 +97,8 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Navigation(
                                 navController,
-                                reminderViewModel
+                                reminderViewModel,
+                                settingsViewModel
                             )
                         }
                     }

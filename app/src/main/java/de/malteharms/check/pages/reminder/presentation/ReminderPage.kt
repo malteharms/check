@@ -28,10 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.malteharms.check.pages.reminder.data.database.ReminderItem
+import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.pages.reminder.data.ReminderState
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddReminderItemButton
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
@@ -43,9 +43,9 @@ import de.malteharms.check.ui.components.TopBar
 @Composable
 fun ReminderPage(
     navController: NavController,
-   state: ReminderState,
-   getNotifications: (Long) -> List<ReminderNotification>,
-   onEvent: (ReminderEvent) -> Unit
+    state: ReminderState,
+    getNotifications: (Long) -> List<ReminderNotification>,
+    onEvent: (ReminderEvent) -> Unit
 ) {
 
     val sheetState = rememberModalBottomSheetState()

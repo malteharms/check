@@ -1,7 +1,7 @@
 package de.malteharms.check.pages.reminder.data
 
 import de.malteharms.check.R
-import de.malteharms.check.pages.reminder.data.database.ReminderCategory
+import de.malteharms.check.data.database.tables.ReminderCategory
 
 fun getIconIdByReminderCategory(category: ReminderCategory): Int {
     return when(category) {

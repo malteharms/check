@@ -1,9 +1,9 @@
 package de.malteharms.check.pages.reminder.domain
 
-import de.malteharms.check.pages.reminder.data.database.ReminderItem
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.pages.reminder.data.ReminderSortType
-import de.malteharms.check.pages.reminder.data.database.ReminderCategory
+import de.malteharms.check.data.database.tables.ReminderCategory
 import java.time.LocalDateTime
 
 

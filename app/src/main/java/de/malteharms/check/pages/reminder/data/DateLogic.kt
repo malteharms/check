@@ -1,16 +1,11 @@
 package de.malteharms.check.pages.reminder.data
 
 import de.malteharms.check.data.TimePeriod
-import de.malteharms.check.pages.reminder.data.database.ReminderNotificationInterval
-import java.text.SimpleDateFormat
-import java.time.Instant
+import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.Locale
-import java.util.TimeZone
 
 
 /* Utility */

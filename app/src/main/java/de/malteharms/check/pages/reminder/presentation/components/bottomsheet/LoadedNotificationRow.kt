@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.pages.reminder.presentation.getNotificationText
 
 @Composable

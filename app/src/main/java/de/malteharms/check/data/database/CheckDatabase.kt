@@ -4,22 +4,28 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import de.malteharms.check.data.database.converter.AnySettingConverter
 import de.malteharms.check.data.database.converter.LocalDateTimeConverter
+import de.malteharms.check.data.database.converter.SettingValueConverter
 import de.malteharms.check.domain.CheckDao
-import de.malteharms.check.pages.reminder.data.database.ReminderItem
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.Setting
 
 
 @Database(
     entities = [
-        ReminderItem::class, ReminderNotification::class
+        ReminderItem::class, ReminderNotification::class, Setting::class
     ],
-    version = 8,
+    version = 11,
     exportSchema = false
 )
-@TypeConverters(LocalDateTimeConverter::class)
+@TypeConverters(
+    value = [
+        LocalDateTimeConverter::class, AnySettingConverter::class, SettingValueConverter::class
+    ]
+)
 abstract class CheckDatabase: RoomDatabase() {
     abstract fun itemDao(): CheckDao
 

@@ -6,8 +6,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import de.malteharms.check.pages.reminder.data.database.ReminderItem
-import de.malteharms.check.pages.reminder.data.database.ReminderNotification
+import androidx.room.Upsert
+import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.Setting
+import de.malteharms.check.pages.settings.data.SettingValue
+import de.malteharms.check.pages.settings.domain.AnySetting
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -41,5 +45,18 @@ interface CheckDao {
 
     @Query("SELECT * FROM reminder_notifications WHERE reminderItem = :itemId ORDER BY notificationDate")
     fun getNotificationsForReminderItem(itemId: Long): List<ReminderNotification>
+
+    /* SETTINGS QUERY'S */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSetting(setting: Setting)
+
+    @Update
+    suspend fun updateSetting(setting: Setting)
+
+    @Delete
+    suspend fun deleteSetting(setting: Setting)
+
+    @Query("SELECT value FROM settings WHERE item = :item")
+    fun getSettingsValue(item: AnySetting): SettingValue
 
 }

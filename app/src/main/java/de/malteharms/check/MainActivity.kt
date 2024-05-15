@@ -23,6 +23,7 @@ import de.malteharms.check.data.SCREEN_INNER_PADDING
 import de.malteharms.check.data.database.CheckDatabase
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.data.notification.AndroidAlarmScheduler
+import de.malteharms.check.data.provider.ContactsProvider
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.data.getAllSettings
@@ -47,6 +48,8 @@ class MainActivity : ComponentActivity() {
         CheckDatabase.getDatabase(this)
     }
 
+    private val contactsProvider = ContactsProvider(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,7 +61,11 @@ class MainActivity : ComponentActivity() {
             factoryProducer = {
                 object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ReminderViewModel(db.itemDao(), notificationScheduler) as T
+                        return ReminderViewModel(
+                            dao = db.itemDao(),
+                            notificationScheduler = notificationScheduler,
+                            contactsProvider = contactsProvider
+                        ) as T
                     }
                 }
             }

@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import de.malteharms.check.data.database.converter.AnySettingConverter
 import de.malteharms.check.data.database.converter.LocalDateTimeConverter
 import de.malteharms.check.data.database.converter.SettingValueConverter
+import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.database.tables.ReminderNotification
@@ -16,9 +17,12 @@ import de.malteharms.check.data.database.tables.Setting
 
 @Database(
     entities = [
-        ReminderItem::class, ReminderNotification::class, Setting::class
+        ReminderItem::class,
+        Birthday::class,
+        ReminderNotification::class,
+        Setting::class
     ],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 @TypeConverters(

@@ -1,5 +1,11 @@
 package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +38,7 @@ import de.malteharms.check.ui.components.LargeDropdownMenu
 import java.time.LocalDateTime
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun EditableNotificationRow(
     modifier: Modifier,
@@ -40,6 +47,10 @@ fun EditableNotificationRow(
     notifications: List<ReminderNotification>,
     onEvent: (ReminderEvent) -> Unit
 ) {
+
+    var hasNotificationPermission by remember {
+        mutableStateOf(false)
+    }
 
     var showNotificationDialog by remember {
         mutableStateOf(false)
@@ -73,7 +84,20 @@ fun EditableNotificationRow(
                 arrangement = arrangement,
                 isFirstRow = currentNotifications.isEmpty(),
                 currentNotification = null,
-                openAddReminderDialog = { showNotificationDialog = true },
+                openAddReminderDialog = {
+                    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.RequestPermission(),
+                        onResult =  { isGranted ->
+                            hasNotificationPermission = isGranted
+                        }
+                    )
+
+                    notificationPermissionResultLauncher.launch(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
+
+                    showNotificationDialog = true
+                },
                 removeNotification = {
                     if (currentNotifications.isNotEmpty()) {
                         currentNotifications -= currentNotifications[0]

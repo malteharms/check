@@ -1,5 +1,8 @@
 package de.malteharms.check.pages.settings.presentation
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +42,17 @@ fun SettingsPage(
     var syncBirthdayThoughContacts: Boolean by remember {
         mutableStateOf(state.syncBirthdayThroughContacts)
     }
+
+    var hasReadingContactsPermission: Boolean by remember {
+        mutableStateOf(false)
+    }
+
+    val contactsPermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult =  { isGranted ->
+            hasReadingContactsPermission = isGranted
+        }
+    )
 
     Scaffold(
         topBar = { TopBar(navController = navController, title = "Settings") }
@@ -88,28 +102,26 @@ fun SettingsPage(
                                         Switch(
                                             checked = syncBirthdayThoughContacts,
                                             onCheckedChange = {
-                                                syncBirthdayThoughContacts = it
-                                                onEvent(SettingsEvent.SwitchBirthdaySync(setting, it))
+                                                contactsPermissionResultLauncher.launch(
+                                                    Manifest.permission.READ_CONTACTS
+                                                )
+
+                                                if (hasReadingContactsPermission) {
+                                                    syncBirthdayThoughContacts = it
+                                                    onEvent(SettingsEvent.SwitchBirthdaySync(setting, it))
+                                                }
                                             }
                                         )
 
                                     }
                                     else -> {}
                                 }
-
-                                
                             }
-                            
                         }
-                        
-                        
                     }
                 }
                 
             }
-            
         }
-
     }
-
 }

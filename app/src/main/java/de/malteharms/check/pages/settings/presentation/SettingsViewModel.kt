@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val dao: CheckDao,
+    private val syncContacts: () -> Unit
 ): ViewModel() {
 
     companion object {
@@ -36,6 +37,7 @@ class SettingsViewModel(
                 }
             }
         }
+        Log.i(TAG, "Settings are created in database")
     }
 
     val state = MutableStateFlow(SettingsState(
@@ -59,6 +61,7 @@ class SettingsViewModel(
                 }
 
                 Log.i(TAG, "Updated setting ${event.setting.item.getTitle()} to ${event.value}")
+                syncContacts()
             }
         }
     }

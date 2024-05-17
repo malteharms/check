@@ -75,7 +75,10 @@ class MainActivity : ComponentActivity() {
             factoryProducer = {
                 object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return SettingsViewModel(db.itemDao()) as T
+                        return SettingsViewModel(
+                            db.itemDao(),
+                            reminderViewModel::syncContacts
+                        ) as T
                     }
                 }
             }

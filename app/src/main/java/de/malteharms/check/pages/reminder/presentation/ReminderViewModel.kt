@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.data.NotificationResult
 import de.malteharms.check.data.NotificationState
+import de.malteharms.check.data.database.insertReminderItemForBirthday
+import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.domain.AlarmScheduler
@@ -14,9 +16,12 @@ import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.updateReminderItemForBirthday
 import de.malteharms.check.data.provider.ContactsProvider
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.data.calculateNotificationDate
+import de.malteharms.check.pages.settings.data.ReminderSettings
+import de.malteharms.check.pages.settings.data.SettingValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -235,6 +240,52 @@ class ReminderViewModel(
 
     fun getNotifications(itemId: Long): List<ReminderNotification> {
         return dao.getNotificationsForReminderItem(itemId)
+    }
+
+    fun syncContacts() {
+        var allowedToSyncContacts: SettingValue? = null
+
+        viewModelScope.launch {
+            allowedToSyncContacts =
+                dao.getSettingsValue(ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS)
+        }
+
+        if (!allowedToSyncContacts?.boolean!!) {
+            Log.w(TAG, "Not allowed to sync Contacts!")
+            return
+        }
+
+        val birthdays: List<Birthday> = contactsProvider.getContactBirthdays()
+
+        birthdays.forEach{
+            // check, if birthday already exists
+            val existingBirthday: Birthday? = dao.getBirthday(it.id)
+
+            // if there is no birthday which was already saved in database,
+            // create a row for for the birthday and the corresponding
+            // reminder item
+            if (existingBirthday == null) {
+                viewModelScope.launch {
+                    dao.insertBirthday(it)
+                    insertReminderItemForBirthday(dao, it)
+                }
+                return@forEach
+            }
+
+            // if the entry already exists, check, if the item
+            // needs to be updated. For example, when the name
+            // or the birthday changes
+            // If the item is the same as before, continue with
+            // the next birthday item
+            if (existingBirthday == it) {
+                return@forEach
+            }
+
+            viewModelScope.launch {
+                val linkedReminder: ReminderItem? = dao.getReminderItemForBirthdayId(it.id)
+                updateReminderItemForBirthday(dao, linkedReminder!!.id, it)
+            }
+        }
     }
 
     private suspend fun handleNotification(

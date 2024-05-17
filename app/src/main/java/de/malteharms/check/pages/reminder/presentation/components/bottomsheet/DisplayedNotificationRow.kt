@@ -20,7 +20,7 @@ fun DisplayedNotificationRow(
     arrangement: Arrangement.Horizontal,
     isFirstRow: Boolean,
     currentNotification: ReminderNotification?,
-    openAddReminderDialog: @Composable () -> Unit,
+    openAddReminderDialog: () -> Unit,
     removeNotification: () -> Unit
 ) {
 

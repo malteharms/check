@@ -52,6 +52,13 @@ fun EditableNotificationRow(
         mutableStateOf(false)
     }
 
+    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult =  { isGranted ->
+            hasNotificationPermission = isGranted
+        }
+    )
+
     var showNotificationDialog by remember {
         mutableStateOf(false)
     }
@@ -85,18 +92,13 @@ fun EditableNotificationRow(
                 isFirstRow = currentNotifications.isEmpty(),
                 currentNotification = null,
                 openAddReminderDialog = {
-                    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
-                        contract = ActivityResultContracts.RequestPermission(),
-                        onResult =  { isGranted ->
-                            hasNotificationPermission = isGranted
-                        }
-                    )
-
                     notificationPermissionResultLauncher.launch(
                         Manifest.permission.POST_NOTIFICATIONS
                     )
 
-                    showNotificationDialog = true
+                    if (hasNotificationPermission) {
+                        showNotificationDialog = true
+                    }
                 },
                 removeNotification = {
                     if (currentNotifications.isNotEmpty()) {

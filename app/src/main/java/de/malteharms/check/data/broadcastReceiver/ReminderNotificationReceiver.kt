@@ -1,4 +1,4 @@
-package de.malteharms.check.data.notification
+package de.malteharms.check.data.broadcastReceiver
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver

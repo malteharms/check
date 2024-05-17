@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
+import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.data.database.tables.Setting
@@ -32,6 +33,9 @@ interface CheckDao {
 
     @Query("SELECT * FROM reminder_items ORDER BY dueDate ASC")
     fun getReminderItemsOrderedByDueDate(): Flow<List<ReminderItem>>
+
+    @Query("SELECT * FROM reminder_items WHERE birthdayRelation = :birthdayId LIMIT 1")
+    fun getReminderItemForBirthdayId(birthdayId: Long): ReminderItem?
 
     /* REMINDER NOTIFICATION QUERY'S */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -59,4 +63,9 @@ interface CheckDao {
     @Query("SELECT value FROM settings WHERE item = :item")
     fun getSettingsValue(item: AnySetting): SettingValue
 
+    @Insert
+    suspend fun insertBirthday(item: Birthday)
+
+    @Query("SELECT * FROM birthdays WHERE id = :birthdayId")
+    fun getBirthday(birthdayId: Long): Birthday?
 }

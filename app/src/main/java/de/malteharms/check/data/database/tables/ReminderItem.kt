@@ -13,12 +13,13 @@ data class ReminderItem(
     val title: String,
     val category: ReminderCategory = ReminderCategory.GENERAL,
 
-    val todoRelation: Int? = null,
+    val todoRelation: Long? = null,
+    val birthdayRelation: Long? = null,
 
     // todo: implement migration strategy for LocalDateTime
     val dueDate: LocalDateTime,
-    val creationDate: LocalDateTime,
-    val lastUpdate: LocalDateTime
+    val creationDate: LocalDateTime = LocalDateTime.now(),
+    val lastUpdate: LocalDateTime = LocalDateTime.now()
 )
 
 enum class ReminderCategory {

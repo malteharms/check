@@ -47,12 +47,11 @@ class ContactsProvider(
 
                 val bDaySplit = bDay.split('-')
                 val year: Int = bDaySplit[0].toInt()
-                val month: Int = bDaySplit[1].toInt() - 1
+                val month: Int = bDaySplit[1].toInt()
                 val day: Int = bDaySplit[2].toInt()
 
                 contacts.add(Birthday(
                     id = cId,
-                    reminderItemId = null,
                     name = name,
                     birthday = LocalDate.of(year, month, day).atStartOfDay()
                 ))

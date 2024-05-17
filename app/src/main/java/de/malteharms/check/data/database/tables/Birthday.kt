@@ -9,7 +9,6 @@ data class Birthday (
 
     @PrimaryKey
     val id: Long,
-    val reminderItemId: Long?,
 
     val name: String,
     val birthday: LocalDateTime

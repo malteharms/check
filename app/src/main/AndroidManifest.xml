@@ -30,7 +30,7 @@
         </activity>
 
         <receiver
-            android:name=".data.notification.ReminderNotificationReceiver"
+            android:name=".data.broadcastReceiver.ReminderNotificationReceiver"
             android:enabled="true"/>
 
     </application>

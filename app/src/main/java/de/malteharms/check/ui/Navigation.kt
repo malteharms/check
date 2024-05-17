@@ -67,7 +67,8 @@ fun Navigation(
                     navController = navController,
                     state = reminderState,
                     getNotifications = reminderViewModel::getNotifications,
-                    onEvent = reminderViewModel::onEvent
+                    onEvent = reminderViewModel::onEvent,
+                    syncContacts = reminderViewModel::syncContacts
                 )
             }
 

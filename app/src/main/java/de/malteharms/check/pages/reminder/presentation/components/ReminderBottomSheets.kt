@@ -1,5 +1,7 @@
 package de.malteharms.check.pages.reminder.presentation.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,6 +46,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun ReminderBottomSheet(
     item: ReminderItem?,
@@ -171,6 +174,7 @@ fun ReminderBottomSheet(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview
 @Composable
 fun ReminderBottomSheetPreview() {

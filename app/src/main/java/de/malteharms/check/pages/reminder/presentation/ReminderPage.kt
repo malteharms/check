@@ -1,5 +1,7 @@
 package de.malteharms.check.pages.reminder.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -39,6 +41,7 @@ import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRo
 import de.malteharms.check.ui.components.TopBar
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderPage(

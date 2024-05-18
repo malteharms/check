@@ -285,8 +285,11 @@ class ReminderViewModel(
             // the next birthday item
 
             // TODO load overdue from settings
-            if (existingBirthday.birthday == it.birthday && existingBirthday.name == it.name &&
-                !checkIfBirthdayNeedsToBeUpdated(existingBirthday.birthday)) {
+            val needsUpdate: Boolean = checkIfBirthdayNeedsToBeUpdated(
+                dateToReview = existingBirthday.birthday
+            )
+
+            if ((existingBirthday.birthday == it.birthday && existingBirthday.name == it.name) || needsUpdate) {
                 return@forEach
             }
 
@@ -303,8 +306,6 @@ class ReminderViewModel(
         reminderReference: ReminderItem,
         reminderNotification: ReminderNotification
     ) {
-        val newNotifications: List<ReminderNotification> = state.value.newNotifications
-
         // calculate the date, where notification needs to be thrown
         val notificationDate: LocalDateTime = calculateNotificationDate(
             dueDate = reminderReference.dueDate,

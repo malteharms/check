@@ -32,7 +32,7 @@ import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingsState
 import de.malteharms.check.pages.settings.data.getAllSettings
 import de.malteharms.check.pages.settings.domain.SettingsEvent
-import de.malteharms.check.ui.components.TopBar
+import de.malteharms.check.presentation.components.TopBar
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable

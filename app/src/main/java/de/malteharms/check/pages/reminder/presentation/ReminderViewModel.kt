@@ -3,21 +3,19 @@ package de.malteharms.check.pages.reminder.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.data.NotificationResult
 import de.malteharms.check.data.NotificationState
 import de.malteharms.check.data.database.insertReminderItemForBirthday
 import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
-import de.malteharms.check.domain.AlarmScheduler
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.data.database.updateReminderItemForBirthday
-import de.malteharms.check.data.provider.ContactsProvider
+import de.malteharms.check.di.AppModule
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.data.calculateNotificationDate
 import de.malteharms.check.pages.reminder.data.checkIfBirthdayNeedsToBeUpdated
@@ -36,14 +34,14 @@ import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReminderViewModel(
-    private val dao: CheckDao,
-    private val notificationScheduler: AlarmScheduler,
-    private val contactsProvider: ContactsProvider
+    private val app: AppModule
 ): ViewModel() {
 
     companion object {
         private val TAG: String? = ReminderViewModel::class.simpleName
     }
+
+    private val dao = app.db.itemDao()
 
     private val _reminderSortType = MutableStateFlow(ReminderSortType.DUE_DATE)
     private val _reminderItems = _reminderSortType
@@ -168,7 +166,7 @@ class ReminderViewModel(
                     // remove deleted notifications
                     notificationsToRemove.forEach { reminderNotification ->
                         // cancel already scheduled notification
-                        notificationScheduler.cancel(reminderNotification.notificationId)
+                        app.notificationScheduler.cancel(reminderNotification.notificationId)
                         // remove reminder from database
                         dao.removeReminderNotification(reminderNotification)
 
@@ -261,7 +259,7 @@ class ReminderViewModel(
             return
         }
 
-        val birthdays: List<Birthday> = contactsProvider.getContactBirthdays()
+        val birthdays: List<Birthday> = app.contactsProvider.getContactBirthdays()
 
         birthdays.forEach{
             // check, if birthday already exists
@@ -316,7 +314,7 @@ class ReminderViewModel(
         Log.i(TAG, "Calculated $notificationDate as notification date")
 
         // schedule notification for each item
-        val result: NotificationResult = notificationScheduler.schedule(
+        val result: NotificationResult = app.notificationScheduler.schedule(
             // use the existing nId, if scheduling is already saved
             if (reminderNotification.notificationId == -1) null else reminderNotification.notificationId,
             AlarmItem(

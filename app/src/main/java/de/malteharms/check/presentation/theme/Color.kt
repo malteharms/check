@@ -1,4 +1,4 @@
-package de.malteharms.check.ui.theme
+package de.malteharms.check.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

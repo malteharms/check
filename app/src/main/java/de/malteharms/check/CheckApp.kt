@@ -6,15 +6,19 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import de.malteharms.check.data.NOTIFICATION_REMINDER_CHANNEL_ID
+import de.malteharms.check.di.AppModule
+import de.malteharms.check.di.AppModuleImpl
 
 class CheckApp: Application() {
 
     companion object {
         val TAG: String? = CheckApp::class.simpleName
+        lateinit var appModule: AppModule
     }
 
     override fun onCreate() {
         super.onCreate()
+        appModule = AppModuleImpl(context = this)
 
         createNotificationChannels()
     }

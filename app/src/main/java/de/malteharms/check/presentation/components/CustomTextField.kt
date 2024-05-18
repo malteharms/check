@@ -1,4 +1,4 @@
-package de.malteharms.check.ui.components
+package de.malteharms.check.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

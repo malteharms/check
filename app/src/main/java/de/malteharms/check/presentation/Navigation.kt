@@ -1,4 +1,4 @@
-package de.malteharms.check.ui
+package de.malteharms.check.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

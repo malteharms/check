@@ -23,7 +23,7 @@ import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
-import de.malteharms.check.ui.theme.blue60
+import de.malteharms.check.presentation.theme.blue60
 import java.time.LocalDateTime
 
 

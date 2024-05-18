@@ -34,7 +34,7 @@ import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
-import de.malteharms.check.ui.components.LargeDropdownMenu
+import de.malteharms.check.presentation.components.LargeDropdownMenu
 import java.time.LocalDateTime
 
 

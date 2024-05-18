@@ -1,4 +1,4 @@
-package de.malteharms.check.ui.theme
+package de.malteharms.check.presentation.theme
 
 import android.app.Activity
 import androidx.compose.material3.MaterialTheme

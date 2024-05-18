@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.malteharms.check.pages.food.data.FOOD_BOX_CORNER_RADIUS
-import de.malteharms.check.ui.theme.blue60
+import de.malteharms.check.presentation.theme.blue60
 
 @Composable
 fun FoodLabelContainer(

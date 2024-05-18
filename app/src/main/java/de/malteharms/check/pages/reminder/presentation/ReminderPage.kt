@@ -38,7 +38,7 @@ import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddReminderItemButton
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
 import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
-import de.malteharms.check.ui.components.TopBar
+import de.malteharms.check.presentation.components.TopBar
 
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)

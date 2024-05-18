@@ -1,4 +1,4 @@
-package de.malteharms.check.ui.components
+package de.malteharms.check.presentation.components
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.Image
 import androidx.compose.ui.graphics.Color
-import de.malteharms.check.ui.theme.blue80
+import de.malteharms.check.presentation.theme.blue80
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row

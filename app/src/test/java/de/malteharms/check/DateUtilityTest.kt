@@ -1,9 +1,11 @@
 package de.malteharms.check
 
+import de.malteharms.check.pages.reminder.data.calculateCorrectYearOfNextBirthday
 import de.malteharms.check.pages.reminder.data.timeBetween
 import org.junit.Assert
 import org.junit.Test
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class DateUtilityTest {
 
@@ -90,6 +92,34 @@ class DateUtilityTest {
         )
 
         Assert.assertEquals(expectedRange, actualRange.days)
+    }
+
+    @Test
+    fun correctYearOfNextBirthdayBeforeToday_isCorrect() {
+        val currentDate: LocalDateTime = LocalDate.of(2024, 5, 18).atStartOfDay()
+        val beforeToday: LocalDateTime = LocalDate.of(2024, 4, 18).atStartOfDay()
+
+        val expectedYear: Int = 2025
+        val actualYear: Int = calculateCorrectYearOfNextBirthday(
+            dateToReview = beforeToday,
+            today = currentDate
+        )
+
+        Assert.assertEquals(expectedYear, actualYear)
+    }
+
+    @Test
+    fun correctYearOfNextBirthdayAfterToday_isCorrect() {
+        val currentDate: LocalDateTime = LocalDate.of(2024, 5, 18).atStartOfDay()
+        val beforeToday: LocalDateTime = LocalDate.of(2024, 6, 18).atStartOfDay()
+
+        val expectedYear: Int = 2024
+        val actualYear: Int = calculateCorrectYearOfNextBirthday(
+            dateToReview = beforeToday,
+            today = currentDate
+        )
+
+        Assert.assertEquals(expectedYear, actualYear)
     }
 
 }

@@ -4,16 +4,11 @@ import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.domain.CheckDao
+import de.malteharms.check.pages.reminder.data.calculateCorrectYearOfNextBirthday
 import java.time.LocalDateTime
 
 suspend fun insertReminderItemForBirthday(dao: CheckDao, item: Birthday) {
-
-    val today: LocalDateTime = LocalDateTime.now()
-    val thisYear: Int = today.year
-
-    val nextYearOfBirthday: Int = if (item.birthday.withYear(thisYear).isBefore(today)) {
-        thisYear
-    } else thisYear + 1
+    val nextYearOfBirthday: Int = calculateCorrectYearOfNextBirthday(item.birthday)
 
     dao.insertReminderItem(ReminderItem(
         title = "${item.name}'s Geburtstag",
@@ -24,12 +19,7 @@ suspend fun insertReminderItemForBirthday(dao: CheckDao, item: Birthday) {
 }
 
 suspend fun updateReminderItemForBirthday(dao: CheckDao, reminderId: Long, item: Birthday) {
-    val today: LocalDateTime = LocalDateTime.now()
-    val thisYear: Int = today.year
-
-    val nextYearOfBirthday: Int = if (item.birthday.withYear(thisYear).isBefore(today)) {
-        thisYear
-    } else thisYear + 1
+    val nextYearOfBirthday: Int = calculateCorrectYearOfNextBirthday(item.birthday)
 
     dao.updateReminderItem(ReminderItem(
         id = reminderId,

@@ -20,6 +20,7 @@ import de.malteharms.check.data.database.updateReminderItemForBirthday
 import de.malteharms.check.data.provider.ContactsProvider
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.data.calculateNotificationDate
+import de.malteharms.check.pages.reminder.data.checkIfBirthdayNeedsToBeUpdated
 import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -250,6 +251,11 @@ class ReminderViewModel(
                 dao.getSettingsValue(ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS)
         }
 
+        if (allowedToSyncContacts == null) {
+            Log.w(TAG, "Settings not yet loaded")
+            return
+        }
+
         if (!allowedToSyncContacts?.boolean!!) {
             Log.w(TAG, "Not allowed to sync Contacts!")
             return
@@ -277,13 +283,17 @@ class ReminderViewModel(
             // or the birthday changes
             // If the item is the same as before, continue with
             // the next birthday item
-            if (existingBirthday == it) {
+
+            // TODO load overdue from settings
+            if (existingBirthday.birthday == it.birthday && existingBirthday.name == it.name &&
+                !checkIfBirthdayNeedsToBeUpdated(existingBirthday.birthday)) {
                 return@forEach
             }
 
             viewModelScope.launch {
                 val linkedReminder: ReminderItem? = dao.getReminderItemForBirthdayId(it.id)
                 updateReminderItemForBirthday(dao, linkedReminder!!.id, it)
+                Log.i(TAG, "Updated reminder item with ID ${linkedReminder.id} because birthday data changed")
             }
         }
     }

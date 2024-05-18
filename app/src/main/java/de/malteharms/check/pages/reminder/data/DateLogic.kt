@@ -28,6 +28,32 @@ fun calculateNotificationDate(
     }
 }
 
+fun checkIfBirthdayNeedsToBeUpdated(
+    dateToReview: LocalDateTime,
+    today: LocalDateTime = LocalDate.now().atStartOfDay(),
+    overDue: Long = 0
+): Boolean {
+    val thisYear: Int = today.year
+    return dateToReview.minusDays(overDue).withYear(thisYear).isBefore(today)
+}
+
+fun calculateCorrectYearOfNextBirthday(
+    dateToReview: LocalDateTime,
+    today: LocalDateTime = LocalDate.now().atStartOfDay(),
+    overDue: Long = 0
+): Int {
+    val birthdayNeedsUpdate: Boolean = checkIfBirthdayNeedsToBeUpdated(
+        dateToReview,
+        overDue = overDue
+    )
+
+    val nextYearOfBirthday: Int = if (birthdayNeedsUpdate) {
+        today.year + 1
+    } else today.year
+
+    return nextYearOfBirthday
+}
+
 /* Timestamp <-> String */
 fun convertTimestampToDateString(date: LocalDateTime): String {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")

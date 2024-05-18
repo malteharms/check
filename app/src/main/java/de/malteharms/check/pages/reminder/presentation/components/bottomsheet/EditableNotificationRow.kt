@@ -133,17 +133,15 @@ fun EditableNotificationRow(
                             modifier = Modifier.weight(1f),
                             value = value,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            onValueChange = {
-                                value = it
+                            onValueChange = { newValue ->
+                                value = newValue
 
-
-
-                                warning = if (it.text.isEmpty()) {
+                                warning = if (newValue.text.isEmpty()) {
                                     "Bitte gebe ein Zeitpunkt an"
-                                } else if (!it.text.all { it.isDigit() }) {
+                                } else if (!newValue.text.all { it.isDigit() }) {
                                     "Nur Ziffern sind erlaubt"
                                 } else {
-                                    if (it.text.toInt() < 0)
+                                    if (newValue.text.toInt() < 0)
                                         "Zeitpunkt muss heute oder in der Zukunft liegen"
                                     else
                                         ""

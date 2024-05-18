@@ -28,6 +28,8 @@ class SettingsViewModel(
         private val TAG: String? = SettingsViewModel::class.simpleName
     }
 
+    val state = MutableStateFlow(SettingsState())
+
     init {
         getAllSettings().forEach { settingsGroup ->
             settingsGroup.forEach { setting ->
@@ -38,11 +40,18 @@ class SettingsViewModel(
             }
         }
         Log.i(TAG, "Settings are created in database")
-    }
 
-    val state = MutableStateFlow(SettingsState(
-        syncBirthdayThroughContacts = dao.getSettingsValue(ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS).boolean!!
-    ))
+        state.update { it.copy(
+            syncBirthdayThroughContacts = dao.getSettingsValue(
+                ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS
+            ).boolean!!,
+
+            // todo crash on first start
+            defaultNotificationForBirthday = dao.getSettingsValue(
+                ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS
+            ).boolean!!
+        ) }
+    }
 
     fun onEvent(event: SettingsEvent) {
 
@@ -62,6 +71,20 @@ class SettingsViewModel(
 
                 Log.i(TAG, "Updated setting ${event.setting.item.getTitle()} to ${event.value}")
                 syncContacts()
+            }
+
+            is SettingsEvent.SwitchDefaultNotificationForBirthday -> {
+                state.update { it.copy(
+                    defaultNotificationForBirthday = event.value
+                ) }
+
+                val updatedValue: Setting = event.setting.copy(
+                    value = SettingValue(boolean = event.value)
+                )
+
+                viewModelScope.launch {
+                    dao.updateSetting(updatedValue)
+                }
             }
         }
     }

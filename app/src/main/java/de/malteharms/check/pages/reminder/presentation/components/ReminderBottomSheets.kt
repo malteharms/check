@@ -97,6 +97,7 @@ fun ReminderBottomSheet(
             alignment = editableRowAlignment,
             arrangement = editableRowArrangement,
             title = title.text,
+            editable = item?.birthdayRelation == null,
             onValueChange = { newText ->
                 title = TextFieldValue(newText)
                 onEvent(ReminderEvent.SetTitle(newText))

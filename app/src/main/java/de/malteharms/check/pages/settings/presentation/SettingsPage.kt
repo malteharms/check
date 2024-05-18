@@ -1,8 +1,10 @@
 package de.malteharms.check.pages.settings.presentation
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +34,7 @@ import de.malteharms.check.pages.settings.data.getAllSettings
 import de.malteharms.check.pages.settings.domain.SettingsEvent
 import de.malteharms.check.ui.components.TopBar
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SettingsPage(
     navController: NavController,
@@ -41,6 +44,10 @@ fun SettingsPage(
 
     var syncBirthdayThoughContacts: Boolean by remember {
         mutableStateOf(state.syncBirthdayThroughContacts)
+    }
+
+    var defaultNotificationForBirthday: Boolean by remember {
+        mutableStateOf(state.defaultNotificationForBirthday)
     }
 
     var hasReadingContactsPermission: Boolean by remember {
@@ -68,7 +75,17 @@ fun SettingsPage(
                 
                 LazyColumn {
                     itemsIndexed(settings) { index, setting ->
-                        
+
+                        val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.RequestPermission(),
+                            onResult =  { isGranted ->
+                                if (isGranted) {
+                                    defaultNotificationForBirthday = !defaultNotificationForBirthday
+                                    onEvent(SettingsEvent.SwitchBirthdaySync(setting, defaultNotificationForBirthday))
+                                }
+                            }
+                        )
+
                         Column (
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -98,7 +115,6 @@ fun SettingsPage(
 
                                 when (setting.item) {
                                     ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS -> {
-
                                         Switch(
                                             checked = syncBirthdayThoughContacts,
                                             onCheckedChange = {
@@ -112,9 +128,18 @@ fun SettingsPage(
                                                 }
                                             }
                                         )
-
                                     }
-                                    else -> {}
+
+                                    ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS -> {
+                                        Switch(
+                                            checked = defaultNotificationForBirthday,
+                                            onCheckedChange = {
+                                                notificationPermissionResultLauncher.launch(
+                                                    Manifest.permission.POST_NOTIFICATIONS
+                                                )
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }

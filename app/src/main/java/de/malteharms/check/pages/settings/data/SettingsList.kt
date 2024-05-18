@@ -11,6 +11,7 @@ fun getAllSettings(): List<List<Setting>> {
 
 fun getReminderSettings(): List<Setting> {
     return listOf(
-        ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS.getSetting()
+        ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS.getSetting(),
+        ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS.getSetting()
     )
 }

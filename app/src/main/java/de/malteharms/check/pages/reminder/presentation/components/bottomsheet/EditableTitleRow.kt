@@ -33,6 +33,7 @@ fun EditableTitleRow(
     arrangement: Arrangement.Horizontal,
 
     title: String,
+    editable: Boolean = true,
     onValueChange: (String) -> Unit,
 ) {
     Row (
@@ -42,16 +43,30 @@ fun EditableTitleRow(
     ){
         Icon(imageVector = Icons.Default.Edit, contentDescription = null)
 
-        CustomTextField(
-            modifier = Modifier
-                .background(
-                    MaterialTheme.colorScheme.surface,
-                    RoundedCornerShape(percent = 50)
-                ),
-            placeholderText = "Titel",
-            value = title,
-            onValueChange = { newText ->  onValueChange(newText) }
-        )
+        if (editable) {
+            CustomTextField(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                        RoundedCornerShape(percent = 50)
+                    )
+                    .padding(horizontal = 10.dp),
+                placeholderText = "Titel",
+                value = title,
+                onValueChange = { newText ->  onValueChange(newText) }
+            )
+        } else {
+            Text(
+                text = title,
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                        RoundedCornerShape(percent = 50)
+                    )
+                    .padding(horizontal = 10.dp),
+                color = Color.Gray
+            )
+        }
     }
 }
 

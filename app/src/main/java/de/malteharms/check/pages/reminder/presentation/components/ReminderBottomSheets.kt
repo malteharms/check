@@ -163,7 +163,6 @@ fun ReminderBottomSheet(
             datepicker(
                 initialDate = currentDate,
                 title = "Wähle ein Datum",
-                allowedDateValidator = { it.isAfter(currentDate) }
             ) { newDate: LocalDate ->
                 pickedDate = newDate.atStartOfDay()
                 onEvent(ReminderEvent.SetDueDate(pickedDate))

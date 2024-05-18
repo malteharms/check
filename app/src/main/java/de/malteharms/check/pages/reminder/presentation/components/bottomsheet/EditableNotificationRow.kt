@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -110,6 +111,10 @@ fun EditableNotificationRow(
             mutableStateOf(ReminderNotificationInterval.DAYS)
         }
 
+        var warning by remember {
+            mutableStateOf("")
+        }
+
         AlertDialog(
             icon = {
                 Icon(Icons.Default.Notifications, contentDescription = null, tint = Color.White)
@@ -118,31 +123,49 @@ fun EditableNotificationRow(
                 Text(text = "Benachrichtige mich")
             },
             text = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    TextField(
-                        modifier = Modifier.weight(1f),
-                        value = value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
-                            value = it
-                        }
-                    )
-
-                    LargeDropdownMenu(
-                        label = "Interval",
-                        items = ReminderNotificationInterval.entries,
-                        selectedIndex = interval.ordinal,
-                        onItemSelected = { _, item -> interval = item },
-                        selectedItemToString = { getNotificationIntervalRepresentation(interval) },
-                        modifier = Modifier.weight(3f)
-                    )
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        TextField(
+                            modifier = Modifier.weight(1f),
+                            value = value,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            onValueChange = {
+                                value = it
 
 
-                    Text(text = "vorher", modifier = Modifier.weight(1f))
+
+                                warning = if (it.text.isEmpty()) {
+                                    "Bitte gebe ein Zeitpunkt an"
+                                } else if (!it.text.all { it.isDigit() }) {
+                                    "Nur Ziffern sind erlaubt"
+                                } else {
+                                    if (it.text.toInt() < 0)
+                                        "Zeitpunkt muss heute oder in der Zukunft liegen"
+                                    else
+                                        ""
+                                }
+                            }
+                        )
+
+                        LargeDropdownMenu(
+                            label = "Interval",
+                            items = ReminderNotificationInterval.entries,
+                            selectedIndex = interval.ordinal,
+                            onItemSelected = { _, item -> interval = item },
+                            selectedItemToString = { getNotificationIntervalRepresentation(interval) },
+                            modifier = Modifier.weight(3f)
+                        )
+
+
+                        Text(text = "vorher", modifier = Modifier.weight(1f))
+                    }
+
+                    // warning text
+                    Text(text = warning, color = Color.Red)
                 }
             },
             onDismissRequest = {
@@ -151,20 +174,20 @@ fun EditableNotificationRow(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        val newReminderNotification = ReminderNotification(
-                            reminderItem = -1,  // will be set on save
-                            valueBeforeDue = value.text.toInt(),
-                            interval = interval,
-                            notificationId = -1, // will be set on save
-                            notificationDate = LocalDateTime.MAX // will be set on save
-                        )
+                        if (warning == "") {
+                            val newReminderNotification = ReminderNotification(
+                                reminderItem = -1,  // will be set on save
+                                valueBeforeDue = value.text.toInt(),
+                                interval = interval,
+                                notificationId = -1, // will be set on save
+                                notificationDate = LocalDateTime.MAX // will be set on save
+                            )
 
-                        // todo just add the notification if the date is not in the past or today
+                            currentNotifications += newReminderNotification
+                            onEvent(ReminderEvent.AddNotification(newReminderNotification))
 
-                        currentNotifications += newReminderNotification
-                        onEvent(ReminderEvent.AddNotification(newReminderNotification))
-
-                        showNotificationDialog = false
+                            showNotificationDialog = false
+                        }
                     }
                 ) {
                     Text("Hinzufügen")

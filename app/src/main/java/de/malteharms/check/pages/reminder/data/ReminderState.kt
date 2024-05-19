@@ -19,5 +19,5 @@ data class ReminderState (
 
     val isAddingItem: Boolean = false,
     val isEditingItem: Boolean = false,
-    val sortType: ReminderSortType = ReminderSortType.DUE_DATE
+    val filter: List<ReminderCategory> = emptyList()
 )

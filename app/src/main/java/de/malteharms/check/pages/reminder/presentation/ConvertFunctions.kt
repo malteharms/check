@@ -53,13 +53,6 @@ fun getAddOrUpdateButtonText(isItemNew: Boolean): String {
     return if (isItemNew) { "Erinnerung hinzufügen" } else "Erinnerung speichern"
 }
 
-fun getSortTypeRepresentation(sortType: ReminderSortType): String {
-    return when(sortType) {
-        ReminderSortType.TITLE -> "Titel"
-        ReminderSortType.DUE_DATE -> "Fällig am"
-    }
-}
-
 fun getCategoryRepresentation(category: ReminderCategory): String {
     return when(category) {
         ReminderCategory.GENERAL -> "Allgemein"

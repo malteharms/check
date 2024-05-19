@@ -25,7 +25,7 @@ data class ReminderItem(
 enum class ReminderCategory {
     GENERAL,
     BIRTHDAY,
+    IMPORTANT_APPOINTMENT,
     AUTOMATIC_RENEW,
-    MANUAL_RENEW,
-    IMPORTANT_APPOINTMENT
+    MANUAL_RENEW
 }

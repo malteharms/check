@@ -1,5 +1,7 @@
 package de.malteharms.check.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,6 +23,7 @@ import de.malteharms.check.pages.settings.presentation.SettingsViewModel
 import de.malteharms.check.pages.todo.ui.Todo
 import de.malteharms.check.pages.welcome.ui.Welcome
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun Navigation(
     navController: NavHostController,
@@ -67,8 +70,7 @@ fun Navigation(
                     navController = navController,
                     state = reminderState,
                     getNotifications = reminderViewModel::getNotifications,
-                    onEvent = reminderViewModel::onEvent,
-                    syncContacts = reminderViewModel::syncContacts
+                    onEvent = reminderViewModel::onEvent
                 )
             }
 

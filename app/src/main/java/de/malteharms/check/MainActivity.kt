@@ -1,5 +1,6 @@
 package de.malteharms.check
 
+import android.os.Build
 import android.os.Bundle
 import androidx.compose.ui.Modifier
 import de.malteharms.check.presentation.Navigation
@@ -8,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Scaffold
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import de.malteharms.check.presentation.theme.CheckTheme
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +26,7 @@ import de.malteharms.check.presentation.viewModelFactory
 
 class MainActivity : ComponentActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,12 +38,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             CheckTheme {
 
+                /*
+                * The ReminderViewModel will provide the state for showing the ReminderPage.
+                * A user has the possibility to load birthdays from contacts. To always stay
+                * up to date, the birthdays will be synced when starting the application
+                */
                 val reminderViewModel: ReminderViewModel = viewModel<ReminderViewModel>(
                     factory = viewModelFactory { ReminderViewModel(
                         app = CheckApp.appModule
                     ) }
                 )
 
+                reminderViewModel.syncContacts()
+
+                /*
+                * The SettingsViewModel will work as a bridge between the Settings UI and
+                * the database, where all settings are stored.
+                 */
                 val settingsViewModel: SettingsViewModel = viewModel<SettingsViewModel>(
                     factory = viewModelFactory { SettingsViewModel(
                         dao = CheckApp.appModule.db.itemDao(),
@@ -73,5 +87,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }

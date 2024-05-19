@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
 import de.malteharms.check.data.database.tables.Birthday
+import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.data.database.tables.Setting
@@ -28,11 +29,11 @@ interface CheckDao {
     @Delete
     suspend fun removeReminderItem(reminderItem: ReminderItem)
 
-    @Query("SELECT * FROM reminder_items ORDER BY title ASC")
-    fun getReminderItemsOrderedByTitle(): Flow<List<ReminderItem>>
+    @Query("SELECT * FROM reminder_items ORDER BY dueDate ASC LIMIT :limit")
+    fun getAllReminderItems(limit: Int? = null): Flow<List<ReminderItem>>
 
-    @Query("SELECT * FROM reminder_items ORDER BY dueDate ASC")
-    fun getReminderItemsOrderedByDueDate(): Flow<List<ReminderItem>>
+    @Query("SELECT * FROM reminder_items WHERE category IN (:categories) ORDER BY dueDate ASC LIMIT :limit")
+    fun getFilteredReminderItems(categories: List<ReminderCategory>, limit: Int? = null): Flow<List<ReminderItem>>
 
     @Query("SELECT * FROM reminder_items WHERE birthdayRelation = :birthdayId LIMIT 1")
     fun getReminderItemForBirthdayId(birthdayId: Long): ReminderItem?

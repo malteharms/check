@@ -79,6 +79,8 @@ fun ReminderBottomSheet(
     val editableRowAlignment = Alignment.CenterVertically
     val editableRowArrangement = Arrangement.spacedBy(10.dp)
 
+    val editable: Boolean = item?.birthdayRelation == null
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
@@ -97,7 +99,7 @@ fun ReminderBottomSheet(
             alignment = editableRowAlignment,
             arrangement = editableRowArrangement,
             title = title.text,
-            editable = item?.birthdayRelation == null,
+            editable = editable,
             onValueChange = { newText ->
                 title = TextFieldValue(newText)
                 onEvent(ReminderEvent.SetTitle(newText))
@@ -106,12 +108,16 @@ fun ReminderBottomSheet(
 
         // date picker row
         Row(
-            modifier = editableRowModifier.clickable { dateDialogState.show() },
+            modifier = editableRowModifier.clickable {
+                if (editable) {
+                    dateDialogState.show()
+                }
+            },
             verticalAlignment = editableRowAlignment,
             horizontalArrangement = editableRowArrangement
         ) {
             Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
-            Text(text = formattedDate)
+            Text(text = formattedDate, color = if (editable) { Color.Unspecified } else Color.Gray)
         }
 
         EditableNotificationRow(

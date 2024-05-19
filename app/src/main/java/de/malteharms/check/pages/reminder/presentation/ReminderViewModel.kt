@@ -11,7 +11,6 @@ import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
-import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.data.database.updateReminderItemForBirthday
@@ -43,20 +42,23 @@ class ReminderViewModel(
 
     private val dao = app.db.itemDao()
 
-    private val _reminderSortType = MutableStateFlow(ReminderSortType.DUE_DATE)
-    private val _reminderItems = _reminderSortType
-        .flatMapLatest { sortType ->
-            when(sortType) {
-                ReminderSortType.TITLE -> dao.getReminderItemsOrderedByTitle()
-                ReminderSortType.DUE_DATE -> dao.getReminderItemsOrderedByDueDate()
+    private val _reminderFilter: MutableStateFlow<List<ReminderCategory>> = MutableStateFlow(
+        emptyList()
+    )
+
+    private val _reminderItems = _reminderFilter
+        .flatMapLatest { filterList ->
+            when (filterList.isEmpty()) {
+                true -> dao.getAllReminderItems(limit = 5)
+                false -> dao.getFilteredReminderItems(filterList, limit = 5)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _reminderState = MutableStateFlow(ReminderState())
-    val state = combine(_reminderState, _reminderSortType, _reminderItems) { state, sortType, items ->
+    val state = combine(_reminderState, _reminderFilter, _reminderItems) { state, filter, items ->
         state.copy(
             items = items,
-            sortType = sortType
+            filter = filter
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ReminderState())
 
@@ -217,8 +219,10 @@ class ReminderViewModel(
                 Log.i(TAG, "Category changed to ${event.category}")
             }
 
-            is ReminderEvent.SortItems -> {
-                _reminderSortType.value = event.sortType
+            is ReminderEvent.AddOrRemoveFilterCategory -> {
+                _reminderFilter.value = if (_reminderFilter.value.contains(event.filter)) {
+                    _reminderFilter.value.minus(event.filter)
+                } else _reminderFilter.value.plus(event.filter)
             }
 
             is ReminderEvent.AddNotification -> {

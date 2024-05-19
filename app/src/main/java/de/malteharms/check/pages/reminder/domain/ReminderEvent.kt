@@ -2,7 +2,6 @@ package de.malteharms.check.pages.reminder.domain
 
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.database.tables.ReminderNotification
-import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.data.database.tables.ReminderCategory
 import java.time.LocalDateTime
 
@@ -24,5 +23,5 @@ sealed interface ReminderEvent {
     data class ShowEditDialog(val item: ReminderItem): ReminderEvent
     data object HideDialog: ReminderEvent
 
-    data class SortItems(val sortType: ReminderSortType): ReminderEvent
+    data class AddOrRemoveFilterCategory(val filter: ReminderCategory): ReminderEvent
 }

@@ -46,7 +46,10 @@ class MainActivity : ComponentActivity() {
                     ) }
                 )
 
-                reminderViewModel.syncContacts()
+                // TODO add possibility to ignore birthdays from contacts
+                reminderViewModel.syncBirthdaysFromContacts()
+
+                // TODO check, if any new birthday has a notification on due, when setting is active
 
                 /*
                 * The SettingsViewModel will work as a bridge between the Settings UI and
@@ -55,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 val settingsViewModel: SettingsViewModel = viewModel<SettingsViewModel>(
                     factory = viewModelFactory { SettingsViewModel(
                         dao = CheckApp.appModule.db.itemDao(),
-                        syncContacts = reminderViewModel::syncContacts
+                        syncContacts = reminderViewModel::syncBirthdaysFromContacts
                     ) }
                 )
 

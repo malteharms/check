@@ -1,8 +1,6 @@
 package de.malteharms.check.pages.reminder.presentation
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.data.NotificationResult
@@ -23,7 +21,6 @@ import de.malteharms.check.pages.reminder.data.checkIfBirthdayNeedsToBeUpdated
 import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -267,7 +264,7 @@ class ReminderViewModel(
         return dao.getNotificationsForReminderItem(itemId)
     }
 
-    fun syncContacts() {
+    fun syncBirthdaysFromContacts() {
         var allowedToSyncContacts: SettingValue? = null
 
         viewModelScope.launch {

@@ -1,6 +1,5 @@
 package de.malteharms.check
 
-import android.os.Build
 import android.os.Bundle
 import androidx.compose.ui.Modifier
 import de.malteharms.check.presentation.Navigation
@@ -9,7 +8,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Scaffold
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import de.malteharms.check.presentation.theme.CheckTheme
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +24,6 @@ import de.malteharms.check.presentation.viewModelFactory
 
 class MainActivity : ComponentActivity() {
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

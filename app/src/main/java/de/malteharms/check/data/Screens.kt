@@ -16,8 +16,6 @@ sealed class Screens(val route : String) {
     data object ReminderDetailsRoute : Screens ("reminder_details_route")
 
     data object FoodRoute : Screens("food_route")
-
-
 }
 
 sealed class NestedRoutes(val route : String) {

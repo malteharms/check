@@ -21,7 +21,8 @@ import de.malteharms.check.pages.reminder.presentation.getCategoryRepresentation
 @Composable
 fun CategoryChoice(
     item: ReminderItem?,
-    onEvent: (ReminderEvent) -> Unit
+    onEvent: (ReminderEvent) -> Unit,
+    editable: Boolean
 ) {
     var selectedCategory by remember {
         mutableStateOf(item?.category ?: ReminderCategory.GENERAL)
@@ -37,8 +38,10 @@ fun CategoryChoice(
 
             FilterChip(
                 onClick = {
-                    selectedCategory = category
-                    onEvent(ReminderEvent.SetCategory(category))
+                    if (editable) {
+                        selectedCategory = category
+                        onEvent(ReminderEvent.SetCategory(category))
+                    }
                 },
                 label = { Text(getCategoryRepresentation(category)) },
                 selected = selectedCategory == category,

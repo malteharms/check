@@ -8,7 +8,6 @@ fun getAllSettings(): List<List<Setting>> {
     )
 }
 
-
 fun getReminderSettings(): List<Setting> {
     return listOf(
         ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS.getSetting(),

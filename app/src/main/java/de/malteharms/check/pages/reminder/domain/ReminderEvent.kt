@@ -12,16 +12,18 @@ sealed interface ReminderEvent {
     data class UpdateItem(val itemToUpdate: ReminderItem): ReminderEvent
     data class RemoveItem(val item: ReminderItem): ReminderEvent
 
+    data object MoveFromOrToDetailsScreen: ReminderEvent
+
     data class SetTitle(val title: String): ReminderEvent
     data class SetDueDate(val dueDate: LocalDateTime): ReminderEvent
+
     data class SetCategory(val category: ReminderCategory): ReminderEvent
-
     data class AddNotification(val notification: ReminderNotification): ReminderEvent
-    data class RemoveNotification(val notification: ReminderNotification): ReminderEvent
 
+    data class RemoveNotification(val notification: ReminderNotification): ReminderEvent
     data object ShowNewDialog: ReminderEvent
     data class ShowEditDialog(val item: ReminderItem): ReminderEvent
-    data object HideDialog: ReminderEvent
 
+    data object HideDialog: ReminderEvent
     data class AddOrRemoveFilterCategory(val filter: ReminderCategory): ReminderEvent
 }

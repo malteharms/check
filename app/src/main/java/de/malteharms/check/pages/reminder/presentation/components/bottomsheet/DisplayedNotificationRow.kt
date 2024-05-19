@@ -24,7 +24,7 @@ fun DisplayedNotificationRow(
     removeNotification: () -> Unit
 ) {
 
-    val iconColor = if (isFirstRow) LocalContentColor.current else Color.Transparent
+    val iconColor: Color = if (isFirstRow) LocalContentColor.current else Color.Transparent
 
     Row(
         modifier = modifier,

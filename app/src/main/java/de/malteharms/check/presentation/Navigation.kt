@@ -1,7 +1,5 @@
 package de.malteharms.check.presentation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,6 +13,7 @@ import de.malteharms.check.pages.profile.ui.ProfilePage
 import de.malteharms.check.pages.cash.ui.Cash
 import de.malteharms.check.pages.food.ui.Food
 import de.malteharms.check.pages.home.ui.Home
+import de.malteharms.check.pages.reminder.presentation.ReminderDetailsPage
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.data.SettingsState
@@ -23,7 +22,6 @@ import de.malteharms.check.pages.settings.presentation.SettingsViewModel
 import de.malteharms.check.pages.todo.ui.Todo
 import de.malteharms.check.pages.welcome.ui.Welcome
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun Navigation(
     navController: NavHostController,
@@ -47,7 +45,7 @@ fun Navigation(
 
         // navigation graph for main app usage
         navigation(
-            startDestination = Screens.FoodRoute.route,
+            startDestination = Screens.ReminderRoute.route,
             route = NestedRoutes.MainRoute.route
         ) {
             // general pages available in main route
@@ -71,6 +69,15 @@ fun Navigation(
                     state = reminderState,
                     getNotifications = reminderViewModel::getNotifications,
                     onEvent = reminderViewModel::onEvent
+                )
+            }
+
+            composable(Screens.ReminderDetailsRoute.route) {
+                ReminderDetailsPage(
+                    navController = navController,
+                    state = reminderState,
+                    onEvent = reminderViewModel::onEvent,
+                    getNotifications = reminderViewModel::getNotifications
                 )
             }
 

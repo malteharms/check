@@ -66,6 +66,9 @@ fun getCategoryRepresentation(category: ReminderCategory): String {
 fun getNotificationText(notification: ReminderNotification): String {
     val value = notification.valueBeforeDue
 
+    if (value == 0)
+        return "Am selben Tag"
+
     val interval = when(notification.interval) {
         ReminderNotificationInterval.DAYS -> if(value == 1) { "Tag" } else "Tage"
         ReminderNotificationInterval.MONTHS -> if(value == 1) { "Monat" } else "Monate"

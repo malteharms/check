@@ -1,6 +1,10 @@
 package de.malteharms.check.pages.settings.data
 
+import androidx.compose.runtime.Composable
 import de.malteharms.check.pages.settings.domain.AnySetting
+import de.malteharms.check.pages.settings.domain.SettingsEvent
+import de.malteharms.check.pages.settings.presentation.settingAction.DefaultNotificationForBirthdaysAction
+import de.malteharms.check.pages.settings.presentation.settingAction.SyncBirthdaysThoughContactsAction
 
 enum class ReminderSettings: AnySetting {
 
@@ -17,7 +21,7 @@ enum class ReminderSettings: AnySetting {
     override fun defaultValue(): SettingValue {
         return when (this) {
             SYNC_BIRTHDAYS_THROUGH_CONTACTS -> SettingValue(boolean = false)
-            DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS -> SettingValue(boolean = true)
+            DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS -> SettingValue(boolean = false)
         }
     }
 
@@ -35,4 +39,20 @@ enum class ReminderSettings: AnySetting {
         }
     }
 
+    @Composable
+    override fun Action(
+        state: SettingsState,
+        onEvent: (SettingsEvent) -> Unit
+    ) {
+        return when (this) {
+            SYNC_BIRTHDAYS_THROUGH_CONTACTS -> SyncBirthdaysThoughContactsAction(
+                state = state,
+                onEvent = onEvent
+            )
+            DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS -> DefaultNotificationForBirthdaysAction(
+                state = state,
+                onEvent = onEvent
+            )
+        }
+    }
 }

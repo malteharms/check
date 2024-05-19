@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 data class ReminderState (
 
     val items: List<ReminderItem> = emptyList(),
+    val allItems: List<ReminderItem> = emptyList(),
     val title: String = "",
     val dueDate: LocalDateTime = LocalDateTime.now(),
     val category: ReminderCategory = ReminderCategory.GENERAL,

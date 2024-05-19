@@ -29,11 +29,17 @@ interface CheckDao {
     @Delete
     suspend fun removeReminderItem(reminderItem: ReminderItem)
 
+    @Query("SELECT * FROM reminder_items ORDER BY dueDate ASC")
+    fun getAllReminderItems(): Flow<List<ReminderItem>>
+
     @Query("SELECT * FROM reminder_items ORDER BY dueDate ASC LIMIT :limit")
-    fun getAllReminderItems(limit: Int? = null): Flow<List<ReminderItem>>
+    fun getAllReminderItemsLimited(limit: Int): Flow<List<ReminderItem>>
+
+    @Query("SELECT * FROM reminder_items WHERE category IN (:categories) ORDER BY dueDate ASC")
+    fun getFilteredReminderItems(categories: List<ReminderCategory>): Flow<List<ReminderItem>>
 
     @Query("SELECT * FROM reminder_items WHERE category IN (:categories) ORDER BY dueDate ASC LIMIT :limit")
-    fun getFilteredReminderItems(categories: List<ReminderCategory>, limit: Int? = null): Flow<List<ReminderItem>>
+    fun getFilteredReminderItemsLimited(categories: List<ReminderCategory>, limit: Int): Flow<List<ReminderItem>>
 
     @Query("SELECT * FROM reminder_items WHERE birthdayRelation = :birthdayId LIMIT 1")
     fun getReminderItemForBirthdayId(birthdayId: Long): ReminderItem?

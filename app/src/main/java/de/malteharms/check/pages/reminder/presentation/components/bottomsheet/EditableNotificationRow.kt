@@ -1,10 +1,8 @@
 package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
 import android.Manifest
-import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,7 +36,6 @@ import de.malteharms.check.presentation.components.LargeDropdownMenu
 import java.time.LocalDateTime
 
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun EditableNotificationRow(
     modifier: Modifier,

@@ -4,7 +4,7 @@ plugins {
 
     kotlin("kapt")
 
-    id("kotlinx-serialization")
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {
@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "de.malteharms.check"
-        minSdk = 26
+        minSdk = 33
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

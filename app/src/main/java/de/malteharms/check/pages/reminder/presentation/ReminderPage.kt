@@ -60,7 +60,7 @@ fun ReminderPage(
         LazyColumn (
             contentPadding = paddingValues,
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
 
             item {
@@ -71,6 +71,7 @@ fun ReminderPage(
 
                 ReminderItemRow(
                     item = reminderItem,
+                    hasNotifications = getNotifications(reminderItem.id).isNotEmpty(),
                     onClick =  {
                         currentEditItem = reminderItem
                         onEvent(ReminderEvent.ShowEditDialog(reminderItem))

@@ -43,6 +43,7 @@ fun ReminderDetailsPage(
         items(state.allItems) { item: ReminderItem ->
             ReminderItemRow(
                 item = item,
+                hasNotifications = getNotifications(item.id).isNotEmpty(),
                 onClick =  {
                     currentEditItem = item
                     onEvent(ReminderEvent.ShowEditDialog(item))

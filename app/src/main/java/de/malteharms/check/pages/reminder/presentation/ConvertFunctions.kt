@@ -17,36 +17,27 @@ fun getTextForDurationInDays(due: LocalDateTime): String {
 
     // handle values for years
     if (periodBetweenTodayAndDue.years > 0 || periodBetweenTodayAndDue.years < 0) {
-        dayText = "${periodBetweenTodayAndDue.years} Jahren"
-        prefix = if (periodBetweenTodayAndDue.years > 0) {
-            "in"
-        } else "vor"
+        dayText = when (periodBetweenTodayAndDue.years) {
+            in -1L .. 1L -> "${periodBetweenTodayAndDue.years}\nJahr"
+            else -> "${periodBetweenTodayAndDue.years}\nJahre"
+        }
     }
 
     else if (periodBetweenTodayAndDue.months > 0 || periodBetweenTodayAndDue.months < 0) {
-        dayText = "${periodBetweenTodayAndDue.months} Monaten"
-        prefix = if (periodBetweenTodayAndDue.months > 0) {
-            "in"
-        } else "vor"
+        dayText = when (periodBetweenTodayAndDue.months) {
+            in -1L .. 1L -> "${periodBetweenTodayAndDue.months}\nMonat"
+            else -> "${periodBetweenTodayAndDue.months}\nMonate"
+        }
     }
 
     else {
         dayText = when (periodBetweenTodayAndDue.days) {
-            -1L -> "Gestern"
-            0L -> "Heute"
-            1L -> "Morgen"
-            else -> "${periodBetweenTodayAndDue.days} Tagen"
-        }
-
-        prefix = when (periodBetweenTodayAndDue.days) {
-            in Int.MIN_VALUE..-2 -> "vor"
-            in 2..Int.MAX_VALUE -> "in"
-            else -> ""
+            in -1L .. 1L -> "${periodBetweenTodayAndDue.days}\nTag"
+            else -> "${periodBetweenTodayAndDue.days}\nTage"
         }
     }
 
-    dayText.removePrefix("-")
-    return "$prefix $dayText".trim()
+    return dayText.trim()
 }
 
 fun getAddOrUpdateButtonText(isItemNew: Boolean): String {

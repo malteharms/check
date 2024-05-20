@@ -131,28 +131,16 @@ fun ReminderBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ){
-            if (item != null) {
+            if (item == null) {
                 Button(
-                    onClick = {
-                        onEvent(ReminderEvent.RemoveItem(item))
-                    },
+                    onClick = { onEvent(ReminderEvent.SaveItem) },
+                    colors = ButtonDefaults.buttonColors(containerColor = blue80)
+                ) { Text(text = "Reminder speichern") }
+            } else {
+                Button(
+                    onClick = { onEvent(ReminderEvent.RemoveItem(item)) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
-                ) {
-                    Text(text = "Reminder Löschen")
-                }
-            }
-
-            Button(
-                onClick = {
-                    if (item == null) {
-                        onEvent(ReminderEvent.SaveItem)
-                    } else {
-                        onEvent(ReminderEvent.UpdateItem(item))
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = blue80)
-            ) {
-                Text(text = getAddOrUpdateButtonText(isItemNew = item == null))
+                ) { Text(text = "Reminder löschen") }
             }
         }
 

@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.presentation.SettingsViewModel
+import de.malteharms.check.presentation.UtilityViewModel
 import de.malteharms.check.presentation.components.FloatingBottomNavigation
 import de.malteharms.check.presentation.viewModelFactory
 
@@ -35,6 +36,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             CheckTheme {
 
+                val utilityViewModel: UtilityViewModel = viewModel<UtilityViewModel>()
+
+                /*
+                * The SettingsViewModel will work as a bridge between the Settings UI and
+                * the database, where all settings are stored.
+                * The Settings need to be loaded at first to guarantee, that other
+                * functions and ViewModels can load the settings from the database
+                 */
+                val settingsViewModel: SettingsViewModel = viewModel<SettingsViewModel>(
+                    factory = viewModelFactory { SettingsViewModel(
+                        dao = CheckApp.appModule.db.itemDao(),
+                        syncContacts = utilityViewModel::syncBirthdaysFromContacts
+                    ) }
+                )
+
+                // try to load all settings from database
+                settingsViewModel.loadSettingsFromDatabase()
+
                 /*
                 * The ReminderViewModel will provide the state for showing the ReminderPage.
                 * A user has the possibility to load birthdays from contacts. To always stay
@@ -47,20 +66,9 @@ class MainActivity : ComponentActivity() {
                 )
 
                 // TODO add possibility to ignore birthdays from contacts
-                reminderViewModel.syncBirthdaysFromContacts()
+                utilityViewModel.syncBirthdaysFromContacts()
 
                 // TODO check, if any new birthday has a notification on due, when setting is active
-
-                /*
-                * The SettingsViewModel will work as a bridge between the Settings UI and
-                * the database, where all settings are stored.
-                 */
-                val settingsViewModel: SettingsViewModel = viewModel<SettingsViewModel>(
-                    factory = viewModelFactory { SettingsViewModel(
-                        dao = CheckApp.appModule.db.itemDao(),
-                        syncContacts = reminderViewModel::syncBirthdaysFromContacts
-                    ) }
-                )
 
                 Surface(
                     color = MaterialTheme.colorScheme.background,
@@ -78,6 +86,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Navigation(
                                 navController,
+                                utilityViewModel,
                                 reminderViewModel,
                                 settingsViewModel
                             )

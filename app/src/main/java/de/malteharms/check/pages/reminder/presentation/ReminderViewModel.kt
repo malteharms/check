@@ -171,6 +171,7 @@ class ReminderViewModel(
                     title = title,
                     dueDate = dueDate,
                     category = category,
+                    birthdayRelation = event.itemToUpdate.birthdayRelation,
                     creationDate = event.itemToUpdate.creationDate,
                     lastUpdate = LocalDateTime.now()
                 )
@@ -262,64 +263,6 @@ class ReminderViewModel(
 
     fun getNotifications(itemId: Long): List<ReminderNotification> {
         return dao.getNotificationsForReminderItem(itemId)
-    }
-
-    fun syncBirthdaysFromContacts() {
-        var allowedToSyncContacts: SettingValue? = null
-
-        viewModelScope.launch {
-            allowedToSyncContacts =
-                dao.getSettingsValue(ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS)
-        }
-
-        if (allowedToSyncContacts == null) {
-            Log.w(TAG, "Settings not yet loaded")
-            return
-        }
-
-        if (!allowedToSyncContacts?.boolean!!) {
-            Log.w(TAG, "Not allowed to sync Contacts!")
-            return
-        }
-
-        val birthdays: List<Birthday> = app.contactsProvider.getContactBirthdays()
-
-        birthdays.forEach{
-            // check, if birthday already exists
-            val existingBirthday: Birthday? = dao.getBirthday(it.id)
-
-            // if there is no birthday which was already saved in database,
-            // create a row for for the birthday and the corresponding
-            // reminder item
-            if (existingBirthday == null) {
-                viewModelScope.launch {
-                    dao.insertBirthday(it)
-                    insertReminderItemForBirthday(dao, it)
-                }
-                return@forEach
-            }
-
-            // if the entry already exists, check, if the item
-            // needs to be updated. For example, when the name
-            // or the birthday changes
-            // If the item is the same as before, continue with
-            // the next birthday item
-
-            // TODO load overdue from settings
-            val needsUpdate: Boolean = checkIfBirthdayNeedsToBeUpdated(
-                dateToReview = existingBirthday.birthday
-            )
-
-            if ((existingBirthday.birthday == it.birthday && existingBirthday.name == it.name) || needsUpdate) {
-                return@forEach
-            }
-
-            viewModelScope.launch {
-                val linkedReminder: ReminderItem? = dao.getReminderItemForBirthdayId(it.id)
-                updateReminderItemForBirthday(dao, linkedReminder!!.id, it)
-                Log.i(TAG, "Updated reminder item with ID ${linkedReminder.id} because birthday data changed")
-            }
-        }
     }
 
     private suspend fun handleNotification(

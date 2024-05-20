@@ -53,17 +53,6 @@ class SettingsViewModel(
             }
         }
         Log.i(TAG, "Settings are created in database")
-
-        state.update { it.copy(
-            syncBirthdayThroughContacts = dao.getSettingsValue(
-                ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS
-            ).boolean!!,
-
-            // todo crash on first start
-            defaultNotificationForBirthday = dao.getSettingsValue(
-                ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS
-            ).boolean!!
-        ) }
     }
 
     fun onEvent(event: SettingsEvent) {
@@ -74,7 +63,8 @@ class SettingsViewModel(
                     syncBirthdayThroughContacts = event.value
                 ) }
 
-                val updatedValue: Setting = event.setting.copy(
+                val setting: Setting = ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS.getSetting()
+                val updatedValue: Setting = setting.copy(
                     value = SettingValue(boolean = event.value)
                 )
 
@@ -82,7 +72,7 @@ class SettingsViewModel(
                     dao.updateSetting(updatedValue)
                 }
 
-                Log.i(TAG, "Updated setting ${event.setting.item.getTitle()} to ${event.value}")
+                Log.i(TAG, "Updated setting ${setting.item.getTitle()} to ${event.value}")
                 syncContacts()
             }
 
@@ -91,7 +81,9 @@ class SettingsViewModel(
                     defaultNotificationForBirthday = event.value
                 ) }
 
-                val updatedValue: Setting = event.setting.copy(
+                val setting: Setting = ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS.getSetting()
+
+                val updatedValue: Setting = setting.copy(
                     value = SettingValue(boolean = event.value)
                 )
 
@@ -141,6 +133,36 @@ class SettingsViewModel(
                 }
             }
         }
+    }
+
+    fun loadSettingsFromDatabase() {
+
+        var syncBirthdayThroughContacts: SettingValue? = null
+        var defaultNotificationForBirthday: SettingValue? = null
+
+        viewModelScope.launch {
+            syncBirthdayThroughContacts =
+                dao.getSettingsValue(ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS)
+
+            defaultNotificationForBirthday =
+                dao.getSettingsValue(ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS)
+        }
+
+        if (syncBirthdayThroughContacts == null) {
+            Log.w(TAG, "SyncBirthdayTroughContacts setting was not yet present in database. Choosing default value instead")
+            syncBirthdayThroughContacts = ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS.defaultValue()
+        }
+
+        if (defaultNotificationForBirthday == null) {
+            Log.w(TAG, "DefaultNotificationForBirthday setting was not yet present in database. Choosing default value instead")
+            defaultNotificationForBirthday = ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS.defaultValue()
+        }
+
+        state.update { it.copy(
+            syncBirthdayThroughContacts = syncBirthdayThroughContacts!!.boolean!!,
+            defaultNotificationForBirthday = defaultNotificationForBirthday!!.boolean!!
+        ) }
+        Log.i(TAG, "Initialized settings and updated settings viewModel state")
     }
 
 }

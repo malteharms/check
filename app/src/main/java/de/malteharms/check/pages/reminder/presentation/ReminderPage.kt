@@ -41,13 +41,16 @@ fun ReminderPage(
     navController: NavController,
     state: ReminderState,
     getNotifications: (Long) -> List<ReminderNotification>,
-    onEvent: (ReminderEvent) -> Unit
+    onEvent: (ReminderEvent) -> Unit,
+    syncContacts: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
 
     var currentEditItem: ReminderItem? by remember {
         mutableStateOf(null)
     }
+
+    syncContacts()
 
     Scaffold (
         topBar = { TopBar(navController, "Reminder") },
@@ -100,7 +103,7 @@ fun ReminderPage(
                 .fillMaxWidth(),
 
             onDismissRequest = {
-                onEvent(ReminderEvent.HideDialog)
+                onEvent(ReminderEvent.UpdateItem(currentEditItem!!))
                 currentEditItem = null
             },
             sheetState = sheetState,

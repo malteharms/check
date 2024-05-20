@@ -23,31 +23,28 @@ fun SyncBirthdaysThoughContactsAction(
         mutableStateOf(state.syncBirthdayThroughContacts)
     }
 
-    var hasReadingContactsPermission: Boolean by remember {
-        mutableStateOf(false)
-    }
-
     val contactsPermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult =  { isGranted ->
-            hasReadingContactsPermission = isGranted
+
+            if (isGranted) {
+                syncBirthdayThoughContacts = true
+                onEvent(SettingsEvent.SwitchBirthdaySync(value =  true))
+            }
         }
     )
 
     Switch(
         checked = syncBirthdayThoughContacts,
-        onCheckedChange = {
-            contactsPermissionResultLauncher.launch(
-                Manifest.permission.READ_CONTACTS
-            )
+        onCheckedChange = { isActive: Boolean ->
 
-            if (hasReadingContactsPermission) {
-                syncBirthdayThoughContacts = it
-                onEvent(SettingsEvent.SwitchBirthdaySync(
-                    ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS.getSetting(),
-                    it
-                ))
+            if (isActive) {
+                contactsPermissionResultLauncher.launch(Manifest.permission.READ_CONTACTS)
+            } else {
+                syncBirthdayThoughContacts = false
+                onEvent(SettingsEvent.SwitchBirthdaySync(value = false))
             }
+
         }
     )
 }

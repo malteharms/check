@@ -28,8 +28,7 @@ fun DefaultNotificationForBirthdaysAction(
             if (isGranted) {
                 defaultNotificationForBirthday = !defaultNotificationForBirthday
                 onEvent(SettingsEvent.SwitchDefaultNotificationForBirthday(
-                    ReminderSettings.DEFAULT_NOTIFICATION_DATE_FOR_BIRTHDAYS.getSetting(),
-                    defaultNotificationForBirthday
+                    value = defaultNotificationForBirthday
                 ))
             }
         }

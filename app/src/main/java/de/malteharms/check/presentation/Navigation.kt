@@ -25,6 +25,7 @@ import de.malteharms.check.pages.welcome.ui.Welcome
 @Composable
 fun Navigation(
     navController: NavHostController,
+    utilityViewModel: UtilityViewModel,
     reminderViewModel: ReminderViewModel,
     settingsViewModel: SettingsViewModel
 ) {
@@ -68,7 +69,8 @@ fun Navigation(
                     navController = navController,
                     state = reminderState,
                     getNotifications = reminderViewModel::getNotifications,
-                    onEvent = reminderViewModel::onEvent
+                    onEvent = reminderViewModel::onEvent,
+                    syncContacts = utilityViewModel::syncBirthdaysFromContacts
                 )
             }
 

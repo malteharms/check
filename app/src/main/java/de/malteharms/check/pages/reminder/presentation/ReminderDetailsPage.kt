@@ -1,5 +1,6 @@
 package de.malteharms.check.pages.reminder.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,7 +40,9 @@ fun ReminderDetailsPage(
         mutableStateOf(null)
     }
 
-    LazyColumn {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
         items(state.allItems) { item: ReminderItem ->
             ReminderItemRow(
                 item = item,

@@ -1,6 +1,7 @@
 package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -84,9 +85,11 @@ fun EditableNotificationRow(
                 isFirstRow = currentNotifications.isEmpty(),
                 currentNotification = null,
                 openAddReminderDialog = {
-                    notificationPermissionResultLauncher.launch(
-                        Manifest.permission.POST_NOTIFICATIONS
-                    )
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        notificationPermissionResultLauncher.launch(
+                            Manifest.permission.POST_NOTIFICATIONS
+                        )
+                    }
                 },
                 removeNotification = {
                     if (currentNotifications.isNotEmpty()) {

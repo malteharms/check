@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "de.malteharms.check"
-        minSdk = 33
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

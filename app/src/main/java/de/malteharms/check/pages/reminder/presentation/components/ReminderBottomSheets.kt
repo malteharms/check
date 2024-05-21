@@ -38,7 +38,6 @@ import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableNotificationRow
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableTitleRow
-import de.malteharms.check.pages.reminder.presentation.getAddOrUpdateButtonText
 import de.malteharms.check.presentation.theme.blue80
 import java.time.LocalDate
 import java.time.LocalDateTime

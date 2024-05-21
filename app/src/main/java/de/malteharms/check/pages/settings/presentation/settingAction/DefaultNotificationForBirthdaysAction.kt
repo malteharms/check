@@ -1,6 +1,7 @@
 package de.malteharms.check.pages.settings.presentation.settingAction
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Switch
@@ -9,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingsState
 import de.malteharms.check.pages.settings.domain.SettingsEvent
 
@@ -37,9 +37,11 @@ fun DefaultNotificationForBirthdaysAction(
     Switch(
         checked = defaultNotificationForBirthday,
         onCheckedChange = {
-            notificationPermissionResultLauncher.launch(
-                Manifest.permission.POST_NOTIFICATIONS
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                notificationPermissionResultLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
         }
     )
 }

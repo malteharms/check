@@ -78,7 +78,9 @@ class MainActivity : ComponentActivity() {
                 val notificationPermission = rememberPermissionState(
                     permission = Manifest.permission.POST_NOTIFICATIONS
                 )
-                if (notificationPermission.status.isGranted) {
+
+                val hasNotificationPermission: Boolean = notificationPermission.status.isGranted
+                if (hasNotificationPermission) {
                     CheckApp.appModule.loadNotifications()
                 }
 

@@ -44,12 +44,18 @@ interface CheckDao {
     @Query("SELECT * FROM reminder_items WHERE birthdayRelation = :birthdayId LIMIT 1")
     fun getReminderItemForBirthdayId(birthdayId: Long): ReminderItem?
 
+    @Query("SELECT * FROM reminder_items WHERE id = :reminderId")
+    fun getReminderItemById(reminderId: Long): ReminderItem
+
     /* REMINDER NOTIFICATION QUERY'S */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReminderNotification(reminderNotification: ReminderNotification)
 
     @Delete
     suspend fun removeReminderNotification(reminderNotification: ReminderNotification)
+
+    @Query("SELECT * FROM reminder_notifications")
+    fun getAllNotifications(): List<ReminderNotification>
 
     @Query("DELETE FROM reminder_notifications WHERE reminderItem = :reminderItemId")
     fun removeReminderNotificationsForReminderItem(reminderItemId: Long)

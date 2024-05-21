@@ -75,6 +75,9 @@ dependencies {
     // date picker
     implementation(libs.datetime)
 
+    // permission
+    implementation(libs.accompanist.permissions)
+
     // ktor
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)

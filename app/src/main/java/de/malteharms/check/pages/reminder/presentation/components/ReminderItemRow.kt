@@ -116,7 +116,8 @@ fun ReminderItemRow(
                 text = getTextForDurationInDays(item.dueDate),
                 fontWeight = FontWeight.Light,
                 fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                minLines = 2
+                maxLines = 2,
+                minLines = 1
             )
         }
     }

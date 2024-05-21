@@ -1,5 +1,6 @@
 package de.malteharms.check
 
+import android.Manifest
 import android.os.Bundle
 import androidx.compose.ui.Modifier
 import de.malteharms.check.presentation.Navigation
@@ -15,6 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.presentation.SettingsViewModel
@@ -25,6 +29,7 @@ import de.malteharms.check.presentation.viewModelFactory
 
 class MainActivity : ComponentActivity() {
 
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,7 +73,15 @@ class MainActivity : ComponentActivity() {
                 // TODO add possibility to ignore birthdays from contacts
                 utilityViewModel.syncBirthdaysFromContacts()
 
-                // TODO check, if any new birthday has a notification on due, when setting is active
+                // if notification permission are granted, schedule all notifications
+                // on startup
+                val notificationPermission = rememberPermissionState(
+                    permission = Manifest.permission.POST_NOTIFICATIONS
+                )
+                if (notificationPermission.status.isGranted) {
+                    CheckApp.appModule.loadNotifications()
+                }
+
 
                 Surface(
                     color = MaterialTheme.colorScheme.background,

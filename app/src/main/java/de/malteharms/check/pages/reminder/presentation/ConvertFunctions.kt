@@ -12,7 +12,6 @@ import java.time.LocalDateTime
 fun getTextForDurationInDays(due: LocalDateTime): String {
     val periodBetweenTodayAndDue: TimePeriod = timeBetween(dateToReach = due)
 
-    val prefix: String
     val dayText: String
 
     // handle values for years
@@ -32,7 +31,9 @@ fun getTextForDurationInDays(due: LocalDateTime): String {
 
     else {
         dayText = when (periodBetweenTodayAndDue.days) {
-            in -1L .. 1L -> "${periodBetweenTodayAndDue.days}\nTag"
+            0L -> "Heute"
+            -1L -> "${periodBetweenTodayAndDue.days}\nTag"
+            1L-> "${periodBetweenTodayAndDue.days}\nTag"
             else -> "${periodBetweenTodayAndDue.days}\nTage"
         }
     }

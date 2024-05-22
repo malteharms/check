@@ -46,7 +46,7 @@ fun Navigation(
 
         // navigation graph for main app usage
         navigation(
-            startDestination = Screens.ReminderRoute.route,
+            startDestination = Screens.HomeRoute.route,
             route = NestedRoutes.MainRoute.route
         ) {
             // general pages available in main route

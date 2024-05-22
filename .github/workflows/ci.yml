@@ -13,17 +13,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4.2.1
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
+          distribution: 'zulu'
           java-version: '21'
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
+      # Create .apk for release and debug
+      - name: Create Release
         run: ./gradlew assemble
+
+      # Test the application
+      - name: Test the application
+        run: ./gradlew test

@@ -24,7 +24,7 @@ jobs:
 
       # Create .apk for release and debug
       - name: Create Release
-        run: ./gradlew assemble
+        run: ./gradlew build
 
       # Test the application
       - name: Test the application

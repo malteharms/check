@@ -1,6 +1,7 @@
 package de.malteharms.check
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.compose.ui.Modifier
 import de.malteharms.check.presentation.Navigation
@@ -17,9 +18,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import de.malteharms.check.data.getBottomNavigationItems
+import de.malteharms.check.data.notification.NotificationHandler
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.presentation.SettingsViewModel
 import de.malteharms.check.presentation.UtilityViewModel
@@ -75,15 +78,28 @@ class MainActivity : ComponentActivity() {
 
                 // if notification permission are granted, schedule all notifications
                 // on startup
-                val notificationPermission = rememberPermissionState(
-                    permission = Manifest.permission.POST_NOTIFICATIONS
-                )
-
-                val hasNotificationPermission: Boolean = notificationPermission.status.isGranted
-                if (hasNotificationPermission) {
-                    CheckApp.appModule.loadNotifications()
+                var notificationPermission: PermissionState? = null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notificationPermission = rememberPermissionState(
+                        permission = Manifest.permission.POST_NOTIFICATIONS
+                    )
                 }
 
+                // update overdue NOTIFICATIONS
+                NotificationHandler.updateOverdueNotifications(
+                    dao = CheckApp.appModule.db.itemDao()
+                )
+
+                // reschedule notification if necessary
+                val hasNotificationPermission: Boolean =
+                    notificationPermission?.status?.isGranted ?: true
+
+                if (hasNotificationPermission) {
+                    NotificationHandler.rescheduleAllNotifications(
+                        dao = CheckApp.appModule.db.itemDao(),
+                        notificationScheduler = CheckApp.appModule.notificationScheduler
+                    )
+                }
 
                 Surface(
                     color = MaterialTheme.colorScheme.background,

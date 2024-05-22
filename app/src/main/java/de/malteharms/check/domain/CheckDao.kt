@@ -45,7 +45,7 @@ interface CheckDao {
     fun getReminderItemForBirthdayId(birthdayId: Long): ReminderItem?
 
     @Query("SELECT * FROM reminder_items WHERE id = :reminderId")
-    fun getReminderItemById(reminderId: Long): ReminderItem
+    fun getReminderItemById(reminderId: Long): ReminderItem?
 
     /* REMINDER NOTIFICATION QUERY'S */
     @Insert(onConflict = OnConflictStrategy.IGNORE)

@@ -13,6 +13,7 @@ import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.data.provider.ContactsProvider
 import de.malteharms.check.domain.AlarmScheduler
 import de.malteharms.check.domain.CheckDao
+import de.malteharms.check.pages.reminder.data.calculateCorrectYearOfNextBirthday
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingValue
@@ -20,6 +21,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
+import java.time.LocalDateTime
 
 
 interface AppModule{
@@ -27,8 +29,6 @@ interface AppModule{
     val websocketClient: HttpClient
     val notificationScheduler: AlarmScheduler
     val contactsProvider: ContactsProvider
-
-    fun loadNotifications()
 }
 
 class AppModuleImpl(
@@ -56,29 +56,6 @@ class AppModuleImpl(
 
     override val contactsProvider: ContactsProvider by lazy {
         ContactsProvider(context)
-    }
-
-    override fun loadNotifications() {
-        val dao: CheckDao = db.itemDao()
-
-        // schedule notifications
-        val notifications: List<ReminderNotification> = dao.getAllNotifications()
-
-        notifications.forEach { notification ->
-            val reminderItem: ReminderItem = dao.getReminderItemById(notification.reminderItem)
-
-            notificationScheduler.schedule(
-                notificationId = notification.notificationId,
-                item = AlarmItem(
-                    channel = NotificationChannel.REMINDER,
-                    time = notification.notificationDate,
-                    title = "Reminder >> ${reminderItem.title}",
-                    message = getTextForDurationInDays(reminderItem.dueDate)
-                )
-            )
-        }
-
-        Log.i(TAG, "Loaded and re-scheduled all notifications")
     }
 
 }

@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -38,7 +39,6 @@ import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableNotificationRow
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableTitleRow
-import de.malteharms.check.presentation.theme.blue80
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -133,13 +133,19 @@ fun ReminderBottomSheet(
             if (item == null) {
                 Button(
                     onClick = { onEvent(ReminderEvent.SaveItem) },
-                    colors = ButtonDefaults.buttonColors(containerColor = blue80)
-                ) { Text(text = "Reminder speichern") }
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                ) { Text(
+                    text = "Reminder speichern",
+                    color = MaterialTheme.colorScheme.onSecondary
+                ) }
             } else {
                 Button(
                     onClick = { onEvent(ReminderEvent.RemoveItem(item)) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
-                ) { Text(text = "Reminder löschen") }
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text(
+                    text = "Reminder löschen",
+                    color = MaterialTheme.colorScheme.onError
+                ) }
             }
         }
 

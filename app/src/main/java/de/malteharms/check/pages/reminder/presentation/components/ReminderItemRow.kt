@@ -28,7 +28,6 @@ import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
-import de.malteharms.check.presentation.theme.blue60
 import java.time.LocalDateTime
 
 
@@ -40,7 +39,7 @@ fun ReminderItemRow(
 ) {
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = blue60),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 50.dp),
         modifier = Modifier
             .padding(horizontal = 7.dp)

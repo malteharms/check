@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,8 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.malteharms.check.pages.food.data.FOOD_BOX_CORNER_RADIUS
-import de.malteharms.check.presentation.theme.blue60
-
 @Composable
 fun FoodLabelContainer(
     navController: NavController,
@@ -22,7 +21,7 @@ fun FoodLabelContainer(
 ) {
     Box(modifier = Modifier
         .clip(shape = RoundedCornerShape(FOOD_BOX_CORNER_RADIUS.dp))
-        .background(blue60)
+        .background(MaterialTheme.colorScheme.surface)
         .width(foodBoxWidth.dp)
         .fillMaxHeight()
     ) {

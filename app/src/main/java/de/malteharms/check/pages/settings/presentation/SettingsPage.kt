@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import de.malteharms.check.pages.settings.data.SettingsState
 import de.malteharms.check.pages.settings.data.getAllSettings
@@ -70,8 +71,16 @@ fun SettingsPage(
                             ){
                                 
                                 Column {
-                                    Text(setting.item.getTitle())
-                                    Text(setting.item.getDescription(), fontSize = MaterialTheme.typography.bodySmall.fontSize)
+                                    Text(
+                                        text = setting.item.getTitle(),
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        fontStyle = MaterialTheme.typography.labelMedium.fontStyle
+                                    )
+                                    Text(
+                                        text = setting.item.getDescription(),
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        fontSize = 10.sp
+                                    )
                                 }
 
                                 // the action Composable at the end of the row

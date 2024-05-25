@@ -54,7 +54,7 @@ fun ReminderItemRow(
                 painter = painterResource(id = getIconIdByReminderCategory(item.category)),
                 contentDescription = null,
                 modifier = Modifier.weight(1f),
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onSurface
             )
 
             Column(
@@ -62,6 +62,7 @@ fun ReminderItemRow(
             ) {
                 Text(
                     text = item.title,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = MaterialTheme.typography.labelMedium.fontSize,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 5.dp)
@@ -76,6 +77,7 @@ fun ReminderItemRow(
                 ) {
                     Text(
                         text = convertTimestampToDateString(item.dueDate),
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = MaterialTheme.typography.labelSmall.fontSize,
                         fontWeight = FontWeight.Light
                     )
@@ -84,14 +86,14 @@ fun ReminderItemRow(
                         Icon(
                             painter = painterResource(id = R.drawable.ic_dott),
                             contentDescription = null,
-                            tint = Color.Gray,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(4.dp)
                         )
 
                         Icon(
                             painter = painterResource(id = R.drawable.ic_bell),
                             contentDescription = null,
-                            tint = Color.Gray,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(10.dp)
                         )
                     }
@@ -102,6 +104,7 @@ fun ReminderItemRow(
                 modifier = Modifier.weight(1.5f),
                 textAlign = TextAlign.Center,
                 text = getTextForDurationInDays(item.dueDate),
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Light,
                 fontSize = MaterialTheme.typography.labelMedium.fontSize,
                 maxLines = 2,

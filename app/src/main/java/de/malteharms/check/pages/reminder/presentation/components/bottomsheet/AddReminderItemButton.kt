@@ -23,7 +23,10 @@ fun AddReminderItemButton(
 
         onClick = { onClick() },
 
-        text = { Text(text = "Add Item") },
+        text = { Text(
+            text = "Add Item",
+            color = MaterialTheme.colorScheme.onTertiaryContainer
+        )},
         icon = { Icon(Icons.Filled.Add, null) },
 
         containerColor = MaterialTheme.colorScheme.tertiaryContainer

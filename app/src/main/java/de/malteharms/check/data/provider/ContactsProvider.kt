@@ -3,10 +3,8 @@ package de.malteharms.check.data.provider
 import android.net.Uri
 import android.content.Context
 import android.provider.ContactsContract
-import android.util.Log
 import de.malteharms.check.data.database.tables.Birthday
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class ContactsProvider(
     private val context: Context
@@ -15,7 +13,7 @@ class ContactsProvider(
     fun getContactBirthdays(): List<Birthday> {
         val contentResolver = context.contentResolver
 
-        val uri: Uri = ContactsContract.Data.CONTENT_URI;
+        val uri: Uri = ContactsContract.Data.CONTENT_URI
 
         val projection = arrayOf(
             ContactsContract.Contacts._ID,
@@ -23,9 +21,10 @@ class ContactsProvider(
             ContactsContract.CommonDataKinds.Event.START_DATE
         )
 
-        val selection = ContactsContract.Data.MIMETYPE + "= ? AND " + ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
+        // the user needs to set the birthday field
+        // if the user sets a custom field, this will not be supported!
+        val selection = ContactsContract.Data.MIMETYPE + "= ? AND " + ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
         val selectionArgs = arrayOf(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
-        val sortOrder = null;
 
         val contacts = mutableListOf<Birthday>()
 
@@ -34,7 +33,7 @@ class ContactsProvider(
             projection,
             selection,
             selectionArgs,
-            sortOrder
+            null
         )?.use { cursor ->
             val cIdColumn = cursor.getColumnIndex(ContactsContract.Contacts._ID)
             val bDayColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE)
@@ -46,9 +45,22 @@ class ContactsProvider(
                 val name: String = cursor.getString(nameColumn)
 
                 val bDaySplit = bDay.split('-')
-                val year: Int = bDaySplit[0].toInt()
-                val month: Int = bDaySplit[1].toInt()
-                val day: Int = bDaySplit[2].toInt()
+
+                // it could happen, that the user does not provide a year for
+                // a contacts birthday. If the year is not present, it will be
+                // set to the current years date
+                // The format, when no year is passed, is "--MM-dd"
+                val noYearPassed: Boolean = bDaySplit.size == 4 && bDaySplit[0] == ""
+
+                val year: Int = if (noYearPassed) {
+                    LocalDate.now().atStartOfDay().year
+                } else bDaySplit[0].toInt()
+
+                val monthIndex: Int = if (noYearPassed) 2 else 1
+                val month: Int = bDaySplit[monthIndex].toInt()
+
+                val dayIndex: Int = if (noYearPassed) 3 else 2
+                val day: Int = bDaySplit[dayIndex].toInt()
 
                 contacts.add(Birthday(
                     id = cId,

@@ -16,7 +16,6 @@ data class ReminderItem(
     val todoRelation: Long? = null,
     val birthdayRelation: Long? = null,
 
-    // todo: implement migration strategy for LocalDateTime
     val dueDate: LocalDateTime,
     val creationDate: LocalDateTime = LocalDateTime.now(),
     val lastUpdate: LocalDateTime = LocalDateTime.now()

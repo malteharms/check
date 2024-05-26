@@ -73,7 +73,9 @@ class MainActivity : ComponentActivity() {
                     ) }
                 )
 
-                // TODO add possibility to ignore birthdays from contacts
+                // TODO #8
+                //  add possibility to ignore birthdays from contacts
+
                 utilityViewModel.syncBirthdaysFromContacts()
 
                 // if notification permission are granted, schedule all notifications

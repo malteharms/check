@@ -64,7 +64,9 @@ class UtilityViewModel: ViewModel() {
             // If the item is the same as before, continue with
             // the next birthday item
 
-            // TODO load overdue from settings
+            // TODO #9
+            //  load overdue from settings
+
             val needsUpdate: Boolean = checkIfBirthdayNeedsToBeUpdated(
                 dateToReview = existingBirthday.birthday
             )

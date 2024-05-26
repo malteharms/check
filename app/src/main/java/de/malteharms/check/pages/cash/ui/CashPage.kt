@@ -3,6 +3,7 @@ package de.malteharms.check.pages.cash.ui
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +25,12 @@ fun Cash(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ){
-            Text(text = "Cash is currently in development", fontWeight = FontWeight.Bold, minLines = 2)
+            Text(
+                text = "Cash is currently in development",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Bold,
+                minLines = 2
+            )
         }
     }
 }

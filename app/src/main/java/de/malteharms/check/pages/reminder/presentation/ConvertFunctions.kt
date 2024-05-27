@@ -5,11 +5,15 @@ import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.data.timeBetween
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 
-fun getTextForDurationInDays(due: LocalDateTime): String {
-    val periodBetweenTodayAndDue: TimePeriod = timeBetween(dateToReach = due)
+fun getTextForDurationInDays(
+    due: LocalDateTime,
+    today: LocalDateTime = LocalDate.now().atStartOfDay()
+): String {
+    val periodBetweenTodayAndDue: TimePeriod = timeBetween(dateToReach = due, today = today)
 
     val dayText: String
 

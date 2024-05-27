@@ -280,8 +280,11 @@ class ReminderViewModel(
             AlarmItem(
                 channel = NotificationChannel.REMINDER,
                 time = notificationDate,
-                title = "Reminder >> ${reminderReference.title}",
-                message = "in ${reminderNotification.valueBeforeDue} ${getNotificationIntervalRepresentation(reminderNotification.interval)}"
+                title = reminderReference.title,
+                message = getTextForDurationInDays(
+                    due = notificationDate,
+                    today = reminderReference.dueDate
+                )
             )
         )
 

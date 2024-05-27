@@ -101,8 +101,8 @@ fun FloatingBottomNavigation(
                             Image(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .weight(1.2f)
-                                    .padding(top = 14.dp),
+                                    .weight(1.0f)
+                                    .padding(top = 10 .dp),
                                 painter = painterResource(id = icon),
                                 contentDescription = null,
                                 colorFilter = ColorFilter.tint(color),

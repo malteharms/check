@@ -1,7 +1,6 @@
 package de.malteharms.check.pages.settings.presentation
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.CheckApp
@@ -14,8 +13,6 @@ import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.data.database.tables.Setting
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
-import de.malteharms.check.pages.reminder.data.ReminderState
-import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
 import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingValue
 import de.malteharms.check.pages.settings.data.SettingsState
@@ -23,10 +20,6 @@ import de.malteharms.check.pages.settings.data.getAllSettings
 import de.malteharms.check.pages.settings.domain.SettingsEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.forEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -39,7 +32,7 @@ class SettingsViewModel(
         private val TAG: String? = SettingsViewModel::class.simpleName
     }
 
-    val notificationScheduler = CheckApp.appModule.notificationScheduler
+    private val notificationScheduler = CheckApp.appModule.notificationScheduler
 
     val state = MutableStateFlow(SettingsState())
 
@@ -106,7 +99,7 @@ class SettingsViewModel(
                                             item = AlarmItem(
                                                 channel = NotificationChannel.REMINDER,
                                                 time = reminderItem.dueDate,
-                                                title = "Reminder >> ${reminderItem.title}",
+                                                title = reminderItem.title,
                                                 message = "Heute"
                                             )
                                         )

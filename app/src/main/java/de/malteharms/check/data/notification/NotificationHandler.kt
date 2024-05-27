@@ -90,7 +90,7 @@ class NotificationHandler {
                         item = AlarmItem(
                             channel = NotificationChannel.REMINDER,
                             time = notification.notificationDate,
-                            title = "Reminder >> ${reminderItem.title}",
+                            title = reminderItem.title,
                             message = getTextForDurationInDays(reminderItem.dueDate)
                         )
                     )

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,10 +25,14 @@ fun LoadedNotificationRow(
         horizontalArrangement = Arrangement.Absolute.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = getNotificationText(reminderNotification))
+        Text(
+            text = getNotificationText(reminderNotification),
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Icon(
             imageVector = Icons.Default.Delete,
             contentDescription = null,
+            tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.clickable { onDelete(reminderNotification) }
         )
     }

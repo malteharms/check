@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
@@ -57,12 +58,17 @@ fun <T> LargeDropdownMenu(
 
     Box(modifier = modifier.height(IntrinsicSize.Min)) {
         OutlinedTextField(
-            label = { Text(label) },
-            value = selectedItemToString(items.get(selectedIndex)),
+            label = { Text(label, color = MaterialTheme.colorScheme.onBackground) },
+            value = selectedItemToString(items[selectedIndex]),
+            textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
             enabled = enabled,
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
-                Icon(Icons.Filled.ArrowDropDown, null)
+                Icon(
+                    Icons.Filled.ArrowDropDown,
+                    null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             },
             onValueChange = { },
             readOnly = true,

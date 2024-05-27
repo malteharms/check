@@ -15,9 +15,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -116,23 +119,32 @@ fun EditableNotificationRow(
         }
 
         AlertDialog(
-            icon = {
-                Icon(Icons.Default.Notifications, contentDescription = null, tint = Color.White)
-            },
-            title = {
-                Text(text = "Benachrichtige mich")
-            },
+            containerColor = MaterialTheme.colorScheme.background,
+            icon = { Icon(
+                Icons.Default.Notifications,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground
+            ) },
+            title = { Text(
+                text = "Benachrichtige mich",
+                color = MaterialTheme.colorScheme.onBackground
+            ) },
             text = {
                 Column {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         TextField(
                             modifier = Modifier.weight(1f),
                             value = value,
+                            textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.Transparent,
+                            ),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            maxLines = 1,
                             onValueChange = { newValue ->
                                 value = newValue
 
@@ -159,7 +171,11 @@ fun EditableNotificationRow(
                         )
 
 
-                        Text(text = "vorher", modifier = Modifier.weight(1f))
+                        Text(
+                            text = "vorher",
+                            modifier = Modifier.weight(1f),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                     }
 
                     // warning text
@@ -188,7 +204,7 @@ fun EditableNotificationRow(
                         }
                     }
                 ) {
-                    Text("Hinzufügen")
+                    Text("Hinzufügen", color = MaterialTheme.colorScheme.onBackground)
                 }
             },
             dismissButton = {
@@ -197,7 +213,7 @@ fun EditableNotificationRow(
                         showNotificationDialog = false
                     }
                 ) {
-                    Text("Abbrechen")
+                    Text("Abbrechen", color = MaterialTheme.colorScheme.onBackground)
                 }
             }
         )

@@ -114,7 +114,7 @@ fun ReminderBottomSheet(
             horizontalArrangement = editableRowArrangement
         ) {
             Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
-            Text(text = formattedDate, color = if (editable) { Color.Unspecified } else Color.Gray)
+            Text(text = formattedDate, color = if (editable) { MaterialTheme.colorScheme.onBackground } else Color.Gray)
         }
 
         EditableNotificationRow(

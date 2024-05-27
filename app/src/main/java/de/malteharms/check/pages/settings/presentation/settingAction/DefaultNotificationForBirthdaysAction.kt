@@ -37,6 +37,8 @@ fun DefaultNotificationForBirthdaysAction(
     Switch(
         checked = defaultNotificationForBirthday,
         onCheckedChange = {
+            // TODO #10
+            //  no notification for API < 33
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 notificationPermissionResultLauncher.launch(
                     Manifest.permission.POST_NOTIFICATIONS

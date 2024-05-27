@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +27,7 @@ import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
 import de.malteharms.check.pages.reminder.presentation.components.ReminderFilterRow
 import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
+import de.malteharms.check.presentation.components.TopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,29 +43,36 @@ fun ReminderDetailsPage(
         mutableStateOf(null)
     }
 
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(5.dp)
-    ) {
+    Scaffold(
+        topBar = { TopBar(navController, "Alle Reminder") },
+    ) { paddingValues ->
 
-        item {
-            ReminderFilterRow(filterList = state.filter, onEvent = onEvent)
-        }
+        LazyColumn(
+            contentPadding = paddingValues,
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
 
-        items(state.allItems) { item: ReminderItem ->
-            ReminderItemRow(
-                item = item,
-                hasNotifications = getNotifications(item.id).isNotEmpty(),
-                onClick =  {
-                    currentEditItem = item
-                    onEvent(ReminderEvent.ShowEditDialog(item))
-                }
-            )
-        }
+            item {
+                ReminderFilterRow(filterList = state.filter, onEvent = onEvent)
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(NAVIGATION_BAR_HEIGHT.dp))
+            items(state.allItems) { item: ReminderItem ->
+                ReminderItemRow(
+                    item = item,
+                    hasNotifications = getNotifications(item.id).isNotEmpty(),
+                    onClick =  {
+                        currentEditItem = item
+                        onEvent(ReminderEvent.ShowEditDialog(item))
+                    }
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(NAVIGATION_BAR_HEIGHT.dp))
+            }
         }
     }
+
 
     if (state.isEditingItem) {
         ModalBottomSheet(

@@ -1,18 +1,10 @@
 package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,46 +13,37 @@ import de.malteharms.check.presentation.components.CustomTextField
 
 @Composable
 fun EditableTitleRow(
-    modifier: Modifier,
-    alignment: Alignment.Vertical,
-    arrangement: Arrangement.Horizontal,
-
     title: String,
     editable: Boolean = true,
     onValueChange: (String) -> Unit,
 ) {
-    Row (
-        modifier = modifier,
-        horizontalArrangement = arrangement,
-        verticalAlignment = alignment
-    ){
-        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
 
-        if (editable) {
-            CustomTextField(
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.surface,
-                        RoundedCornerShape(percent = 50)
-                    )
-                    .padding(horizontal = 10.dp),
-                placeholderText = "Titel",
-                value = title,
-                onValueChange = { newText ->  onValueChange(newText) }
-            )
-        } else {
-            Text(
-                text = title,
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.surface,
-                        RoundedCornerShape(percent = 50)
-                    )
-                    .padding(horizontal = 10.dp),
-                color = Color.Gray
-            )
-        }
+    val modifier: Modifier = Modifier
+        .background(
+            Color.Transparent,
+            MaterialTheme.shapes.large
+        )
+        .padding(horizontal = 10.dp)
+
+    val textStyle = MaterialTheme.typography.titleLarge
+
+    if (editable) {
+        CustomTextField(
+            modifier = modifier,
+            placeholderText = "Titel",
+            fontSize = textStyle.fontSize,
+            value = title,
+            onValueChange = { newText ->  onValueChange(newText) }
+        )
+    } else {
+        Text(
+            text = title,
+            modifier = modifier,
+            fontStyle = textStyle.fontStyle,
+            color = Color.Gray
+        )
     }
+
 }
 
 
@@ -68,9 +51,6 @@ fun EditableTitleRow(
 @Composable
 fun EditableTitleRowPreview() {
     EditableTitleRow(
-        modifier = Modifier.fillMaxWidth(),
-        alignment = Alignment.CenterVertically,
-        arrangement = Arrangement.spacedBy(10.dp),
         title = "Perso",
         onValueChange = {}
     )

@@ -1,11 +1,11 @@
 package de.malteharms.check.pages.reminder.presentation.components.bottomsheet
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import de.malteharms.check.data.database.tables.ReminderNotification
 
 @Composable
@@ -39,7 +40,10 @@ fun DisplayedNotificationRow(
         )
 
         if (currentNotification == null) {
-            TextButton(onClick = { openAddReminderDialog() }) {
+            TextButton(
+                onClick = { openAddReminderDialog() },
+                contentPadding = PaddingValues(0.dp)
+            ) {
                 Text(
                     text = "+ Neue Benachrichtigung",
                     color = MaterialTheme.colorScheme.onBackground

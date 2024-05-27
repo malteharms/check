@@ -1,10 +1,8 @@
 package de.malteharms.check.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomTextField(
@@ -33,12 +30,7 @@ fun CustomTextField(
     var text by rememberSaveable { mutableStateOf(value) }
 
     BasicTextField(modifier = modifier
-        .background(
-            MaterialTheme.colorScheme.surface,
-            MaterialTheme.shapes.small,
-        )
-        .fillMaxWidth()
-        .padding(horizontal = 4.dp),
+        .fillMaxWidth(),
         value = text,
         onValueChange = {
             text = it

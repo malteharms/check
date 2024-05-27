@@ -73,7 +73,7 @@ fun ReminderBottomSheet(
         .fillMaxWidth()
         .height(40.dp)
     val editableRowAlignment = Alignment.CenterVertically
-    val editableRowArrangement = Arrangement.spacedBy(10.dp)
+    val editableRowArrangement = Arrangement.spacedBy(20.dp)
 
     val editable: Boolean = item?.birthdayRelation == null
 
@@ -83,18 +83,8 @@ fun ReminderBottomSheet(
             .padding(top = 16.dp, bottom = 16.dp, start = 20.dp, end = 20.dp),
     ) {
 
-        // category row
-        CategoryChoice(
-            item = item,
-            onEvent = onEvent,
-            editable = editable
-        )
-
         // title row
         EditableTitleRow(
-            modifier = editableRowModifier,
-            alignment = editableRowAlignment,
-            arrangement = editableRowArrangement,
             title = title.text,
             editable = editable,
             onValueChange = { newText ->
@@ -102,6 +92,16 @@ fun ReminderBottomSheet(
                 onEvent(ReminderEvent.SetTitle(newText))
             }
         )
+
+        Spacer(modifier = Modifier.height(5.dp))
+
+        // category row
+        CategoryChoice(
+            item = item,
+            onEvent = onEvent,
+            editable = editable
+        )
+
 
         // date picker row
         Row(

@@ -178,7 +178,7 @@ fun ReminderBottomSheetPreview() {
     val sampleItem = ReminderItem(
         id = -1,
         title = "Perso",
-        category = ReminderCategory.AUTOMATIC_RENEW,
+        category = ReminderCategory.GENERAL,
         todoRelation = null,
         dueDate = LocalDateTime.now(),
         creationDate = LocalDateTime.now(),

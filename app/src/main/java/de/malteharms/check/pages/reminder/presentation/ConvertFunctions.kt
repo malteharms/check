@@ -1,7 +1,6 @@
 package de.malteharms.check.pages.reminder.presentation
 
 import de.malteharms.check.data.TimePeriod
-import de.malteharms.check.pages.reminder.data.ReminderSortType
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
@@ -41,16 +40,10 @@ fun getTextForDurationInDays(due: LocalDateTime): String {
     return dayText.trim()
 }
 
-fun getAddOrUpdateButtonText(isItemNew: Boolean): String {
-    return if (isItemNew) { "Erinnerung hinzufügen" } else "Erinnerung speichern"
-}
-
 fun getCategoryRepresentation(category: ReminderCategory): String {
     return when(category) {
         ReminderCategory.GENERAL -> "Allgemein"
         ReminderCategory.BIRTHDAY -> "Geburtstag"
-        ReminderCategory.AUTOMATIC_RENEW -> "Automatische Erneuerung"
-        ReminderCategory.MANUAL_RENEW -> "Maneuelle Erneuerung"
         ReminderCategory.IMPORTANT_APPOINTMENT -> "Wichtiger Termin"
     }
 }

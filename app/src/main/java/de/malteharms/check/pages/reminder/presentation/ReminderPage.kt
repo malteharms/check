@@ -63,7 +63,7 @@ fun ReminderPage(
         LazyColumn (
             contentPadding = paddingValues,
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
             item {

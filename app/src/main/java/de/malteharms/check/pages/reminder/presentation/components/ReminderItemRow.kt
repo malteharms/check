@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,7 +39,7 @@ fun ReminderItemRow(
 
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-        elevation = CardDefaults.cardElevation(defaultElevation = 50.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
             .padding(horizontal = 7.dp)
             .clickable { onClick() },
@@ -105,7 +104,7 @@ fun ReminderItemRow(
                 textAlign = TextAlign.Center,
                 text = getTextForDurationInDays(item.dueDate),
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Light,
+                fontWeight = FontWeight.Bold,
                 fontSize = MaterialTheme.typography.labelMedium.fontSize,
                 maxLines = 2,
                 minLines = 1
@@ -128,7 +127,7 @@ fun ReminderItemRowPreview() {
             id = 0,
             title = "Personalausweis",
             dueDate = LocalDateTime.now().plusDays(1),
-            category = ReminderCategory.MANUAL_RENEW,
+            category = ReminderCategory.GENERAL,
             creationDate = LocalDateTime.now(),
             lastUpdate = LocalDateTime.now(),
             todoRelation = null

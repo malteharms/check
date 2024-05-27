@@ -74,7 +74,7 @@ fun FloatingBottomNavigation(
                     var icon: Int = item.icon
 
                     if (selectedIcon == index) {
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = MaterialTheme.colorScheme.primary
                         icon = item.iconSelected
                     }
 

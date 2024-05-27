@@ -22,7 +22,7 @@ fun ReminderFilterRow(
 ) {
     FlowRow(
         modifier = Modifier.fillMaxWidth().padding(5.dp),
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.spacedBy(7.dp)
     ) {
         ReminderCategory.entries.forEach { category ->
             val isSelected: Boolean = filterList.contains(category)

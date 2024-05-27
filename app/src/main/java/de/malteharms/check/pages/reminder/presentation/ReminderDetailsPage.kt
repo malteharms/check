@@ -24,6 +24,7 @@ import de.malteharms.check.data.database.tables.ReminderNotification
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
+import de.malteharms.check.pages.reminder.presentation.components.ReminderFilterRow
 import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,6 +44,11 @@ fun ReminderDetailsPage(
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
+
+        item {
+            ReminderFilterRow(filterList = state.filter, onEvent = onEvent)
+        }
+
         items(state.allItems) { item: ReminderItem ->
             ReminderItemRow(
                 item = item,

@@ -1,9 +1,12 @@
 package de.malteharms.check.pages.reminder.presentation
 
+import de.malteharms.check.CheckApp
 import de.malteharms.check.data.TimePeriod
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
+import de.malteharms.check.data.notification.dataclasses.NotificationChannel
+import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.pages.reminder.data.timeBetween
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -52,22 +55,34 @@ fun getCategoryRepresentation(category: ReminderCategory): String {
     }
 }
 
-fun getNotificationText(notification: NotificationItem): String {
-    val period: TimePeriod = timeBetween(dateToReach = notification.notificationDate)
+fun getNotificationText(
+    notification: NotificationItem,
+    dao: CheckDao = CheckApp.appModule.db.itemDao()
+): String {
+
+    // todo this is a bad implementation and may cost some calculation time
+    val dueDate: LocalDateTime = when (notification.channel) {
+        NotificationChannel.REMINDER -> dao.getReminderItemById(notification.connectedItem)?.dueDate
+    } ?: return ""
+
+    val period: TimePeriod = timeBetween(
+        dateToReach = notification.notificationDate,
+        today = dueDate
+    )
 
     if (period.days == 0L && period.months == 0L && period.years == 0L)
         return "Am selben Tag"
 
     val value: Int = when {
-        period.months == 0L && period.years == 0L -> period.days.toInt()
-        period.years == 0L -> period.months.toInt()
-        else -> period.years.toInt()
+        period.years > 0L -> period.years.toInt()
+        period.months > 0L -> period.months.toInt()
+        else -> period.days.toInt()
     }
 
     val interval = when {
-        period.months == 0L && period.years == 0L -> if(period.days == 1L) { "Tag" } else "Tage"
-        period.years == 0L -> if(period.months == 1L) { "Monat" } else "Monate"
-        else -> if (period.years == 1L) "Jahr" else "Jahre"
+        period.years > 0L -> if(period.years == 1L) { "Jahr" } else "Jahre"
+        period.months > 0L -> if(period.months == 1L) { "Monat" } else "Monate"
+        else -> if (period.days == 1L) "Jahr" else "Jahre"
     }
 
     return "$value $interval vorher"

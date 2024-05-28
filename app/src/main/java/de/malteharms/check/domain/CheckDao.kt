@@ -6,12 +6,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import androidx.room.Upsert
 import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.Setting
+import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.pages.settings.data.SettingValue
 import de.malteharms.check.pages.settings.domain.AnySetting
 import kotlinx.coroutines.flow.Flow
@@ -47,21 +47,24 @@ interface CheckDao {
     @Query("SELECT * FROM reminder_items WHERE id = :reminderId")
     fun getReminderItemById(reminderId: Long): ReminderItem?
 
-    /* REMINDER NOTIFICATION QUERY'S */
+    /* NOTIFICATION QUERY'S */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertReminderNotification(reminderNotification: ReminderNotification)
+    suspend fun insertNotification(notification: NotificationItem)
 
     @Delete
-    suspend fun removeReminderNotification(reminderNotification: ReminderNotification)
+    suspend fun removeNotification(notification: NotificationItem)
 
-    @Query("SELECT * FROM reminder_notifications")
-    fun getAllNotifications(): List<ReminderNotification>
+    @Query("SELECT * FROM notifications")
+    fun getAllNotifications(): List<NotificationItem>
 
-    @Query("DELETE FROM reminder_notifications WHERE reminderItem = :reminderItemId")
-    fun removeReminderNotificationsForReminderItem(reminderItemId: Long)
+    @Query("DELETE FROM notifications WHERE connectedItem = :connectedItemId AND channel = :channel")
+    fun removeNotificationsForConnectedItem(channel: NotificationChannel, connectedItemId: Long)
 
-    @Query("SELECT * FROM reminder_notifications WHERE reminderItem = :itemId ORDER BY notificationDate")
-    fun getNotificationsForReminderItem(itemId: Long): List<ReminderNotification>
+    @Query("SELECT * FROM notifications WHERE connectedItem = :itemId  AND channel = :channel ORDER BY notificationDate")
+    fun getNotificationsForConnectedItem(channel: NotificationChannel, itemId: Long): List<NotificationItem>
+
+    @Query("SELECT * FROM notifications WHERE notificationDate >= :timestamp")
+    fun getOverdueNotifications(timestamp: Long): List<NotificationItem>
 
     /* SETTINGS QUERY'S */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -81,4 +84,5 @@ interface CheckDao {
 
     @Query("SELECT * FROM birthdays WHERE id = :birthdayId")
     fun getBirthday(birthdayId: Long): Birthday?
+
 }

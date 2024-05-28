@@ -1,8 +1,9 @@
 package de.malteharms.check.pages.reminder.domain
 
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.ReminderCategory
+import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import java.time.LocalDateTime
 
 
@@ -18,9 +19,10 @@ sealed interface ReminderEvent {
     data class SetDueDate(val dueDate: LocalDateTime): ReminderEvent
 
     data class SetCategory(val category: ReminderCategory): ReminderEvent
-    data class AddNotification(val notification: ReminderNotification): ReminderEvent
 
-    data class RemoveNotification(val notification: ReminderNotification): ReminderEvent
+    data class AddDummyNotification(val value: Int, val interval: ReminderNotificationInterval): ReminderEvent
+    data class RemoveNotification(val notification: NotificationItem): ReminderEvent
+
     data object ShowNewDialog: ReminderEvent
     data class ShowEditDialog(val item: ReminderItem): ReminderEvent
 

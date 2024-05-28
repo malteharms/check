@@ -32,8 +32,8 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.ReminderNotification
-import de.malteharms.check.data.database.tables.ReminderNotificationInterval
+import de.malteharms.check.data.database.tables.NotificationItem
+import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice
@@ -46,7 +46,7 @@ import java.time.LocalDateTime
 @Composable
 fun ReminderBottomSheet(
     item: ReminderItem?,
-    notifications: List<ReminderNotification>,
+    notifications: List<NotificationItem>,
     onEvent: (ReminderEvent) -> Unit
 ) {
     val dateDialogState = rememberMaterialDialogState()
@@ -65,7 +65,7 @@ fun ReminderBottomSheet(
         }
     }
 
-    val currentNotifications: List<ReminderNotification> by remember {
+    val currentNotifications: List<NotificationItem> by remember {
         mutableStateOf(notifications)
     }
 
@@ -186,10 +186,9 @@ fun ReminderBottomSheetPreview() {
     )
 
     val sampleNotification = listOf(
-        ReminderNotification(
-            reminderItem = -1,
-            valueBeforeDue = 5,
-            interval = ReminderNotificationInterval.DAYS,
+        NotificationItem(
+            channel = NotificationChannel.REMINDER,
+            connectedItem = -1,
             notificationId = -1,
             notificationDate = LocalDateTime.now().plusSeconds(5)
         )

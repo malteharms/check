@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import de.malteharms.check.data.Screens
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
-import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddReminderItemButton
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
@@ -40,7 +40,7 @@ import de.malteharms.check.presentation.components.TopBar
 fun ReminderPage(
     navController: NavController,
     state: ReminderState,
-    getNotifications: (Long) -> List<ReminderNotification>,
+    getNotifications: (Long) -> List<NotificationItem>,
     onEvent: (ReminderEvent) -> Unit,
     syncContacts: () -> Unit
 ) {

@@ -32,12 +32,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
 import de.malteharms.check.presentation.components.LargeDropdownMenu
-import java.time.LocalDateTime
 
 
 @Composable
@@ -45,7 +44,7 @@ fun EditableNotificationRow(
     modifier: Modifier,
     arrangement: Arrangement.Horizontal,
 
-    notifications: List<ReminderNotification>,
+    notifications: List<NotificationItem>,
     onEvent: (ReminderEvent) -> Unit
 ) {
     var showNotificationDialog by remember {
@@ -170,7 +169,6 @@ fun EditableNotificationRow(
                             modifier = Modifier.weight(3f)
                         )
 
-
                         Text(
                             text = "vorher",
                             modifier = Modifier.weight(1f),
@@ -189,17 +187,10 @@ fun EditableNotificationRow(
                 TextButton(
                     onClick = {
                         if (warning == "") {
-                            val newReminderNotification = ReminderNotification(
-                                reminderItem = -1,  // will be set on save
-                                valueBeforeDue = value.text.toInt(),
-                                interval = interval,
-                                notificationId = -1, // will be set on save
-                                notificationDate = LocalDateTime.MAX // will be set on save
-                            )
-
-                            currentNotifications += newReminderNotification
-                            onEvent(ReminderEvent.AddNotification(newReminderNotification))
-
+                            onEvent(ReminderEvent.AddDummyNotification(
+                                value = value.text.toInt(),
+                                interval = interval
+                            ))
                             showNotificationDialog = false
                         }
                     }

@@ -80,28 +80,19 @@ class MainActivity : ComponentActivity() {
 
                 // if notification permission are granted, schedule all notifications
                 // on startup
-                var notificationPermission: PermissionState? = null
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    notificationPermission = rememberPermissionState(
+
+                val hasNotificationPermission: Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    rememberPermissionState(
                         permission = Manifest.permission.POST_NOTIFICATIONS
-                    )
-                }
+                    ).status.isGranted
+                } else true
 
-                // update overdue NOTIFICATIONS
-                NotificationHandler.updateOverdueNotifications(
-                    dao = CheckApp.appModule.db.itemDao()
+                // update overdue notifications
+                NotificationHandler.updateNotifications(
+                    dao = CheckApp.appModule.db.itemDao(),
+                    alarmScheduler = CheckApp.appModule.notificationScheduler,
+                    hasPermission = hasNotificationPermission
                 )
-
-                // reschedule notification if necessary
-                val hasNotificationPermission: Boolean =
-                    notificationPermission?.status?.isGranted ?: true
-
-                if (hasNotificationPermission) {
-                    NotificationHandler.rescheduleAllNotifications(
-                        dao = CheckApp.appModule.db.itemDao(),
-                        notificationScheduler = CheckApp.appModule.notificationScheduler
-                    )
-                }
 
                 Surface(
                     color = MaterialTheme.colorScheme.background,

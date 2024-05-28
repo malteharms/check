@@ -11,7 +11,7 @@ import de.malteharms.check.data.database.converter.SettingValueConverter
 import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.Setting
 
 
@@ -19,10 +19,10 @@ import de.malteharms.check.data.database.tables.Setting
     entities = [
         ReminderItem::class,
         Birthday::class,
-        ReminderNotification::class,
+        NotificationItem::class,
         Setting::class
     ],
-    version = 20,
+    version = 21,
     exportSchema = false
 )
 @TypeConverters(

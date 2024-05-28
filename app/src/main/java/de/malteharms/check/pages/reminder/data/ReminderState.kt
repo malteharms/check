@@ -2,7 +2,7 @@ package de.malteharms.check.pages.reminder.data
 
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.NotificationItem
 import java.time.LocalDateTime
 
 
@@ -14,9 +14,9 @@ data class ReminderState (
     val dueDate: LocalDateTime = LocalDateTime.now(),
     val category: ReminderCategory = ReminderCategory.GENERAL,
 
-    val notifications: List<ReminderNotification> = listOf(),
-    val newNotifications: List<ReminderNotification> = listOf(),
-    val notificationsToDelete: List<ReminderNotification> = listOf(),
+    val notifications: List<NotificationItem> = listOf(),
+    val newNotifications: List<NotificationItem> = listOf(),
+    val notificationsToDelete: List<NotificationItem> = listOf(),
 
     val isAddingItem: Boolean = false,
     val isEditingItem: Boolean = false,

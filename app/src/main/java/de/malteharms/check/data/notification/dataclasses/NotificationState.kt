@@ -1,4 +1,4 @@
-package de.malteharms.check.data
+package de.malteharms.check.data.notification.dataclasses
 
 
 data class NotificationResult (

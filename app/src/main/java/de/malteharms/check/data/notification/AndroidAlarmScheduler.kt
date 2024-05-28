@@ -8,8 +8,8 @@ import android.util.Log
 import de.malteharms.check.data.NOTIFICATION_ID
 import de.malteharms.check.data.NOTIFICATION_MESSAGE
 import de.malteharms.check.data.NOTIFICATION_TITLE
-import de.malteharms.check.data.NotificationResult
-import de.malteharms.check.data.NotificationState
+import de.malteharms.check.data.notification.dataclasses.NotificationResult
+import de.malteharms.check.data.notification.dataclasses.NotificationState
 import de.malteharms.check.data.broadcastReceiver.ReminderNotificationReceiver
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel

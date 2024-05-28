@@ -1,8 +1,7 @@
 package de.malteharms.check.domain
 
-import de.malteharms.check.data.NotificationResult
+import de.malteharms.check.data.notification.dataclasses.NotificationResult
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
-import kotlin.random.Random
 
 interface AlarmScheduler {
 

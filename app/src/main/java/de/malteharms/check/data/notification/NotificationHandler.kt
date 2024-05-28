@@ -1,15 +1,17 @@
 package de.malteharms.check.data.notification
 
 import android.util.Log
-import de.malteharms.check.data.database.tables.ReminderCategory
+import de.malteharms.check.data.database.converter.LocalDateTimeConverter
+import de.malteharms.check.data.notification.dataclasses.NotificationResult
+import de.malteharms.check.data.notification.dataclasses.NotificationState
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.ReminderNotification
+import de.malteharms.check.data.database.tables.NotificationItem
+import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.domain.AlarmScheduler
 import de.malteharms.check.domain.CheckDao
-import de.malteharms.check.pages.reminder.data.calculateCorrectYearOfNextBirthday
-import de.malteharms.check.pages.reminder.data.calculateNotificationDate
+import de.malteharms.check.domain.Notificationable
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -17,89 +19,121 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class NotificationHandler {
+class NotificationHandler() {
 
     companion object {
         private val TAG: String? = NotificationHandler::class.simpleName
 
-        @OptIn(DelicateCoroutinesApi::class)
-        fun updateOverdueNotifications(dao: CheckDao) {
-            val notifications: List<ReminderNotification> = dao.getAllNotifications()
-
-            notifications.forEach{ notification ->
-                val reminderItem: ReminderItem? = dao.getReminderItemById(notification.reminderItem)
-
-                if (notification.notificationDate.isBefore(LocalDate.now().atStartOfDay())) {
-                    GlobalScope.launch {
-                        // remove existing notification, which is overdue
-                        dao.removeReminderNotification(notification)
-
-                        if (reminderItem == null) {
-                            Log.w(TAG, "Cannot load reminder item for notification ${notification.id}")
-                            return@launch
-                        }
-
-                        if (reminderItem.category == ReminderCategory.BIRTHDAY) {
-                            val updatedYear: Int = calculateCorrectYearOfNextBirthday(reminderItem.dueDate)
-                            val updatedReminderItem = reminderItem.copy(
-                                dueDate = reminderItem.dueDate.withYear(updatedYear),
-                                lastUpdate = LocalDateTime.now()
-                            )
-
-                            val notificationDate: LocalDateTime = calculateNotificationDate(
-                                dueDate = updatedReminderItem.dueDate,
-                                valueForNotification = notification.valueBeforeDue,
-                                daysOrMonths = notification.interval
-                            )
-
-                            dao.updateReminderItem(updatedReminderItem)
-                            dao.insertReminderNotification(ReminderNotification(
-                                reminderItem = reminderItem.id,
-                                valueBeforeDue = notification.valueBeforeDue,
-                                interval = notification.interval,
-                                notificationId = notification.notificationId,
-                                notificationDate = notificationDate
-                            ))
-                        }
-                    }
-                }
-
+        fun scheduleNotification(
+            alarmScheduler: AlarmScheduler,
+            type: NotificationChannel,
+            connectedItem: Notificationable,
+            notificationDate: LocalDateTime,
+            notificationId: Long? = null
+        ): NotificationItem? {
+            return when (type) {
+                NotificationChannel.REMINDER -> scheduleReminderNotification(
+                    alarmScheduler, connectedItem as ReminderItem, notificationDate, notificationId
+                )
             }
         }
 
         @OptIn(DelicateCoroutinesApi::class)
-        fun rescheduleAllNotifications(
+        fun updateNotifications(
             dao: CheckDao,
-            notificationScheduler: AlarmScheduler
+            alarmScheduler: AlarmScheduler,
+            hasPermission: Boolean = false
         ) {
-            // schedule notifications
-            val notifications: List<ReminderNotification> = dao.getAllNotifications()
+            val currentTimestamp: Long = LocalDateTimeConverter().dateToTimestamp(
+                LocalDate.now().atStartOfDay()
+            ) ?: throw InternalError("Could not create timestamp of current date")
+
+            // get all notifications, which are have an overdue notification date
+            // also update those notifications, which have the notification date today
+            val overdueNotifications: List<NotificationItem> = dao.getOverdueNotifications(
+                timestamp = currentTimestamp
+            )
+
+            var updatedNotifications = 0
 
             GlobalScope.launch {
-                notifications.forEach { notification ->
-                    val reminderItem: ReminderItem? =
-                        dao.getReminderItemById(notification.reminderItem)
+                overdueNotifications.forEach { notificationItem ->
 
-                    if (reminderItem == null) {
-                        Log.w(TAG, "Cannot load reminder item for notification ${notification.id}")
+                    // remove the existing notification
+                    dao.removeNotification(notificationItem)
+
+                    // from here, the app needs permissions to reschedule
+                    // notifications
+                    if (!hasPermission) {
                         return@forEach
                     }
 
-                    notificationScheduler.schedule(
-                        notificationId = notification.notificationId,
-                        item = AlarmItem(
-                            channel = NotificationChannel.REMINDER,
-                            time = notification.notificationDate,
-                            title = reminderItem.title,
-                            message = getTextForDurationInDays(reminderItem.dueDate)
-                        )
-                    )
+                    // reschedule
+                    val connectedItem: Notificationable = when (notificationItem.channel) {
+                        NotificationChannel.REMINDER -> {
+                            dao.getReminderItemById(notificationItem.connectedItem)
+                        }
+                    } ?: return@forEach
 
-                    Log.i(
-                        TAG,
-                        "Scheduled reminder item ${reminderItem.id} at ${notification.notificationDate}"
-                    )
+                    when (connectedItem) {
+                        is ReminderItem -> {
+                            if (connectedItem.category != ReminderCategory.BIRTHDAY) {
+                                return@forEach
+                            }
+                        }
+                        else -> return@forEach
+                    }
 
+                    val nextNotificationYear: Int = LocalDate.now().year + 1
+
+                    val newNotification: NotificationItem = scheduleNotification(
+                        alarmScheduler = alarmScheduler,
+                        type = notificationItem.channel,
+                        connectedItem = connectedItem,
+                        notificationDate = notificationItem.notificationDate.withYear(nextNotificationYear)
+                    ) ?: return@forEach
+
+                    // update database
+                    dao.insertNotification(newNotification)
+                    updatedNotifications += 1
+                }
+            }
+
+            Log.i(TAG, "Rescheduled $updatedNotifications notifications")
+        }
+
+        private fun scheduleReminderNotification(
+            alarmScheduler: AlarmScheduler,
+            reminderItem: ReminderItem,
+            notificationDate: LocalDateTime,
+            notificationId: Long?
+        ): NotificationItem? {
+
+            val alarmItem = AlarmItem(
+                channel = NotificationChannel.REMINDER,
+                time = notificationDate,
+                title = reminderItem.title,
+                message = getTextForDurationInDays(reminderItem.dueDate)
+            )
+
+            val schedulingResult: NotificationResult = alarmScheduler.schedule(
+                notificationId = notificationId?.toInt(),
+                item = alarmItem
+            )
+
+            return when (schedulingResult.state) {
+                NotificationState.SUCCESS -> {
+                    NotificationItem(
+                        connectedItem = reminderItem.id,
+                        channel = NotificationChannel.REMINDER,
+                        notificationId = schedulingResult.notificationId,
+                        notificationDate = notificationDate
+                    )
+                }
+
+                NotificationState.NOTIFICATION_IS_DISABLED -> {
+                    Log.e(TAG, "Could not schedule notification due to missing permission!")
+                    null
                 }
             }
         }

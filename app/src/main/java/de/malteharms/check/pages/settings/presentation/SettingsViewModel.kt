@@ -4,14 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.CheckApp
-import de.malteharms.check.data.NotificationResult
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.ReminderNotification
-import de.malteharms.check.data.database.tables.ReminderNotificationInterval
+import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.data.database.tables.Setting
-import de.malteharms.check.data.notification.dataclasses.AlarmItem
+import de.malteharms.check.data.notification.NotificationHandler
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingValue
@@ -87,36 +85,31 @@ class SettingsViewModel(
                     allBirthdays.collect { reminderItems ->
                         reminderItems.forEach{ reminderItem ->
 
-                            val notifications: List<ReminderNotification> =
-                                dao.getNotificationsForReminderItem(reminderItem.id)
+                            val notifications: List<NotificationItem> =
+                                dao.getNotificationsForConnectedItem(
+                                    channel = NotificationChannel.REMINDER,
+                                    itemId = reminderItem.id
+                                )
 
                             when (state.value.defaultNotificationForBirthday) {
                                 true -> {
-                                    if (!notifications.any { it.valueBeforeDue == 0 }) {
+                                    if (!notifications.any { it.notificationDate == reminderItem.dueDate }) {
 
-                                        val result: NotificationResult = notificationScheduler.schedule(
-                                            notificationId = null,
-                                            item = AlarmItem(
-                                                channel = NotificationChannel.REMINDER,
-                                                time = reminderItem.dueDate,
-                                                title = reminderItem.title,
-                                                message = "Heute"
-                                            )
-                                        )
-
-                                        dao.insertReminderNotification(ReminderNotification(
-                                            reminderItem = reminderItem.id,
-                                            valueBeforeDue = 0,
-                                            interval = ReminderNotificationInterval.DAYS,
+                                        val notification: NotificationItem = NotificationHandler.scheduleNotification(
+                                            alarmScheduler = CheckApp.appModule.notificationScheduler,
+                                            type = NotificationChannel.REMINDER,
+                                            connectedItem = reminderItem,
                                             notificationDate = reminderItem.dueDate,
-                                            notificationId = result.notificationId
-                                        ))
+                                        ) ?: return@forEach
+
+                                        dao.insertNotification(notification)
                                     }
                                 }
+
                                 false -> {
                                     notifications.forEach{ notification ->
                                         notificationScheduler.cancel(notification.notificationId)
-                                        dao.removeReminderNotification(notification)
+                                        dao.removeNotification(notification)
                                     }
                                 }
                             }

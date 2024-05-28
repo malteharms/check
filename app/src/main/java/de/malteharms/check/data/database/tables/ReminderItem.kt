@@ -2,6 +2,7 @@ package de.malteharms.check.data.database.tables
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import de.malteharms.check.domain.Notificationable
 import java.time.LocalDateTime
 
 
@@ -19,7 +20,7 @@ data class ReminderItem(
     val dueDate: LocalDateTime,
     val creationDate: LocalDateTime = LocalDateTime.now(),
     val lastUpdate: LocalDateTime = LocalDateTime.now()
-)
+): Notificationable
 
 enum class ReminderCategory {
     GENERAL,

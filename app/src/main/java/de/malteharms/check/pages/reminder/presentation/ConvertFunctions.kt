@@ -79,10 +79,10 @@ fun getNotificationText(
         else -> period.days.toInt()
     }
 
-    val interval = when {
+    val interval: String = when {
         period.years > 0L -> if(period.years == 1L) { "Jahr" } else "Jahre"
         period.months > 0L -> if(period.months == 1L) { "Monat" } else "Monate"
-        else -> if (period.days == 1L) "Jahr" else "Jahre"
+        else -> if (period.days == 1L) "Tag" else "Tage"
     }
 
     return "$value $interval vorher"

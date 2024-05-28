@@ -65,6 +65,7 @@ fun ReminderBottomSheet(
         }
     }
 
+    // todo notifications are not updating, because list is not provided as flow
     val currentNotifications: List<NotificationItem> by remember {
         mutableStateOf(notifications)
     }

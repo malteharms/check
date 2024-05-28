@@ -194,15 +194,20 @@ class ReminderViewModel(
 
                     // (add new) / (update existing) notifications to database and schedule them
                     notifications.forEach { reminderNotification ->
+
+                        val notificationId: Int? = if (reminderNotification.notificationId <= 0) {
+                            null
+                        } else reminderNotification.notificationId
+
                         val notification: NotificationItem? = NotificationHandler.scheduleNotification(
                             alarmScheduler = CheckApp.appModule.notificationScheduler,
                             type = NotificationChannel.REMINDER,
                             connectedItem = updatedReminderItem,
                             notificationDate = reminderNotification.notificationDate,
-                            notificationId = event.itemToUpdate.id
+                            notificationId = notificationId
                         )
 
-                        if (notification != null) {
+                        if (notificationId == null && notification != null) {
                             dao.insertNotification(notification)
                         }
                     }

@@ -29,7 +29,7 @@ class NotificationHandler() {
             type: NotificationChannel,
             connectedItem: Notificationable,
             notificationDate: LocalDateTime,
-            notificationId: Long? = null
+            notificationId: Int? = null
         ): NotificationItem? {
             return when (type) {
                 NotificationChannel.REMINDER -> scheduleReminderNotification(
@@ -106,7 +106,7 @@ class NotificationHandler() {
             alarmScheduler: AlarmScheduler,
             reminderItem: ReminderItem,
             notificationDate: LocalDateTime,
-            notificationId: Long?
+            notificationId: Int?
         ): NotificationItem? {
 
             val alarmItem = AlarmItem(
@@ -117,7 +117,7 @@ class NotificationHandler() {
             )
 
             val schedulingResult: NotificationResult = alarmScheduler.schedule(
-                notificationId = notificationId?.toInt(),
+                notificationId = notificationId,
                 item = alarmItem
             )
 

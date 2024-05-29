@@ -1,12 +1,9 @@
 package de.malteharms.check.pages.reminder.presentation
 
-import de.malteharms.check.CheckApp
 import de.malteharms.check.data.TimePeriod
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
-import de.malteharms.check.data.notification.dataclasses.NotificationChannel
-import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.pages.reminder.data.timeBetween
 import java.time.LocalDate
 import java.time.LocalDateTime

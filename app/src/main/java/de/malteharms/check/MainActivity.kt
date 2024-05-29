@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import de.malteharms.check.data.getBottomNavigationItems
@@ -88,6 +87,7 @@ class MainActivity : ComponentActivity() {
                 } else true
 
                 // update overdue notifications
+                // TODO on restart, notifications get updated by failure
                 NotificationHandler.updateNotifications(
                     dao = CheckApp.appModule.db.itemDao(),
                     alarmScheduler = CheckApp.appModule.notificationScheduler,

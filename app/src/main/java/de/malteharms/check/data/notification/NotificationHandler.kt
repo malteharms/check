@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class NotificationHandler() {
+class NotificationHandler {
 
     companion object {
         private val TAG: String? = NotificationHandler::class.simpleName

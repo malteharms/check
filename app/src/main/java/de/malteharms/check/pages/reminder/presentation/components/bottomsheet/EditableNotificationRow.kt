@@ -32,8 +32,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
+import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
 import de.malteharms.check.presentation.components.LargeDropdownMenu
@@ -44,7 +44,7 @@ fun EditableNotificationRow(
     modifier: Modifier,
     arrangement: Arrangement.Horizontal,
 
-    notifications: List<NotificationItem>,
+    state: ReminderState,
     onEvent: (ReminderEvent) -> Unit
 ) {
     var showNotificationDialog by remember {
@@ -58,13 +58,9 @@ fun EditableNotificationRow(
         }
     )
 
-    var currentNotifications by remember {
-        mutableStateOf(notifications)
-    }
-
     LazyColumn {
 
-        itemsIndexed(currentNotifications) {index, item ->
+        itemsIndexed(state.notifications) {index, item ->
 
             DisplayedNotificationRow(
                 modifier = modifier,
@@ -73,18 +69,16 @@ fun EditableNotificationRow(
                 currentNotification = item,
                 openAddReminderDialog = { showNotificationDialog = true },
                 removeNotification = {
-                    currentNotifications -= item
                     onEvent(ReminderEvent.RemoveNotification(item))
                 }
             )
-
         }
 
         item {
             DisplayedNotificationRow(
                 modifier = modifier,
                 arrangement = arrangement,
-                isFirstRow = currentNotifications.isEmpty(),
+                isFirstRow = state.notifications.isEmpty(),
                 currentNotification = null,
                 openAddReminderDialog = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -93,12 +87,7 @@ fun EditableNotificationRow(
                         )
                     }
                 },
-                removeNotification = {
-                    if (currentNotifications.isNotEmpty()) {
-                        currentNotifications -= currentNotifications[0]
-                        onEvent(ReminderEvent.RemoveNotification(currentNotifications[0]))
-                    }
-                }
+                removeNotification = { }
             )
         }
     }

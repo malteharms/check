@@ -12,6 +12,7 @@ import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.domain.AlarmScheduler
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.domain.Notificationable
+import de.malteharms.check.pages.reminder.data.getValueBeforeDueAndInterval
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -121,13 +122,20 @@ class NotificationHandler() {
                 item = alarmItem
             )
 
+            val valueAndIntervalPair = getValueBeforeDueAndInterval(
+                notificationDate = notificationDate,
+                dueDate = reminderItem.dueDate
+            )
+
             return when (schedulingResult.state) {
                 NotificationState.SUCCESS -> {
                     NotificationItem(
                         connectedItem = reminderItem.id,
                         channel = NotificationChannel.REMINDER,
                         notificationId = schedulingResult.notificationId,
-                        notificationDate = notificationDate
+                        notificationDate = notificationDate,
+                        valueBeforeDue = valueAndIntervalPair.first,
+                        interval = valueAndIntervalPair.second
                     )
                 }
 

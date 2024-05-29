@@ -26,7 +26,6 @@ import androidx.navigation.NavController
 import de.malteharms.check.data.Screens
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
-import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddReminderItemButton
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
@@ -40,8 +39,8 @@ import de.malteharms.check.presentation.components.TopBar
 fun ReminderPage(
     navController: NavController,
     state: ReminderState,
-    getNotifications: (Long) -> List<NotificationItem>,
     onEvent: (ReminderEvent) -> Unit,
+    hasNotifications: (Long) -> Boolean,
     syncContacts: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -74,7 +73,7 @@ fun ReminderPage(
 
                 ReminderItemRow(
                     item = reminderItem,
-                    hasNotifications = getNotifications(reminderItem.id).isNotEmpty(),
+                    hasNotifications = hasNotifications(reminderItem.id),
                     onClick =  {
                         currentEditItem = reminderItem
                         onEvent(ReminderEvent.ShowEditDialog(reminderItem))
@@ -90,7 +89,7 @@ fun ReminderPage(
                     TextButton(
                         onClick = { navController.navigate(Screens.ReminderDetailsRoute.route) }
                     ) {
-                        Text(text = "zeige mir alle Reminder", color = Color.Gray)
+                        Text(text = "zeig' mir alle Reminder", color = Color.Gray)
                     }
                 }
             }
@@ -111,7 +110,7 @@ fun ReminderPage(
         ) {
             ReminderBottomSheet(
                 item = currentEditItem,
-                notifications = getNotifications(currentEditItem!!.id),
+                state = state,
                 onEvent = onEvent
             )
         }
@@ -131,7 +130,7 @@ fun ReminderPage(
         ) {
             ReminderBottomSheet(
                 item = null,
-                notifications = listOf(),
+                state = state,
                 onEvent = onEvent
             )
         }

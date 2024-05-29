@@ -13,6 +13,9 @@ data class NotificationItem(
     val channel: NotificationChannel,
     val connectedItem: Long,
 
+    val valueBeforeDue: Long,
+    val interval: ReminderNotificationInterval,
+
     val notificationId: Int,
     val notificationDate: LocalDateTime
 )

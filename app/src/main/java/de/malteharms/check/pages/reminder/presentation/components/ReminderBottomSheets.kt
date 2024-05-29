@@ -32,8 +32,7 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.NotificationItem
-import de.malteharms.check.data.notification.dataclasses.NotificationChannel
+import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice
@@ -46,7 +45,7 @@ import java.time.LocalDateTime
 @Composable
 fun ReminderBottomSheet(
     item: ReminderItem?,
-    notifications: List<NotificationItem>,
+    state: ReminderState,
     onEvent: (ReminderEvent) -> Unit
 ) {
     val dateDialogState = rememberMaterialDialogState()
@@ -63,11 +62,6 @@ fun ReminderBottomSheet(
         derivedStateOf {
             convertTimestampToDateString(pickedDate)
         }
-    }
-
-    // todo notifications are not updating, because list is not provided as flow
-    val currentNotifications: List<NotificationItem> by remember {
-        mutableStateOf(notifications)
     }
 
     val editableRowModifier = Modifier
@@ -121,7 +115,7 @@ fun ReminderBottomSheet(
         EditableNotificationRow(
             modifier = editableRowModifier,
             arrangement = editableRowArrangement,
-            notifications = currentNotifications,
+            state = state,
             onEvent = onEvent
         )
 
@@ -186,18 +180,9 @@ fun ReminderBottomSheetPreview() {
         lastUpdate = LocalDateTime.now()
     )
 
-    val sampleNotification = listOf(
-        NotificationItem(
-            channel = NotificationChannel.REMINDER,
-            connectedItem = -1,
-            notificationId = -1,
-            notificationDate = LocalDateTime.now().plusSeconds(5)
-        )
-    )
-
     ReminderBottomSheet(
         item = sampleItem,
-        notifications = sampleNotification,
+        state = ReminderState(),
         onEvent = {  }
     )
 }

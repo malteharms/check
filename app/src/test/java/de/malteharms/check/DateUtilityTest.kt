@@ -16,8 +16,8 @@ class DateUtilityTest {
 
         val expectedRange = 5L
         val actualRange = timeBetween(
-            dateToReach = dateInPast,
-            today = currentDate
+            end = dateInPast,
+            start = currentDate
         )
 
         Assert.assertEquals(expectedRange, actualRange.days)
@@ -30,8 +30,8 @@ class DateUtilityTest {
 
         val expectedRange = 0L
         val actualRange = timeBetween(
-            dateToReach = dateInPast,
-            today = currentDate
+            end = dateInPast,
+            start = currentDate
         )
 
         Assert.assertEquals(expectedRange, actualRange.days)
@@ -44,8 +44,8 @@ class DateUtilityTest {
 
         val expectedRange = 1L
         val actualRange = timeBetween(
-            dateToReach = dateInPast,
-            today = currentDate
+            end = dateInPast,
+            start = currentDate
         )
 
         Assert.assertEquals(expectedRange, actualRange.days)
@@ -58,8 +58,8 @@ class DateUtilityTest {
 
         val expectedRange = 2L
         val actualRange = timeBetween(
-            dateToReach = dateInPast,
-            today = currentDate
+            end = dateInPast,
+            start = currentDate
         )
 
         Assert.assertEquals(expectedRange, actualRange.days)
@@ -72,8 +72,8 @@ class DateUtilityTest {
 
         val expectedRange = -5L
         val actualRange = timeBetween(
-            dateToReach = dateInPast,
-            today = currentDate
+            end = dateInPast,
+            start = currentDate
         )
 
         Assert.assertEquals(expectedRange, actualRange.days)
@@ -87,8 +87,8 @@ class DateUtilityTest {
 
         val expectedRange = 1515L
         val actualRange = timeBetween(
-            dateToReach = dayInPast,
-            today = currentDate
+            end = dayInPast,
+            start = currentDate
         )
 
         Assert.assertEquals(expectedRange, actualRange.days)

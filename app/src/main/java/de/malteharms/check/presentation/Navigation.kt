@@ -68,7 +68,7 @@ fun Navigation(
                 ReminderPage(
                     navController = navController,
                     state = reminderState,
-                    getNotifications = reminderViewModel::getNotifications,
+                    hasNotifications = reminderViewModel::hasNotifications,
                     onEvent = reminderViewModel::onEvent,
                     syncContacts = utilityViewModel::syncBirthdaysFromContacts
                 )
@@ -79,7 +79,7 @@ fun Navigation(
                     navController = navController,
                     state = reminderState,
                     onEvent = reminderViewModel::onEvent,
-                    getNotifications = reminderViewModel::getNotifications
+                    hasNotifications = reminderViewModel::hasNotifications
                 )
             }
 

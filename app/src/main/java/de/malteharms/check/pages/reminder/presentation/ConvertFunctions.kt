@@ -16,7 +16,7 @@ fun getTextForDurationInDays(
     due: LocalDateTime,
     today: LocalDateTime = LocalDate.now().atStartOfDay()
 ): String {
-    val periodBetweenTodayAndDue: TimePeriod = timeBetween(dateToReach = due, today = today)
+    val periodBetweenTodayAndDue: TimePeriod = timeBetween(end = due, start = today)
 
     val dayText: String
 
@@ -56,36 +56,17 @@ fun getCategoryRepresentation(category: ReminderCategory): String {
 }
 
 fun getNotificationText(
-    notification: NotificationItem,
-    dao: CheckDao = CheckApp.appModule.db.itemDao()
+    notification: NotificationItem
 ): String {
 
-    // todo this is a bad implementation and may cost some calculation time
-    val dueDate: LocalDateTime = when (notification.channel) {
-        NotificationChannel.REMINDER -> dao.getReminderItemById(notification.connectedItem)?.dueDate
-    } ?: return ""
-
-    val period: TimePeriod = timeBetween(
-        dateToReach = notification.notificationDate,
-        today = dueDate
-    )
-
-    if (period.days == 0L && period.months == 0L && period.years == 0L)
+    if (notification.valueBeforeDue == 0L)
         return "Am selben Tag"
 
-    val value: Int = when {
-        period.years > 0L -> period.years.toInt()
-        period.months > 0L -> period.months.toInt()
-        else -> period.days.toInt()
+    val intervalText: String = when (notification.interval) {
+        ReminderNotificationInterval.DAYS -> if (notification.valueBeforeDue == 1L) "Tag" else "Tage"
+        ReminderNotificationInterval.MONTHS -> if (notification.valueBeforeDue == 1L) "Monat" else "Monate"
     }
-
-    val interval: String = when {
-        period.years > 0L -> if(period.years == 1L) { "Jahr" } else "Jahre"
-        period.months > 0L -> if(period.months == 1L) { "Monat" } else "Monate"
-        else -> if (period.days == 1L) "Tag" else "Tage"
-    }
-
-    return "$value $interval vorher"
+    return "${notification.valueBeforeDue} $intervalText vorher"
 }
 
 fun getNotificationIntervalRepresentation(interval: ReminderNotificationInterval): String {

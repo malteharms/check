@@ -75,6 +75,8 @@ class ReminderViewModel(
 
             ReminderEvent.ShowNewDialog -> {
                 Log.i(TAG, "Open 'new reminder' sheet")
+                resetState()
+
                 _reminderState.update { it.copy(
                     isAddingItem = true
                 ) }
@@ -83,30 +85,23 @@ class ReminderViewModel(
             is ReminderEvent.ShowEditDialog -> {
                 Log.i(TAG, "Open 'edit reminder' sheet")
 
-                var notifications: List<NotificationItem> = listOf()
                 viewModelScope.launch {
-                     notifications = dao.getNotificationsForConnectedItem(
-                         channel = NotificationChannel.REMINDER,
-                         itemId = event.item.id
-                     )
+                    _reminderState.update { it.copy(
+                        title = event.item.title,
+                        dueDate = event.item.dueDate,
+                        category = event.item.category,
+                        isEditingItem = true,
+                        notifications = dao.getNotificationsForConnectedItem(
+                            channel = NotificationChannel.REMINDER,
+                            itemId = event.item.id
+                        )
+                    ) }
                 }
-
-                _reminderState.update { it.copy(
-                    title = event.item.title,
-                    dueDate = event.item.dueDate,
-                    category = event.item.category,
-                    notifications = notifications,
-                    isEditingItem = true
-                ) }
             }
 
             ReminderEvent.HideDialog -> {
                 Log.i(TAG, "Hide add / edit reminder sheet")
-
-                _reminderState.update { it.copy(
-                    isAddingItem = false,
-                    isEditingItem = false
-                ) }
+                resetState()
             }
 
             ReminderEvent.SaveItem -> {
@@ -267,7 +262,9 @@ class ReminderViewModel(
                     connectedItem = -1, // will be set on save
                     channel = NotificationChannel.REMINDER,
                     notificationId = -1, // will be set on save
-                    notificationDate = notificationDate
+                    notificationDate = notificationDate,
+                    valueBeforeDue = event.value.toLong(),
+                    interval = event.interval
                 )
 
                 _reminderState.update { it.copy(
@@ -279,6 +276,7 @@ class ReminderViewModel(
             is ReminderEvent.RemoveNotification -> {
                 _reminderState.update { it.copy(
                     notifications = it.notifications.minus(event.notification),
+                    newNotifications = it.newNotifications.minus(event.notification),
                     notificationsToDelete = it.notificationsToDelete.plus(event.notification)
                 ) }
             }
@@ -289,11 +287,6 @@ class ReminderViewModel(
 
         }
     }
-
-    fun getNotifications(itemId: Long): List<NotificationItem> {
-        return dao.getNotificationsForConnectedItem(NotificationChannel.REMINDER, itemId)
-    }
-
 
     private fun resetState() {
         _reminderState.update { it.copy(
@@ -307,6 +300,19 @@ class ReminderViewModel(
             isEditingItem = false
         ) }
         Log.i(TAG, "Reset internal cache for current reminder item")
+    }
+
+    fun hasNotifications(id: Long): Boolean {
+        var hasNotifications = false
+
+        viewModelScope.launch {
+            hasNotifications = dao.getNotificationsForConnectedItem(
+                channel = NotificationChannel.REMINDER,
+                itemId = id
+            ).isNotEmpty()
+        }
+
+        return hasNotifications
     }
 
 }

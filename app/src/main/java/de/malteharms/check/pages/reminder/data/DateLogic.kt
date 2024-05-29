@@ -4,17 +4,16 @@ import de.malteharms.check.data.TimePeriod
 import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 
 /* Utility */
-fun timeBetween(dateToReach: LocalDateTime, today: LocalDateTime = LocalDate.now().atStartOfDay()): TimePeriod {
+fun timeBetween(end: LocalDateTime, start: LocalDateTime = LocalDate.now().atStartOfDay()): TimePeriod {
     return TimePeriod(
-        days = today.until(dateToReach, ChronoUnit.DAYS),
-        months = today.until(dateToReach, ChronoUnit.MONTHS),
-        years = today.until(dateToReach, ChronoUnit.YEARS),
+        days = start.until(end, ChronoUnit.DAYS),
+        months = start.until(end, ChronoUnit.MONTHS),
+        years = start.until(end, ChronoUnit.YEARS),
     )
 }
 
@@ -27,6 +26,29 @@ fun calculateNotificationDate(
         ReminderNotificationInterval.DAYS -> dueDate.minusDays(valueForNotification.toLong())
         ReminderNotificationInterval.MONTHS -> dueDate.minusMonths(valueForNotification.toLong())
     }
+}
+
+fun getValueBeforeDueAndInterval(
+    notificationDate: LocalDateTime,
+    dueDate: LocalDateTime
+): Pair<Long, ReminderNotificationInterval> {
+
+    val period: TimePeriod = timeBetween(
+        end = dueDate,
+        start = notificationDate
+    )
+
+    val interval: ReminderNotificationInterval = when {
+        period.months > 0 -> ReminderNotificationInterval.MONTHS
+        else -> ReminderNotificationInterval.DAYS
+    }
+
+    val value: Long = when {
+        period.months > 0 -> period.months
+        else -> period.days
+    }
+
+    return Pair(value, interval)
 }
 
 fun checkIfBirthdayNeedsToBeUpdated(

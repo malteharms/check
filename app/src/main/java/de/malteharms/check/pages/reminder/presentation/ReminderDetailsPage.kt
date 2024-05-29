@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.malteharms.check.data.NAVIGATION_BAR_HEIGHT
 import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
@@ -35,7 +34,7 @@ fun ReminderDetailsPage(
     navController: NavController,
     state: ReminderState,
     onEvent: (ReminderEvent) -> Unit,
-    getNotifications: (Long) -> List<NotificationItem>
+    hasNotifications: (Long) -> Boolean
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -59,7 +58,7 @@ fun ReminderDetailsPage(
             items(state.allItems) { item: ReminderItem ->
                 ReminderItemRow(
                     item = item,
-                    hasNotifications = getNotifications(item.id).isNotEmpty(),
+                    hasNotifications = hasNotifications(item.id),
                     onClick =  {
                         currentEditItem = item
                         onEvent(ReminderEvent.ShowEditDialog(item))
@@ -88,7 +87,7 @@ fun ReminderDetailsPage(
         ) {
             ReminderBottomSheet(
                 item = currentEditItem,
-                notifications = getNotifications(currentEditItem!!.id),
+                state = state,
                 onEvent = onEvent
             )
         }

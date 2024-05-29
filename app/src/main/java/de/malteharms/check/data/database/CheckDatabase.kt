@@ -22,7 +22,7 @@ import de.malteharms.check.data.database.tables.Setting
         NotificationItem::class,
         Setting::class
     ],
-    version = 21,
+    version = 22,
     exportSchema = false
 )
 @TypeConverters(

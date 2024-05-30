@@ -87,7 +87,6 @@ class MainActivity : ComponentActivity() {
                 } else true
 
                 // update overdue notifications
-                // TODO on restart, notifications get updated by failure
                 NotificationHandler.updateNotifications(
                     dao = CheckApp.appModule.db.itemDao(),
                     alarmScheduler = CheckApp.appModule.notificationScheduler,

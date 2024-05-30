@@ -63,7 +63,7 @@ interface CheckDao {
     @Query("SELECT * FROM notifications WHERE connectedItem = :itemId  AND channel = :channel ORDER BY notificationDate")
     fun getNotificationsForConnectedItem(channel: NotificationChannel, itemId: Long): List<NotificationItem>
 
-    @Query("SELECT * FROM notifications WHERE notificationDate >= :timestamp")
+    @Query("SELECT * FROM notifications WHERE notificationDate < :timestamp")
     fun getOverdueNotifications(timestamp: Long): List<NotificationItem>
 
     /* SETTINGS QUERY'S */

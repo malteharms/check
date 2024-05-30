@@ -26,6 +26,7 @@ fun DefaultNotificationForBirthdaysAction(
         contract = ActivityResultContracts.RequestPermission(),
         onResult =  { isGranted ->
             if (isGranted) {
+                // if changing this logic, the code for API < 33 needs also to be adjusted
                 defaultNotificationForBirthday = !defaultNotificationForBirthday
                 onEvent(SettingsEvent.SwitchDefaultNotificationForBirthday(
                     value = defaultNotificationForBirthday
@@ -43,6 +44,11 @@ fun DefaultNotificationForBirthdaysAction(
                 notificationPermissionResultLauncher.launch(
                     Manifest.permission.POST_NOTIFICATIONS
                 )
+            } else {
+                defaultNotificationForBirthday = !defaultNotificationForBirthday
+                onEvent(SettingsEvent.SwitchDefaultNotificationForBirthday(
+                    value = defaultNotificationForBirthday
+                ))
             }
         }
     )

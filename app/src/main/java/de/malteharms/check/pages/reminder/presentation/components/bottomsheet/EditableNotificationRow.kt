@@ -85,6 +85,8 @@ fun EditableNotificationRow(
                         notificationPermissionResultLauncher.launch(
                             Manifest.permission.POST_NOTIFICATIONS
                         )
+                    } else {
+                        showNotificationDialog = true
                     }
                 },
                 removeNotification = { }

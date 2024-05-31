@@ -13,6 +13,7 @@ import de.malteharms.check.pages.profile.ui.ProfilePage
 import de.malteharms.check.pages.cash.ui.Cash
 import de.malteharms.check.pages.food.ui.Food
 import de.malteharms.check.pages.home.ui.Home
+import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.presentation.ReminderDetailsPage
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
@@ -29,7 +30,7 @@ fun Navigation(
     reminderViewModel: ReminderViewModel,
     settingsViewModel: SettingsViewModel
 ) {
-    val reminderState by reminderViewModel.state.collectAsState()
+    val reminderState: ReminderState by reminderViewModel.state.collectAsState()
     val settingsState: SettingsState by settingsViewModel.state.collectAsState()
 
     NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {

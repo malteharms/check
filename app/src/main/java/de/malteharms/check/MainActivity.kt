@@ -31,6 +31,9 @@ import de.malteharms.check.presentation.viewModelFactory
 
 class MainActivity : ComponentActivity() {
 
+    // TODO #13
+    //  No notification after device restart
+
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

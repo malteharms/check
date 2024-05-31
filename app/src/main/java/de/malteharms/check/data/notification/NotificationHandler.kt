@@ -114,7 +114,10 @@ class NotificationHandler {
                 channel = NotificationChannel.REMINDER,
                 time = notificationDate,
                 title = reminderItem.title,
-                message = getTextForDurationInDays(reminderItem.dueDate)
+                message = getTextForDurationInDays(
+                    due = reminderItem.dueDate,
+                    today = notificationDate
+                )
             )
 
             val schedulingResult: NotificationResult = alarmScheduler.schedule(

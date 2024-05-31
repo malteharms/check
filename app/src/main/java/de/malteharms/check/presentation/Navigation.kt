@@ -11,7 +11,7 @@ import de.malteharms.check.data.NestedRoutes
 import de.malteharms.check.data.Screens
 import de.malteharms.check.pages.profile.ui.ProfilePage
 import de.malteharms.check.pages.cash.ui.Cash
-import de.malteharms.check.pages.food.ui.Food
+import de.malteharms.check.pages.food.presentation.Food
 import de.malteharms.check.pages.home.ui.Home
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.presentation.ReminderDetailsPage

@@ -25,13 +25,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import de.malteharms.check.data.getBottomNavigationItems
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -52,35 +50,7 @@ fun FloatingBottomNavigation(
 
     var selectedIcon by remember { mutableIntStateOf(0) }
 
-    var search by remember {
-        mutableStateOf("")
-    }
 
-    // BACKGROUND CONTAINER
-    Box(
-        modifier = Modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .width(navigationWith.dp)
-            .height(NAVIGATION_BAR_INNER_HEIGHT.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(5.dp),
-    ) {
-
-        // COLUMN DIVIDING ICONS AND SEARCH BAR
-        Column{
-
-            CustomTextField(
-                value = search,
-                placeholderText = "Search anything",
-                onValueChange = { newValue -> search = newValue}
-            )
-
-        }
-
-    }
-
-
-    /*
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -157,8 +127,6 @@ fun FloatingBottomNavigation(
 
         Spacer(modifier = Modifier.height(NAVIGATION_BAR_BOTTOM_SPACE.dp))
     }
-
-     */
 
 }
 

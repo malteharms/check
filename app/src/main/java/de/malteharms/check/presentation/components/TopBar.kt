@@ -16,8 +16,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,28 +38,34 @@ fun TopBar(
     val backgroundColor: Color = MaterialTheme.colorScheme.background
     val onBackGroundColor: Color = MaterialTheme.colorScheme.onBackground
 
+    var search by remember {
+        mutableStateOf("")
+    }
+
     Box (
         modifier = Modifier
             .background(backgroundColor)
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = title,
-                    color = onBackGroundColor,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-                )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = title,
+                color = onBackGroundColor,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontWeight = FontWeight.Bold
+            )
 
-                Row(horizontalArrangement = Arrangement.End) {
+            CustomTextField(
+                value = search,
+                onValueChange = { newValue -> search = newValue},
+                placeholderText = "Search for Todos, Reminder, ...",
+                trailingIcon = {
                     IconButton(onClick = {
-                        navController.navigate(Screens.ProfileRoute.route)
+                        navController.navigate(Screens.SettingsRoute.route)
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Face,
@@ -62,20 +73,14 @@ fun TopBar(
                             tint = onBackGroundColor
                         )
                     }
+                },
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.large)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                    .padding(vertical = 3.dp, horizontal = 5.dp)
+            )
 
-                    IconButton(onClick = {
-                        navController.navigate(Screens.SettingsRoute.route)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = null,
-                            tint = onBackGroundColor
-                        )
-                    }
-                }
-            }
-
-            HorizontalDivider()
+            // HorizontalDivider()
         }
     }
 

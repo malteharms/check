@@ -65,10 +65,6 @@ fun ReminderPage(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            item {
-                ReminderFilterRow(filterList = state.filter, onEvent = onEvent)
-            }
-
             items(state.items) { reminderItem ->
 
                 ReminderItemRow(

@@ -77,7 +77,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun CheckTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme: ColorScheme = when {

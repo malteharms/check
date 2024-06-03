@@ -11,5 +11,7 @@ data class Birthday (
     val id: Long,
 
     val name: String,
-    val birthday: LocalDateTime
+    val birthday: LocalDateTime,
+
+    val ignore: Boolean = false
 )

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -78,6 +79,12 @@ fun ReminderBottomSheet(
             .padding(top = 16.dp, bottom = 16.dp, start = 20.dp, end = 20.dp),
     ) {
 
+        Icon(
+            imageVector = Icons.Default.Close,
+            contentDescription = null,
+            modifier = Modifier.clickable { /* TODO */ }
+        )
+        
         // title row
         EditableTitleRow(
             title = title.text,

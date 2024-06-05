@@ -67,6 +67,7 @@ class UtilityViewModel: ViewModel() {
             // TODO #9
             //  load overdue from settings
 
+            // TODD birthday from contacts is not updated in database
             val needsUpdate: Boolean = checkIfBirthdayNeedsToBeUpdated(
                 dateToReview = existingBirthday.birthday
             )

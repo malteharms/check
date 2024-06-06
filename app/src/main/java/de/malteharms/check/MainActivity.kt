@@ -102,10 +102,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    Scaffold(
-                        bottomBar = { FloatingBottomNavigation( navController, getBottomNavigationItems() ) },
-                        modifier = Modifier.fillMaxSize()
-                    ) {  innerPadding ->
+                    Scaffold(modifier = Modifier.fillMaxSize()) {  innerPadding ->
                         Box(modifier = Modifier
                             .padding(top = innerPadding.calculateTopPadding())
                             .fillMaxSize()

@@ -25,12 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.malteharms.check.data.Screens
 import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddReminderItemButton
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
 import de.malteharms.check.pages.reminder.presentation.components.ReminderFilterRow
 import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
+import de.malteharms.check.presentation.components.FloatingBottomNavigation
 import de.malteharms.check.presentation.components.TopBar
 
 
@@ -53,6 +55,9 @@ fun ReminderPage(
 
     Scaffold (
         topBar = { TopBar(navController, "Reminder") },
+        bottomBar = {
+            FloatingBottomNavigation( navController, getBottomNavigationItems(), "Reminder")
+        },
         floatingActionButton = {
             AddReminderItemButton(
                 onClick = { onEvent(ReminderEvent.ShowNewDialog) }

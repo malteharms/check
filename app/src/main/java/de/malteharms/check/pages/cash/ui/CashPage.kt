@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
+import de.malteharms.check.data.getBottomNavigationItems
+import de.malteharms.check.presentation.components.FloatingBottomNavigation
 import de.malteharms.check.presentation.components.TopBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -19,7 +21,10 @@ fun Cash(
     navController: NavController
 ) {
     Scaffold(
-        topBar = { TopBar(navController, "Cash") }
+        topBar = { TopBar(navController, "Cash") },
+        bottomBar = {
+            FloatingBottomNavigation( navController, getBottomNavigationItems(), "Costs")
+        }
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

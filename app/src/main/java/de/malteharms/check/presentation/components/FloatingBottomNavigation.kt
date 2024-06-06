@@ -41,14 +41,13 @@ import de.malteharms.check.data.NAVIGATION_BAR_WIDTH_PADDING
 @Composable
 fun FloatingBottomNavigation(
     navController: NavController,
-    navigationItems: List<NavigationItem>
+    navigationItems: List<NavigationItem>,
+    currentItem: String
 ) {
 
     val configuration = LocalConfiguration.current
     val screenWidth: Int = configuration.screenWidthDp
     val navigationWith: Double = screenWidth * NAVIGATION_BAR_WIDTH_PADDING
-
-    var selectedIcon by remember { mutableIntStateOf(0) }
 
 
     Column(
@@ -68,12 +67,12 @@ fun FloatingBottomNavigation(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                navigationItems.forEachIndexed { index, item ->
+                navigationItems.forEach { item ->
 
                     var color: Color = MaterialTheme.colorScheme.onSurface
                     var icon: Int = item.icon
 
-                    if (selectedIcon == index) {
+                    if (item.label == currentItem) {
                         color = MaterialTheme.colorScheme.primary
                         icon = item.iconSelected
                     }
@@ -84,9 +83,6 @@ fun FloatingBottomNavigation(
                             .fillMaxSize()
                             .clickable(
                                 onClick = {
-                                    // update the inner state to change icon color
-                                    selectedIcon = index
-
                                     // navigate to the new selected page
                                     navController.navigate(item.route)
                                 },
@@ -134,5 +130,5 @@ fun FloatingBottomNavigation(
 @Preview
 @Composable
 fun BottomNavigationPreview() {
-    FloatingBottomNavigation( rememberNavController(), getBottomNavigationItems() )
+    FloatingBottomNavigation( rememberNavController(), getBottomNavigationItems(), "Home" )
 }

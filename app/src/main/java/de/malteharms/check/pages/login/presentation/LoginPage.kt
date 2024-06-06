@@ -1,4 +1,4 @@
-package de.malteharms.check.pages.register.presentation
+package de.malteharms.check.pages.login.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -39,33 +39,29 @@ import de.malteharms.check.data.Screens
 import de.malteharms.check.presentation.components.CustomTextField
 
 @Composable
-fun RegisterPage(
+fun LoginPage(
     navController: NavController
 ) {
 
     val textFieldModifier: Modifier = Modifier
-        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = CircleShape)
+        .border(BorderStroke(2.dp, MaterialTheme.colorScheme.primary), shape = CircleShape)
         .padding(horizontal = 30.dp, vertical = 10.dp)
 
     var email: String by remember {
         mutableStateOf("")
     }
 
-    var username: String by remember {
-        mutableStateOf("")
-    }
-
     var password: String by remember {
         mutableStateOf("")
     }
-    
-    Scaffold { paddingValues ->  
+
+    Scaffold { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(20.dp)
         ) {
-            
+
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,33 +86,6 @@ fun RegisterPage(
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
-
-                val borderWidth = 2.dp
-
-                Image(
-                    painter = painterResource(id = R.drawable.default_profile_picture),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .border(
-                            BorderStroke(borderWidth, MaterialTheme.colorScheme.primary),
-                            CircleShape
-                        )
-                        .padding(borderWidth)
-
-                        .clip(CircleShape)
-                )
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                CustomTextField(
-                    modifier = textFieldModifier,
-                    value = username,
-                    fontSize = 15.sp,
-                    placeholderText = "Nutzername",
-                    onValueChange = { newValue -> username = newValue }
-                )
 
                 CustomTextField(
                     modifier = textFieldModifier,
@@ -143,15 +112,15 @@ fun RegisterPage(
                 }
 
             }
-            
+
         }
     }
-    
+
 }
 
 
 @Preview
 @Composable
-fun RegisterPagePreview() {
-    RegisterPage(rememberNavController())
+fun LoginPagePreview() {
+    LoginPage(rememberNavController())
 }

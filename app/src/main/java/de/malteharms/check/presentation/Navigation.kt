@@ -42,9 +42,7 @@ fun Navigation(
         ) {
             composable(Screens.WelcomeRoute.route) { Welcome(navController) }
             composable(Screens.LoginRoute.route) {  }
-            composable(Screens.RegisterRoute.route) {
-                RegisterPage()
-            }
+            composable(Screens.RegisterRoute.route) { RegisterPage(navController) }
         }
 
         // navigation graph for main app usage

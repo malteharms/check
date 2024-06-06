@@ -78,12 +78,6 @@ fun ReminderBottomSheet(
         modifier = Modifier
             .padding(top = 16.dp, bottom = 16.dp, start = 20.dp, end = 20.dp),
     ) {
-
-        Icon(
-            imageVector = Icons.Default.Close,
-            contentDescription = null,
-            modifier = Modifier.clickable { /* TODO */ }
-        )
         
         // title row
         EditableTitleRow(

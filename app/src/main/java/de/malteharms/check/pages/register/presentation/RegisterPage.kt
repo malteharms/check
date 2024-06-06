@@ -139,7 +139,7 @@ fun RegisterPage(
                 Button(onClick = {
                     navController.navigate(Screens.HomeRoute.route)
                 }) {
-                    Text(text = "kostenlos Registrieren")
+                    Text(text = "kostenlos Registrieren", color = MaterialTheme.colorScheme.onPrimary)
                 }
 
             }

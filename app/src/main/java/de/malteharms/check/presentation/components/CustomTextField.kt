@@ -44,7 +44,6 @@ fun CustomTextField(
         ),
         decorationBox = { innerTextField ->
             Row(
-                modifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (leadingIcon != null) leadingIcon()

@@ -12,6 +12,7 @@ import de.malteharms.check.data.Screens
 import de.malteharms.check.pages.cash.ui.Cash
 import de.malteharms.check.pages.food.presentation.Food
 import de.malteharms.check.pages.home.ui.Home
+import de.malteharms.check.pages.register.presentation.RegisterPage
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.presentation.ReminderDetailsPage
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
@@ -32,16 +33,18 @@ fun Navigation(
     val reminderState: ReminderState by reminderViewModel.state.collectAsState()
     val settingsState: SettingsState by settingsViewModel.state.collectAsState()
 
-    NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {
+    NavHost(navController = navController, startDestination = NestedRoutes.AuthRoute.route) {
 
         // navigation graph for authentication procedure
         navigation(
-            startDestination = Screens.WelcomeRoute.route,
+            startDestination = Screens.RegisterRoute.route,
             route = NestedRoutes.AuthRoute.route
         ) {
             composable(Screens.WelcomeRoute.route) { Welcome(navController) }
             composable(Screens.LoginRoute.route) {  }
-            composable(Screens.RegisterRoute.route) {  }
+            composable(Screens.RegisterRoute.route) {
+                RegisterPage()
+            }
         }
 
         // navigation graph for main app usage

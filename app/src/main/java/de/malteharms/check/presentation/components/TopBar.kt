@@ -29,7 +29,8 @@ import de.malteharms.check.data.Screens
 @Composable
 fun TopBar(
     navController: NavController,
-    title: String
+    title: String,
+    showSearchBar: Boolean = true
 ) {
 
     val backgroundColor: Color = MaterialTheme.colorScheme.background
@@ -46,6 +47,7 @@ fun TopBar(
             .padding(20.dp)
     ) {
         Column(
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -56,26 +58,28 @@ fun TopBar(
                 fontWeight = FontWeight.Bold
             )
 
-            CustomTextField(
-                value = search,
-                onValueChange = { newValue -> search = newValue},
-                placeholderText = "Search for Todos, Reminder, ...",
-                trailingIcon = {
-                    IconButton(onClick = {
-                        navController.navigate(Screens.SettingsRoute.route)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.Face,
-                            contentDescription = null,
-                            tint = onBackGroundColor
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.large)
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(vertical = 3.dp, horizontal = 5.dp)
-            )
+            if (showSearchBar) {
+                CustomTextField(
+                    value = search,
+                    onValueChange = { newValue -> search = newValue},
+                    placeholderText = "Search for Todos, Reminder, ...",
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            navController.navigate(Screens.SettingsRoute.route)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Face,
+                                contentDescription = null,
+                                tint = onBackGroundColor
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.large)
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .padding(vertical = 3.dp, horizontal = 5.dp)
+                )
+            }
 
             // HorizontalDivider()
         }

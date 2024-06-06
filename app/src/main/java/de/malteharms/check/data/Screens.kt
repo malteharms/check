@@ -5,7 +5,6 @@ sealed class Screens(val route : String) {
     data object LoginRoute : Screens("login_route")
     data object RegisterRoute : Screens("register_route")
 
-    data object ProfileRoute : Screens("profile_route")
     data object SettingsRoute : Screens("settings_route")
 
     data object HomeRoute : Screens("home_route")

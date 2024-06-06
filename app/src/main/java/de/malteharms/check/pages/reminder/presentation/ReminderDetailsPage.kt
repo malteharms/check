@@ -55,7 +55,10 @@ fun ReminderDetailsPage(
                 ReminderFilterRow(filterList = state.filter, onEvent = onEvent)
             }
 
-            items(state.allItems) { item: ReminderItem ->
+            items(
+                key = { item -> item.id},
+                items = state.allItems
+            ) { item: ReminderItem ->
                 ReminderItemRow(
                     item = item,
                     hasNotifications = hasNotifications(item.id),

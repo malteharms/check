@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import de.malteharms.check.pages.settings.data.SettingsState
 import de.malteharms.check.pages.settings.data.getAllSettings
 import de.malteharms.check.pages.settings.domain.SettingsEvent
+import de.malteharms.check.pages.settings.presentation.components.ProfileComponent
 import de.malteharms.check.presentation.components.TopBar
 
 @Composable
@@ -32,7 +33,7 @@ fun SettingsPage(
 ) {
 
     Scaffold(
-        topBar = { TopBar(navController = navController, title = "Settings") }
+        topBar = { TopBar(navController = navController, title = "Settings", showSearchBar = false) }
     ) { paddingValues ->
 
         Box(
@@ -46,6 +47,11 @@ fun SettingsPage(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+
+                    item {
+                        ProfileComponent(navController)
+                    }
+
                     itemsIndexed(settings) { index, setting ->
 
                         Column (

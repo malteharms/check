@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import de.malteharms.check.data.NestedRoutes
 import de.malteharms.check.data.Screens
-import de.malteharms.check.pages.profile.ui.ProfilePage
 import de.malteharms.check.pages.cash.ui.Cash
 import de.malteharms.check.pages.food.presentation.Food
 import de.malteharms.check.pages.home.ui.Home
@@ -51,7 +50,6 @@ fun Navigation(
             route = NestedRoutes.MainRoute.route
         ) {
             // general pages available in main route
-            composable(Screens.ProfileRoute.route) { ProfilePage(navController) }
             composable(Screens.SettingsRoute.route) {
                 SettingsPage(
                     navController = navController,

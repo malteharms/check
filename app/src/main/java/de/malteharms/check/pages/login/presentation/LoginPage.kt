@@ -1,7 +1,6 @@
 package de.malteharms.check.pages.login.presentation
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -23,18 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import de.malteharms.check.R
 import de.malteharms.check.data.Screens
 import de.malteharms.check.presentation.components.CustomTextField
 
@@ -70,22 +62,13 @@ fun LoginPage(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "Account erstellen",
+                    text = "Login",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 35.sp,
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                Text(
-                    text = "Mit einem Account kannst du Informationen mit Freunden teilen, deine Daten synchronisieren und vieles mehr!",
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Clip,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Light
-                )
-
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(50.dp))
 
                 CustomTextField(
                     modifier = textFieldModifier,

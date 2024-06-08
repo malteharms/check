@@ -12,6 +12,7 @@ import de.malteharms.check.data.Screens
 import de.malteharms.check.pages.cash.ui.Cash
 import de.malteharms.check.pages.food.presentation.Food
 import de.malteharms.check.pages.home.ui.Home
+import de.malteharms.check.pages.login.presentation.LoginPage
 import de.malteharms.check.pages.register.presentation.RegisterPage
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.presentation.ReminderDetailsPage
@@ -41,7 +42,7 @@ fun Navigation(
             route = NestedRoutes.AuthRoute.route
         ) {
             composable(Screens.WelcomeRoute.route) { Welcome(navController) }
-            composable(Screens.LoginRoute.route) {  }
+            composable(Screens.LoginRoute.route) { LoginPage(navController) }
             composable(Screens.RegisterRoute.route) { RegisterPage(navController) }
         }
 

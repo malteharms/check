@@ -20,12 +20,10 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.data.notification.NotificationHandler
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.presentation.SettingsViewModel
 import de.malteharms.check.presentation.UtilityViewModel
-import de.malteharms.check.presentation.components.FloatingBottomNavigation
 import de.malteharms.check.presentation.viewModelFactory
 
 

@@ -21,6 +21,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import de.malteharms.check.data.notification.NotificationHandler
+import de.malteharms.check.pages.auth.AuthViewModel
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.presentation.SettingsViewModel
 import de.malteharms.check.presentation.UtilityViewModel
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CheckTheme {
 
+                val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
                 val utilityViewModel: UtilityViewModel = viewModel<UtilityViewModel>()
 
                 /*
@@ -106,10 +108,11 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                         ) {
                             Navigation(
-                                navController,
-                                utilityViewModel,
-                                reminderViewModel,
-                                settingsViewModel
+                                navController = navController,
+                                authViewModel = authViewModel,
+                                utilityViewModel = utilityViewModel,
+                                reminderViewModel = reminderViewModel,
+                                settingsViewModel = settingsViewModel
                             )
                         }
                     }

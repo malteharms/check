@@ -9,11 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import de.malteharms.check.data.NestedRoutes
 import de.malteharms.check.data.Screens
+import de.malteharms.check.pages.auth.AuthState
+import de.malteharms.check.pages.auth.AuthViewModel
 import de.malteharms.check.pages.cash.ui.Cash
 import de.malteharms.check.pages.food.presentation.Food
 import de.malteharms.check.pages.home.ui.Home
-import de.malteharms.check.pages.login.presentation.LoginPage
-import de.malteharms.check.pages.register.presentation.RegisterPage
+import de.malteharms.check.pages.auth.login.presentation.LoginPage
+import de.malteharms.check.pages.auth.register.presentation.RegisterPage
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.presentation.ReminderDetailsPage
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
@@ -27,10 +29,13 @@ import de.malteharms.check.pages.welcome.ui.Welcome
 @Composable
 fun Navigation(
     navController: NavHostController,
+    authViewModel: AuthViewModel,
     utilityViewModel: UtilityViewModel,
     reminderViewModel: ReminderViewModel,
     settingsViewModel: SettingsViewModel
 ) {
+    val authState: AuthState by authViewModel.state.collectAsState()
+
     val reminderState: ReminderState by reminderViewModel.state.collectAsState()
     val settingsState: SettingsState by settingsViewModel.state.collectAsState()
 
@@ -43,7 +48,13 @@ fun Navigation(
         ) {
             composable(Screens.WelcomeRoute.route) { Welcome(navController) }
             composable(Screens.LoginRoute.route) { LoginPage(navController) }
-            composable(Screens.RegisterRoute.route) { RegisterPage(navController) }
+            composable(Screens.RegisterRoute.route) {
+                RegisterPage(
+                    navController = navController,
+                    state = authState,
+                    onEvent = authViewModel::onEvent
+                )
+            }
         }
 
         // navigation graph for main app usage

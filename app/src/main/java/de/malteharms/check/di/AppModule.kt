@@ -1,6 +1,8 @@
 package de.malteharms.check.di
 
 import android.content.Context
+import de.malteharms.check.data.connection.KtorRealtimeMessagingClient
+import de.malteharms.check.data.connection.RealtimeMessagingClient
 import de.malteharms.check.data.database.CheckDatabase
 import de.malteharms.check.data.notification.AndroidAlarmScheduler
 import de.malteharms.check.data.provider.ContactsProvider
@@ -13,7 +15,7 @@ import io.ktor.client.plugins.websocket.WebSockets
 
 interface AppModule{
     val db: CheckDatabase
-    val websocketClient: HttpClient
+    val websocketClient: RealtimeMessagingClient
     val notificationScheduler: AlarmScheduler
     val contactsProvider: ContactsProvider
 }
@@ -30,11 +32,13 @@ class AppModuleImpl(
         CheckDatabase.getDatabase(context)
     }
 
-    override val websocketClient: HttpClient by lazy {
-        HttpClient(CIO) {
-            install(Logging)
-            install(WebSockets)
-        }
+    override val websocketClient by lazy {
+        KtorRealtimeMessagingClient(
+            HttpClient(CIO) {
+                install(Logging)
+                install(WebSockets)
+            }
+        )
     }
 
     override val notificationScheduler by lazy {

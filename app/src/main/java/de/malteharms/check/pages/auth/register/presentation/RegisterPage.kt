@@ -50,8 +50,6 @@ fun RegisterPage(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-
-
     Scaffold { paddingValues ->  
         Box(
             modifier = Modifier

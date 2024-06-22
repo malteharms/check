@@ -16,19 +16,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -41,6 +46,7 @@ import de.malteharms.check.R
 import de.malteharms.check.pages.auth.AuthEvent
 import de.malteharms.check.pages.auth.AuthState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterPage(
     navController: NavController,
@@ -110,28 +116,37 @@ fun RegisterPage(
                 Spacer(modifier = Modifier.height(15.dp))
 
                 OutlinedTextField(
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
                     shape = RoundedCornerShape(10.dp),
                     value = state.username,
                     onValueChange = { onEvent(AuthEvent.SetUsername(it)) },
-                    label = { Text("Nutzername") },
+                    label = { Text("Nutzername", color = MaterialTheme.colorScheme.onBackground) },
                     singleLine = true,
                     isError = state.usernameEmpty
                 )
 
                 OutlinedTextField(
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
                     shape = RoundedCornerShape(10.dp),
                     value = state.email,
                     onValueChange = { onEvent(AuthEvent.SetEmail(it)) },
-                    label = { Text("EMail") },
+                    label = { Text("EMail", color = MaterialTheme.colorScheme.onBackground) },
                     singleLine = true,
                     isError = state.emailEmpty || state.emailInvalid
                 )
 
                 OutlinedTextField(
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
                     shape = RoundedCornerShape(10.dp),
                     value = state.password,
                     onValueChange = { onEvent(AuthEvent.SetPassword(it)) },
-                    label = { Text("Passwort") },
+                    label = { Text("Passwort", color = MaterialTheme.colorScheme.onBackground) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -139,10 +154,13 @@ fun RegisterPage(
                 )
 
                 OutlinedTextField(
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
                     shape = RoundedCornerShape(10.dp),
                     value = state.confirmPassword,
                     onValueChange = { onEvent(AuthEvent.SetConfirmPassword(it)) },
-                    label = { Text("Passwort wiederholen") },
+                    label = { Text("Passwort wiederholen", color = MaterialTheme.colorScheme.onBackground) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

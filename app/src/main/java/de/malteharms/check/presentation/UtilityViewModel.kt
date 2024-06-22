@@ -9,6 +9,7 @@ import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.database.updateReminderItemForBirthday
 import de.malteharms.check.domain.CheckDao
+import de.malteharms.check.pages.reminder.data.calculateCorrectYearOfNextBirthday
 import de.malteharms.check.pages.reminder.data.checkIfBirthdayNeedsToBeUpdated
 import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingValue
@@ -72,7 +73,8 @@ class UtilityViewModel: ViewModel() {
                 dateToReview = existingBirthday.birthday
             )
 
-            if ((existingBirthday.birthday == it.birthday && existingBirthday.name == it.name) || needsUpdate) {
+            // if nothing has changed, continue with the next birthday item
+            if ((existingBirthday.birthday == it.birthday && existingBirthday.name == it.name) && !needsUpdate) {
                 return@forEach
             }
 
@@ -83,5 +85,4 @@ class UtilityViewModel: ViewModel() {
             }
         }
     }
-
 }

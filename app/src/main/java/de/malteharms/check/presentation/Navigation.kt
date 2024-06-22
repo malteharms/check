@@ -39,7 +39,7 @@ fun Navigation(
     val reminderState: ReminderState by reminderViewModel.state.collectAsState()
     val settingsState: SettingsState by settingsViewModel.state.collectAsState()
 
-    NavHost(navController = navController, startDestination = NestedRoutes.AuthRoute.route) {
+    NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {
 
         // navigation graph for authentication procedure
         navigation(

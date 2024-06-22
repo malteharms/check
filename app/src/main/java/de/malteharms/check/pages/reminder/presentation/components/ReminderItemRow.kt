@@ -38,7 +38,7 @@ fun ReminderItemRow(
 ) {
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
             .padding(horizontal = 7.dp)
@@ -104,7 +104,7 @@ fun ReminderItemRow(
                 textAlign = TextAlign.Center,
                 text = getTextForDurationInDays(item.dueDate),
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
                 fontSize = MaterialTheme.typography.labelMedium.fontSize,
                 maxLines = 2,
                 minLines = 1

@@ -60,7 +60,7 @@ fun FloatingBottomNavigation(
                 .clip(shape = MaterialTheme.shapes.large)
                 .width(navigationWith.dp)
                 .height(NAVIGATION_BAR_INNER_HEIGHT.dp)
-                .background(MaterialTheme.colorScheme.surfaceContainer),
+                .background(MaterialTheme.colorScheme.surface),
 
         ) {
             Row (

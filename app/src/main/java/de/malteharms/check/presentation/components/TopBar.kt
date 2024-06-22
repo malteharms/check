@@ -76,7 +76,7 @@ fun TopBar(
                     },
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.large)
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .background(MaterialTheme.colorScheme.surface)
                         .padding(vertical = 3.dp, horizontal = 5.dp)
                 )
             }

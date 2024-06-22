@@ -19,25 +19,19 @@ fun getTextForDurationInDays(
 
     // handle values for years
     if (periodBetweenTodayAndDue.years > 0 || periodBetweenTodayAndDue.years < 0) {
-        dayText = when (periodBetweenTodayAndDue.years) {
-            in -1L .. 1L -> "${periodBetweenTodayAndDue.years}\nJahr"
-            else -> "${periodBetweenTodayAndDue.years}\nJahre"
-        }
+        dayText = "${periodBetweenTodayAndDue.years} J"
     }
 
     else if (periodBetweenTodayAndDue.months > 0 || periodBetweenTodayAndDue.months < 0) {
-        dayText = when (periodBetweenTodayAndDue.months) {
-            in -1L .. 1L -> "${periodBetweenTodayAndDue.months}\nMonat"
-            else -> "${periodBetweenTodayAndDue.months}\nMonate"
-        }
+        dayText = "${periodBetweenTodayAndDue.months} M"
     }
 
     else {
         dayText = when (periodBetweenTodayAndDue.days) {
             0L -> "Heute"
-            -1L -> "${periodBetweenTodayAndDue.days}\nTag"
-            1L-> "${periodBetweenTodayAndDue.days}\nTag"
-            else -> "${periodBetweenTodayAndDue.days}\nTage"
+            -1L -> "Gestern"
+            1L-> "Morgen"
+            else -> "${periodBetweenTodayAndDue.days} T"
         }
     }
 

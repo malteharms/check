@@ -17,7 +17,7 @@ fun AddReminderItemButton(
 ) {
 
     ExtendedFloatingActionButton(
-        modifier = Modifier.padding(bottom = 70.dp),
+        modifier = Modifier.padding(bottom = 10.dp),
 
         onClick = { onClick() },
 

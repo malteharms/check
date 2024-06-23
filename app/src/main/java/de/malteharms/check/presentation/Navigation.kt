@@ -23,7 +23,9 @@ import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.data.SettingsState
 import de.malteharms.check.pages.settings.presentation.SettingsPage
 import de.malteharms.check.pages.settings.presentation.SettingsViewModel
-import de.malteharms.check.pages.todo.ui.Todo
+import de.malteharms.check.pages.todo.data.TodoState
+import de.malteharms.check.pages.todo.presentation.Todo
+import de.malteharms.check.pages.todo.presentation.TodoViewModel
 import de.malteharms.check.pages.welcome.ui.Welcome
 
 @Composable
@@ -32,11 +34,13 @@ fun Navigation(
     authViewModel: AuthViewModel,
     utilityViewModel: UtilityViewModel,
     reminderViewModel: ReminderViewModel,
+    todoViewModel: TodoViewModel,
     settingsViewModel: SettingsViewModel
 ) {
     val authState: AuthState by authViewModel.state.collectAsState()
 
     val reminderState: ReminderState by reminderViewModel.state.collectAsState()
+    val todoState: TodoState by todoViewModel.state.collectAsState()
     val settingsState: SettingsState by settingsViewModel.state.collectAsState()
 
     NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {
@@ -74,15 +78,20 @@ fun Navigation(
             // pages available through bottom navigation
             composable(Screens.HomeRoute.route) { Home(navController) }
             composable(Screens.CashRoute.route) { Cash(navController = navController) }
-            composable(Screens.TodoRoute.route) { Todo(navController = navController) }
+            composable(Screens.TodoRoute.route) {
+                Todo(
+                    navController = navController,
+                    state = todoState,
+                    onEvent = todoViewModel::onEvent
+                )
+            }
 
             composable(Screens.ReminderRoute.route) {
                 ReminderPage(
                     navController = navController,
                     state = reminderState,
                     hasNotifications = reminderViewModel::hasNotifications,
-                    onEvent = reminderViewModel::onEvent,
-                    syncContacts = utilityViewModel::syncBirthdaysFromContacts
+                    onEvent = reminderViewModel::onEvent
                 )
             }
 

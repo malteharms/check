@@ -1,5 +1,6 @@
-package de.malteharms.check.pages.reminder.presentation
+package de.malteharms.check.pages.todo.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,71 +25,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.malteharms.check.data.Screens
-import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.check.data.database.tables.TodoItem
 import de.malteharms.check.data.getBottomNavigationItems
-import de.malteharms.check.pages.reminder.data.ReminderState
-import de.malteharms.check.pages.reminder.domain.ReminderEvent
-import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
-import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddButton
+import de.malteharms.check.pages.todo.data.TodoState
+import de.malteharms.check.pages.todo.domain.TodoEvent
 import de.malteharms.check.presentation.components.FloatingBottomNavigation
 import de.malteharms.check.presentation.components.TopBar
 
-
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ReminderPage(
+fun Todo(
     navController: NavController,
-    state: ReminderState,
-    onEvent: (ReminderEvent) -> Unit,
-    hasNotifications: (Long) -> Boolean,
+    state: TodoState,
+    onEvent: (TodoEvent) -> Unit
 ) {
+
     val sheetState = rememberModalBottomSheetState()
 
-    var currentEditItem: ReminderItem? by remember {
+    var currentEditItem: TodoItem? by remember {
         mutableStateOf(null)
     }
 
-    Scaffold (
-        topBar = { TopBar(navController, "Reminder") },
+    Scaffold(
+        topBar = { TopBar(navController, title = "ToDo") },
         bottomBar = {
-            FloatingBottomNavigation( navController, getBottomNavigationItems(), "Reminder")
+            FloatingBottomNavigation( navController, getBottomNavigationItems(), "ToDo")
         },
         floatingActionButton = {
             AddButton(
-                text = "Reminder hinzufügen",
-                onClick = { onEvent(ReminderEvent.ShowNewDialog) }
+                text = "Todo hinzufügen",
+                onClick = { onEvent(TodoEvent.ShowNewDialog) }
             )
         }
-    ){ paddingValues ->
+    ) { paddingValues ->
         LazyColumn (
             contentPadding = paddingValues,
             modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            items(state.items) { reminderItem ->
-
-                ReminderItemRow(
-                    item = reminderItem,
-                    hasNotifications = hasNotifications(reminderItem.id),
-                    onClick =  {
-                        currentEditItem = reminderItem
-                        onEvent(ReminderEvent.ShowEditDialog(reminderItem))
-                    }
-                )
+            items(state.items) { todoItem ->
+                // todo ItemRow
             }
-            
+
             item {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
                     TextButton(
-                        onClick = { navController.navigate(Screens.ReminderDetailsRoute.route) }
+                        onClick = { /* navController.navigate(Screens.ReminderDetailsRoute.route) */ }
                     ) {
-                        Text(text = "zeig' mir alle Reminder", color = Color.Gray)
+                        Text(text = "zeig' mir alle Todos", color = Color.Gray)
                     }
                 }
             }
@@ -101,17 +91,13 @@ fun ReminderPage(
                 .fillMaxWidth(),
 
             onDismissRequest = {
-                onEvent(ReminderEvent.UpdateItem(currentEditItem!!))
+                onEvent(TodoEvent.UpdateItem(currentEditItem!!))
                 currentEditItem = null
             },
             sheetState = sheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
-            ReminderBottomSheet(
-                item = currentEditItem,
-                state = state,
-                onEvent = onEvent
-            )
+            // todo TodoBottomSheet
         }
     }
 
@@ -121,17 +107,13 @@ fun ReminderPage(
                 .fillMaxWidth(),
 
             onDismissRequest = {
-                onEvent(ReminderEvent.HideDialog)
+                onEvent(TodoEvent.HideDialog)
                 currentEditItem = null
             },
             sheetState = sheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
-            ReminderBottomSheet(
-                item = null,
-                state = state,
-                onEvent = onEvent
-            )
+            // todo TodoBottomSheet
         }
     }
 }

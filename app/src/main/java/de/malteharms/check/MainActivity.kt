@@ -24,6 +24,7 @@ import de.malteharms.check.data.notification.NotificationHandler
 import de.malteharms.check.pages.auth.AuthViewModel
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.pages.settings.presentation.SettingsViewModel
+import de.malteharms.check.pages.todo.presentation.TodoViewModel
 import de.malteharms.check.presentation.UtilityViewModel
 import de.malteharms.check.presentation.viewModelFactory
 
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
 
                 val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
                 val utilityViewModel: UtilityViewModel = viewModel<UtilityViewModel>()
+                val todoViewModel: TodoViewModel = viewModel<TodoViewModel>()
 
                 /*
                 * The SettingsViewModel will work as a bridge between the Settings UI and
@@ -112,6 +114,7 @@ class MainActivity : ComponentActivity() {
                                 authViewModel = authViewModel,
                                 utilityViewModel = utilityViewModel,
                                 reminderViewModel = reminderViewModel,
+                                todoViewModel = todoViewModel,
                                 settingsViewModel = settingsViewModel
                             )
                         }

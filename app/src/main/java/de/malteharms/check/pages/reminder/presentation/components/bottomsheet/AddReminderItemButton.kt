@@ -12,7 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddReminderItemButton(
+fun AddButton(
+    text: String,
     onClick: () -> Unit
 ) {
 
@@ -22,7 +23,7 @@ fun AddReminderItemButton(
         onClick = { onClick() },
 
         text = { Text(
-            text = "Add Item",
+            text = text,
             color = MaterialTheme.colorScheme.onPrimary
         )},
         icon = { Icon(Icons.Filled.Add, null) },

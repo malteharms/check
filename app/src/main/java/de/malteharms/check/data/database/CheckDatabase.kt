@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import de.malteharms.check.data.database.converter.AnySettingConverter
-import de.malteharms.check.data.database.converter.LocalDateTimeConverter
+import de.malteharms.check.data.database.converter.DateExtConverter
 import de.malteharms.check.data.database.converter.SettingValueConverter
 import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.domain.CheckDao
@@ -22,12 +22,12 @@ import de.malteharms.check.data.database.tables.Setting
         NotificationItem::class,
         Setting::class
     ],
-    version = 24,
+    version = 25,
     exportSchema = false
 )
 @TypeConverters(
     value = [
-        LocalDateTimeConverter::class, AnySettingConverter::class, SettingValueConverter::class
+        DateExtConverter::class, AnySettingConverter::class, SettingValueConverter::class
     ]
 )
 abstract class CheckDatabase: RoomDatabase() {

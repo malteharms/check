@@ -1,11 +1,11 @@
 package de.malteharms.check.data.notification.dataclasses
 
-import java.time.LocalDateTime
+import de.malteharms.utils.model.DateExt
 
 data class AlarmItem(
     val channel: NotificationChannel,
 
-    val time: LocalDateTime,
+    val time: DateExt,
     val title: String,
     val message: String,
 )

@@ -1,7 +1,6 @@
 package de.malteharms.check.data.notification
 
 import android.util.Log
-import de.malteharms.check.data.database.converter.LocalDateTimeConverter
 import de.malteharms.check.data.notification.dataclasses.NotificationResult
 import de.malteharms.check.data.notification.dataclasses.NotificationState
 import de.malteharms.check.data.database.tables.ReminderItem
@@ -12,13 +11,13 @@ import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.domain.AlarmScheduler
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.domain.Notificationable
-import de.malteharms.check.pages.reminder.data.getValueBeforeDueAndInterval
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
+import de.malteharms.utils.logic.timeBetween
+import de.malteharms.utils.model.DateExt
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 class NotificationHandler {
 
@@ -29,7 +28,7 @@ class NotificationHandler {
             alarmScheduler: AlarmScheduler,
             type: NotificationChannel,
             connectedItem: Notificationable,
-            notificationDate: LocalDateTime,
+            notificationDate: DateExt,
             notificationId: Int? = null
         ): NotificationItem? {
             return when (type) {
@@ -45,9 +44,7 @@ class NotificationHandler {
             alarmScheduler: AlarmScheduler,
             hasPermission: Boolean = false
         ) {
-            val currentTimestamp: Long = LocalDateTimeConverter().dateToTimestamp(
-                LocalDate.now().atStartOfDay()
-            ) ?: throw InternalError("Could not create timestamp of current date")
+            val currentTimestamp: Long = DateExt.now().toTimestamp()
 
             // get all notifications, which are have an overdue notification date
             // also update those notifications, which have the notification date today
@@ -85,13 +82,11 @@ class NotificationHandler {
                         else -> return@forEach
                     }
 
-                    val nextNotificationYear: Int = LocalDate.now().year + 1
-
                     val newNotification: NotificationItem = scheduleNotification(
                         alarmScheduler = alarmScheduler,
                         type = notificationItem.channel,
                         connectedItem = connectedItem,
-                        notificationDate = notificationItem.notificationDate.withYear(nextNotificationYear)
+                        notificationDate = notificationItem.notificationDate.applyNextYear()
                     ) ?: return@forEach
 
                     // update database
@@ -106,7 +101,7 @@ class NotificationHandler {
         private fun scheduleReminderNotification(
             alarmScheduler: AlarmScheduler,
             reminderItem: ReminderItem,
-            notificationDate: LocalDateTime,
+            notificationDate: DateExt,
             notificationId: Int?
         ): NotificationItem? {
 
@@ -125,9 +120,9 @@ class NotificationHandler {
                 item = alarmItem
             )
 
-            val valueAndIntervalPair = getValueBeforeDueAndInterval(
-                notificationDate = notificationDate,
-                dueDate = reminderItem.dueDate
+            val timePeriod = timeBetween(
+                end = reminderItem.dueDate,
+                start = notificationDate
             )
 
             return when (schedulingResult.state) {
@@ -137,8 +132,14 @@ class NotificationHandler {
                         channel = NotificationChannel.REMINDER,
                         notificationId = schedulingResult.notificationId,
                         notificationDate = notificationDate,
-                        valueBeforeDue = valueAndIntervalPair.first,
-                        interval = valueAndIntervalPair.second
+                        valueBeforeDue = timePeriod.let { when {
+                            it.months > 0 -> it.months
+                            else -> it.days
+                        } },
+                        timeUnit = timePeriod.let { when {
+                            it.months > 0 -> ChronoUnit.MONTHS
+                            else -> ChronoUnit.DAYS
+                        } }
                     )
                 }
 

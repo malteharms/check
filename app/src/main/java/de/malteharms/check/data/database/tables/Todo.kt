@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import de.malteharms.check.data.Priority
 import de.malteharms.check.domain.Notificationable
+import de.malteharms.utils.model.DateExt
 import java.time.LocalDateTime
 
 @Entity(tableName = "todos")
@@ -18,13 +19,13 @@ data class TodoItem(
     val completed: Boolean = false,
 
     val group: Long,
-    val dueDate: LocalDateTime? = null,
+    val dueDate: DateExt? = null,
     val priority: Priority,
 
     val label: Long? = null,
 
     val subTaskOf: Long? = null,
 
-    val created: LocalDateTime = LocalDateTime.now(),
-    val modified: LocalDateTime = LocalDateTime.now()
+    val created: DateExt = DateExt.now(),
+    val modified: DateExt = DateExt.now()
 ): Notificationable

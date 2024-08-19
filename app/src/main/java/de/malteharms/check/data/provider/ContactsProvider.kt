@@ -4,6 +4,7 @@ import android.net.Uri
 import android.content.Context
 import android.provider.ContactsContract
 import de.malteharms.check.data.database.tables.Birthday
+import de.malteharms.utils.model.DateExt
 import java.time.LocalDate
 
 class ContactsProvider(
@@ -65,7 +66,7 @@ class ContactsProvider(
                 contacts.add(Birthday(
                     id = cId,
                     name = name,
-                    birthday = LocalDate.of(year, month, day).atStartOfDay()
+                    birthday = DateExt.from(year, month, day)
                 ))
             }
         }

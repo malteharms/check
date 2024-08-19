@@ -32,11 +32,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.data.database.tables.ReminderNotificationInterval
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
 import de.malteharms.check.presentation.components.LargeDropdownMenu
+import java.time.temporal.ChronoUnit
 
 
 @Composable
@@ -100,8 +100,8 @@ fun EditableNotificationRow(
             mutableStateOf(TextFieldValue("1"))
         }
 
-        var interval by remember {
-            mutableStateOf(ReminderNotificationInterval.DAYS)
+        var timeUnit by remember {
+            mutableStateOf(ChronoUnit.DAYS)
         }
 
         var warning by remember {
@@ -153,10 +153,10 @@ fun EditableNotificationRow(
 
                         LargeDropdownMenu(
                             label = "Interval",
-                            items = ReminderNotificationInterval.entries,
-                            selectedIndex = interval.ordinal,
-                            onItemSelected = { _, item -> interval = item },
-                            selectedItemToString = { getNotificationIntervalRepresentation(interval) },
+                            items = listOf(ChronoUnit.DAYS, ChronoUnit.MONTHS),
+                            selectedIndex = timeUnit.ordinal,
+                            onItemSelected = { _, item -> timeUnit = item },
+                            selectedItemToString = { getNotificationIntervalRepresentation(timeUnit) },
                             modifier = Modifier.weight(3f)
                         )
 
@@ -180,7 +180,7 @@ fun EditableNotificationRow(
                         if (warning == "") {
                             onEvent(ReminderEvent.AddDummyNotification(
                                 value = value.text.toInt(),
-                                interval = interval
+                                timeUnit = timeUnit
                             ))
                             showNotificationDialog = false
                         }

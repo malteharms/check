@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -35,12 +34,11 @@ import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
-import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.CategoryChoice
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableNotificationRow
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.EditableTitleRow
+import de.malteharms.utils.model.DateExt
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 
 @Composable
@@ -55,14 +53,12 @@ fun ReminderBottomSheet(
         mutableStateOf(TextFieldValue(text = item?.title ?: ""))
     }
 
-    var pickedDate: LocalDateTime by remember {
-        mutableStateOf(item?.dueDate ?: LocalDateTime.now())
+    var pickedDate: DateExt by remember {
+        mutableStateOf(item?.dueDate ?: DateExt.now())
     }
 
     val formattedDate: String by remember {
-        derivedStateOf {
-            convertTimestampToDateString(pickedDate)
-        }
+        derivedStateOf { pickedDate.toString() }
     }
 
     val editableRowModifier = Modifier
@@ -158,7 +154,7 @@ fun ReminderBottomSheet(
                 initialDate = currentDate,
                 title = "Wähle ein Datum",
             ) { newDate: LocalDate ->
-                pickedDate = newDate.atStartOfDay()
+                pickedDate = DateExt(newDate.atStartOfDay())
                 onEvent(ReminderEvent.SetDueDate(pickedDate))
             }
         }
@@ -176,9 +172,9 @@ fun ReminderBottomSheetPreview() {
         title = "Perso",
         category = ReminderCategory.GENERAL,
         todoRelation = null,
-        dueDate = LocalDateTime.now(),
-        creationDate = LocalDateTime.now(),
-        lastUpdate = LocalDateTime.now()
+        dueDate = DateExt.now(),
+        creationDate = DateExt.now(),
+        lastUpdate = DateExt.now()
     )
 
     ReminderBottomSheet(

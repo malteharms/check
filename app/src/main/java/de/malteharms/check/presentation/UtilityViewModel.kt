@@ -9,8 +9,6 @@ import de.malteharms.check.data.database.tables.Birthday
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.database.updateReminderItemForBirthday
 import de.malteharms.check.domain.CheckDao
-import de.malteharms.check.pages.reminder.data.calculateCorrectYearOfNextBirthday
-import de.malteharms.check.pages.reminder.data.checkIfBirthdayNeedsToBeUpdated
 import de.malteharms.check.pages.settings.data.ReminderSettings
 import de.malteharms.check.pages.settings.data.SettingValue
 import kotlinx.coroutines.launch
@@ -69,9 +67,7 @@ class UtilityViewModel: ViewModel() {
             //  load overdue from settings
 
             // TODD birthday from contacts is not updated in database
-            val needsUpdate: Boolean = checkIfBirthdayNeedsToBeUpdated(
-                dateToReview = existingBirthday.birthday
-            )
+            val needsUpdate: Boolean = existingBirthday.birthday.hasPassed()
 
             // if nothing has changed, continue with the next birthday item
             if ((existingBirthday.birthday == it.birthday && existingBirthday.name == it.name) && !needsUpdate) {

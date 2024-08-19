@@ -11,8 +11,8 @@ import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.notification.NotificationHandler
 import de.malteharms.check.di.AppModule
-import de.malteharms.check.pages.reminder.data.calculateNotificationDate
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
+import de.malteharms.utils.model.DateExt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -116,7 +116,7 @@ class ReminderViewModel(
                     return
                 }
 
-                val now: LocalDateTime = LocalDateTime.now()
+                val now = DateExt.now()
 
                 val newReminderItem = ReminderItem(
                     title = title,
@@ -151,7 +151,7 @@ class ReminderViewModel(
 
             is ReminderEvent.UpdateItem -> {
                 val title: String = state.value.title
-                val dueDate: LocalDateTime = state.value.dueDate
+                val dueDate: DateExt = state.value.dueDate
                 val category: ReminderCategory = state.value.category
 
                 val notifications = state.value.notifications
@@ -169,7 +169,7 @@ class ReminderViewModel(
                     category = category,
                     birthdayRelation = event.itemToUpdate.birthdayRelation,
                     creationDate = event.itemToUpdate.creationDate,
-                    lastUpdate = LocalDateTime.now()
+                    lastUpdate = DateExt.now()
                 )
 
                 viewModelScope.launch {
@@ -252,10 +252,9 @@ class ReminderViewModel(
             }
 
             is ReminderEvent.AddDummyNotification -> {
-                val notificationDate: LocalDateTime = calculateNotificationDate(
-                    dueDate = _reminderState.value.dueDate,
-                    valueForNotification = event.value,
-                    daysOrMonths = event.interval
+                val notificationDate: DateExt = _reminderState.value.dueDate.subtractTimeUnit(
+                    value = event.value,
+                    timeUnit = event.timeUnit
                 )
 
                 val dummyReminderNotification = NotificationItem(
@@ -264,7 +263,7 @@ class ReminderViewModel(
                     notificationId = -1, // will be set on save
                     notificationDate = notificationDate,
                     valueBeforeDue = event.value.toLong(),
-                    interval = event.interval
+                    timeUnit = event.timeUnit
                 )
 
                 _reminderState.update { it.copy(
@@ -291,7 +290,7 @@ class ReminderViewModel(
     private fun resetState() {
         _reminderState.update { it.copy(
             title = "",
-            dueDate = LocalDateTime.now(),
+            dueDate = DateExt.now(),
             category = ReminderCategory.GENERAL,
             notifications = listOf(),
             newNotifications = listOf(),

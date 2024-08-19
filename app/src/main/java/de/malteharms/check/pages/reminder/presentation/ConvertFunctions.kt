@@ -1,17 +1,16 @@
 package de.malteharms.check.pages.reminder.presentation
 
-import de.malteharms.check.data.TimePeriod
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.NotificationItem
-import de.malteharms.check.data.database.tables.ReminderNotificationInterval
-import de.malteharms.check.pages.reminder.data.timeBetween
-import java.time.LocalDate
-import java.time.LocalDateTime
+import de.malteharms.utils.logic.timeBetween
+import de.malteharms.utils.model.DateExt
+import de.malteharms.utils.model.TimePeriod
+import java.time.temporal.ChronoUnit
 
 
 fun getTextForDurationInDays(
-    due: LocalDateTime,
-    today: LocalDateTime = LocalDate.now().atStartOfDay()
+    due: DateExt,
+    today: DateExt = DateExt.now()
 ): String {
     val periodBetweenTodayAndDue: TimePeriod = timeBetween(end = due, start = today)
 
@@ -53,16 +52,18 @@ fun getNotificationText(
     if (notification.valueBeforeDue == 0L)
         return "Am selben Tag"
 
-    val intervalText: String = when (notification.interval) {
-        ReminderNotificationInterval.DAYS -> if (notification.valueBeforeDue == 1L) "Tag" else "Tage"
-        ReminderNotificationInterval.MONTHS -> if (notification.valueBeforeDue == 1L) "Monat" else "Monate"
+    val timeUnitText: String = when (notification.timeUnit) {
+        ChronoUnit.DAYS -> if (notification.valueBeforeDue == 1L) "Tag" else "Tage"
+        ChronoUnit.MONTHS -> if (notification.valueBeforeDue == 1L) "Monat" else "Monate"
+        else -> throw UnsupportedOperationException("Wrong time unit parsed")
     }
-    return "${notification.valueBeforeDue} $intervalText vorher"
+    return "${notification.valueBeforeDue} $timeUnitText vorher"
 }
 
-fun getNotificationIntervalRepresentation(interval: ReminderNotificationInterval): String {
-    return when(interval) {
-        ReminderNotificationInterval.DAYS -> "Tage"
-        ReminderNotificationInterval.MONTHS -> "Monate"
+fun getNotificationIntervalRepresentation(timeUnit: ChronoUnit): String {
+    return when(timeUnit) {
+        ChronoUnit.DAYS -> "Tage"
+        ChronoUnit.MONTHS -> "Monate"
+        else -> throw UnsupportedOperationException("Wrong time unit parsed")
     }
 }

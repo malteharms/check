@@ -2,7 +2,7 @@ package de.malteharms.check.data.database.tables
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
+import de.malteharms.utils.model.DateExt
 
 @Entity(tableName = "birthdays")
 data class Birthday (
@@ -11,7 +11,7 @@ data class Birthday (
     val id: Long,
 
     val name: String,
-    val birthday: LocalDateTime,
+    val birthday: DateExt,
 
     val ignore: Boolean = false
 )

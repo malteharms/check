@@ -14,7 +14,6 @@ import de.malteharms.check.data.broadcastReceiver.ReminderNotificationReceiver
 import de.malteharms.check.data.notification.dataclasses.AlarmItem
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.domain.AlarmScheduler
-import java.time.ZoneId
 import kotlin.random.Random
 
 class AndroidAlarmScheduler(
@@ -43,7 +42,7 @@ class AndroidAlarmScheduler(
 
         alarmManager.set(
             AlarmManager.RTC_WAKEUP,
-            item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,
+            item.time.toTimestamp() * 1000,
             pendingIntent
         )
 

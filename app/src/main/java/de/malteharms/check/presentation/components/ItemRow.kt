@@ -19,19 +19,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontVariation.weight
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.malteharms.check.R
-import de.malteharms.check.pages.reminder.data.convertTimestampToDateString
-import java.time.LocalDateTime
+import de.malteharms.utils.model.DateExt
 
 @Composable
 fun ItemRow(
 
     title: String,
-    dueDate: LocalDateTime? = null,
+    dueDate: DateExt? = null,
     hasNotifications: Boolean = false,
 
     onClick: () -> Unit,
@@ -81,7 +78,7 @@ fun ItemRow(
                 ) {
                     if (dueDate != null) {
                         Text(
-                            text = convertTimestampToDateString(dueDate),
+                            text = dueDate.toString(),
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = MaterialTheme.typography.labelSmall.fontSize,
                             fontWeight = FontWeight.Light

@@ -3,7 +3,8 @@ package de.malteharms.check.data.database.tables
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import de.malteharms.check.data.notification.dataclasses.NotificationChannel
-import java.time.LocalDateTime
+import de.malteharms.utils.model.DateExt
+import java.time.temporal.ChronoUnit
 
 @Entity(tableName = "notifications")
 data class NotificationItem(
@@ -14,13 +15,8 @@ data class NotificationItem(
     val connectedItem: Long,
 
     val valueBeforeDue: Long,
-    val interval: ReminderNotificationInterval,
+    val timeUnit: ChronoUnit,
 
     val notificationId: Int,
-    val notificationDate: LocalDateTime
+    val notificationDate: DateExt
 )
-
-enum class ReminderNotificationInterval {
-    DAYS,
-    MONTHS
-}

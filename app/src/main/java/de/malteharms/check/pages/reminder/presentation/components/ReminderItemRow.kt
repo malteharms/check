@@ -13,7 +13,8 @@ import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
 import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import de.malteharms.check.presentation.components.ItemRow
-import java.time.LocalDateTime
+import de.malteharms.utils.model.DateExt
+import java.time.temporal.ChronoUnit
 
 
 @Composable
@@ -61,10 +62,10 @@ fun ReminderItemRowPreview() {
         ReminderItem(
             id = 0,
             title = "Personalausweis",
-            dueDate = LocalDateTime.now().plusDays(1),
+            dueDate = DateExt.now().plus(value = 1, unit = ChronoUnit.DAYS),
             category = ReminderCategory.GENERAL,
-            creationDate = LocalDateTime.now(),
-            lastUpdate = LocalDateTime.now(),
+            creationDate = DateExt.now(),
+            lastUpdate = DateExt.now(),
             todoRelation = null
         )
     )

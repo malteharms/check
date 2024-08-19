@@ -3,8 +3,8 @@ package de.malteharms.check.pages.reminder.domain
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.database.tables.NotificationItem
 import de.malteharms.check.data.database.tables.ReminderCategory
-import de.malteharms.check.data.database.tables.ReminderNotificationInterval
-import java.time.LocalDateTime
+import de.malteharms.utils.model.DateExt
+import java.time.temporal.ChronoUnit
 
 
 sealed interface ReminderEvent {
@@ -16,11 +16,11 @@ sealed interface ReminderEvent {
     data object MoveFromOrToDetailsScreen: ReminderEvent
 
     data class SetTitle(val title: String): ReminderEvent
-    data class SetDueDate(val dueDate: LocalDateTime): ReminderEvent
+    data class SetDueDate(val dueDate: DateExt): ReminderEvent
 
     data class SetCategory(val category: ReminderCategory): ReminderEvent
 
-    data class AddDummyNotification(val value: Int, val interval: ReminderNotificationInterval): ReminderEvent
+    data class AddDummyNotification(val value: Int, val timeUnit: ChronoUnit): ReminderEvent
     data class RemoveNotification(val notification: NotificationItem): ReminderEvent
 
     data object ShowNewDialog: ReminderEvent

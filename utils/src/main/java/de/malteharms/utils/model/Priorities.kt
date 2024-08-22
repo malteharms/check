@@ -1,4 +1,4 @@
-package de.malteharms.check.data
+package de.malteharms.utils.model
 
 enum class Priority {
 

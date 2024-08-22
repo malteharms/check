@@ -2,10 +2,9 @@ package de.malteharms.check.data.database.tables
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import de.malteharms.check.data.Priority
+import de.malteharms.utils.model.Priority
 import de.malteharms.check.domain.Notificationable
 import de.malteharms.utils.model.DateExt
-import java.time.LocalDateTime
 
 @Entity(tableName = "todos")
 data class TodoItem(

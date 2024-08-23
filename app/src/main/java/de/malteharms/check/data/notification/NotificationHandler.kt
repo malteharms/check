@@ -11,7 +11,6 @@ import de.malteharms.check.data.notification.dataclasses.NotificationChannel
 import de.malteharms.check.domain.AlarmScheduler
 import de.malteharms.check.domain.CheckDao
 import de.malteharms.check.domain.Notificationable
-import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import de.malteharms.utils.logic.timeBetween
 import de.malteharms.utils.model.DateExt
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -109,10 +108,7 @@ class NotificationHandler {
                 channel = NotificationChannel.REMINDER,
                 time = notificationDate,
                 title = reminderItem.title,
-                message = getTextForDurationInDays(
-                    due = reminderItem.dueDate,
-                    today = notificationDate
-                )
+                message = reminderItem.dueDate.toStringUntilDue(notificationDate)
             )
 
             val schedulingResult: NotificationResult = alarmScheduler.schedule(

@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
-import de.malteharms.check.pages.reminder.presentation.getTextForDurationInDays
 import de.malteharms.check.presentation.components.ItemRow
 import de.malteharms.utils.model.DateExt
 import java.time.temporal.ChronoUnit
@@ -39,7 +38,7 @@ fun ReminderItemRow(
         trailingComposable = {
             Text(
                 textAlign = TextAlign.Center,
-                text = getTextForDurationInDays(item.dueDate),
+                text = item.dueDate.toStringUntilDue(),
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = MaterialTheme.typography.labelMedium.fontSize,

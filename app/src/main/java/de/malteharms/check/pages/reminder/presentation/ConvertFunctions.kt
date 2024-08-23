@@ -2,40 +2,7 @@ package de.malteharms.check.pages.reminder.presentation
 
 import de.malteharms.check.data.database.tables.ReminderCategory
 import de.malteharms.check.data.database.tables.NotificationItem
-import de.malteharms.utils.logic.timeBetween
-import de.malteharms.utils.model.DateExt
-import de.malteharms.utils.model.TimePeriod
 import java.time.temporal.ChronoUnit
-
-
-fun getTextForDurationInDays(
-    due: DateExt,
-    today: DateExt = DateExt.now()
-): String {
-    val periodBetweenTodayAndDue: TimePeriod = timeBetween(end = due, start = today)
-
-    val dayText: String
-
-    // handle values for years
-    if (periodBetweenTodayAndDue.years > 0 || periodBetweenTodayAndDue.years < 0) {
-        dayText = "${periodBetweenTodayAndDue.years} J"
-    }
-
-    else if (periodBetweenTodayAndDue.months > 0 || periodBetweenTodayAndDue.months < 0) {
-        dayText = "${periodBetweenTodayAndDue.months} M"
-    }
-
-    else {
-        dayText = when (periodBetweenTodayAndDue.days) {
-            0L -> "Heute"
-            -1L -> "Gestern"
-            1L-> "Morgen"
-            else -> "${periodBetweenTodayAndDue.days} T"
-        }
-    }
-
-    return dayText.trim()
-}
 
 fun getCategoryRepresentation(category: ReminderCategory): String {
     return when(category) {

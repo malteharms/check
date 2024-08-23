@@ -1,5 +1,6 @@
 package de.malteharms.utils.model
 
+import de.malteharms.utils.logic.timeBetween
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -33,6 +34,24 @@ class DateExt (
     override fun toString(): String {
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         return date.format(formatter)
+    }
+
+    fun toStringUntilDue(reference: DateExt = now()): String {
+        val periodBetweenTodayAndDue: TimePeriod = timeBetween(end = this, start = reference)
+
+        // handle values for years
+        return if (periodBetweenTodayAndDue.years > 0 || periodBetweenTodayAndDue.years < 0) {
+            "${periodBetweenTodayAndDue.years} J"
+        } else if (periodBetweenTodayAndDue.months > 0 || periodBetweenTodayAndDue.months < 0) {
+            "${periodBetweenTodayAndDue.months} M"
+        } else {
+            when (periodBetweenTodayAndDue.days) {
+                0L -> "Heute"
+                -1L -> "Gestern"
+                1L-> "Morgen"
+                else -> "${periodBetweenTodayAndDue.days} T"
+            }
+        }.trim()
     }
 
     // ===== overwritten functions =====

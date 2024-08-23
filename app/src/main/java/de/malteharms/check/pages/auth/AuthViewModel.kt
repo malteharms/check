@@ -1,7 +1,6 @@
 package de.malteharms.check.pages.auth
 
 import androidx.lifecycle.ViewModel
-import de.malteharms.check.data.Screens
 import de.malteharms.check.data.ValidationResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -43,7 +42,7 @@ class AuthViewModel: ViewModel() {
                 // todo server validation
 
                 // navigate to next screen
-                event.navController.navigate(Screens.HomeRoute.route)
+                event.navController.navigate(de.malteharms.pages.components.data.Screens.HomeRoute.route)
             }
         }
     }

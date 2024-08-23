@@ -27,8 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import de.malteharms.check.data.Screens
-import de.malteharms.check.presentation.components.CustomTextField
+import de.malteharms.pages.components.presentation.CustomTextField
 
 @Composable
 fun LoginPage(
@@ -89,7 +88,7 @@ fun LoginPage(
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(onClick = {
-                    navController.navigate(Screens.HomeRoute.route)
+                    navController.navigate(de.malteharms.pages.components.data.Screens.HomeRoute.route)
                 }) {
                     Text(text = "kostenlos Registrieren")
                 }

@@ -1,4 +1,4 @@
-package de.malteharms.check.presentation.components
+package de.malteharms.pages.components.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.malteharms.check.data.Screens
+import de.malteharms.pages.components.data.Screens
 
 @Composable
 fun TopBar(

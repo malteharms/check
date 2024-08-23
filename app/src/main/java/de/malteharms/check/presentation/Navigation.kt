@@ -7,13 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import de.malteharms.check.data.NestedRoutes
-import de.malteharms.check.data.Screens
 import de.malteharms.check.pages.auth.AuthState
 import de.malteharms.check.pages.auth.AuthViewModel
-import de.malteharms.check.pages.cash.ui.Cash
+import de.malteharms.pages.ui.Cash
 import de.malteharms.check.pages.food.presentation.Food
-import de.malteharms.check.pages.home.ui.Home
 import de.malteharms.check.pages.auth.login.presentation.LoginPage
 import de.malteharms.check.pages.auth.register.presentation.RegisterPage
 import de.malteharms.check.pages.reminder.data.ReminderState
@@ -24,6 +21,9 @@ import de.malteharms.check.pages.todo.presentation.Todo
 import de.malteharms.pages.todo.data.TodoState
 import de.malteharms.pages.todo.presentation.TodoViewModel
 import de.malteharms.check.pages.welcome.ui.Welcome
+import de.malteharms.pages.components.data.NestedRoutes
+import de.malteharms.pages.components.data.Screens
+import de.malteharms.pages.home.presentation.Home
 
 @Composable
 fun Navigation(

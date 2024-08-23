@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.presentation.components.CustomTextField
+import de.malteharms.pages.components.presentation.CustomTextField
 
 @Composable
 fun EditableTitleRow(

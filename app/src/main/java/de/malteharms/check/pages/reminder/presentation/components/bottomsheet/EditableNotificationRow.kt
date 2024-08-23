@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getNotificationIntervalRepresentation
-import de.malteharms.check.presentation.components.LargeDropdownMenu
+import de.malteharms.pages.components.presentation.LargeDropdownMenu
 import java.time.temporal.ChronoUnit
 
 

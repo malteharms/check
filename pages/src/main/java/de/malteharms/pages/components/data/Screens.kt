@@ -1,4 +1,4 @@
-package de.malteharms.check.data
+package de.malteharms.pages.components.data
 
 sealed class Screens(val route : String) {
     data object WelcomeRoute : Screens("welcome_route")
@@ -12,7 +12,7 @@ sealed class Screens(val route : String) {
     data object TodoRoute : Screens("todo_route")
 
     data object ReminderRoute : Screens("reminder_route")
-    data object ReminderDetailsRoute : Screens ("reminder_details_route")
+    data object ReminderDetailsRoute : Screens("reminder_details_route")
 
     data object FoodRoute : Screens("food_route")
 }

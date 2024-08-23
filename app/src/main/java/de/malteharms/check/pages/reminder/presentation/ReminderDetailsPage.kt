@@ -26,7 +26,6 @@ import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
 import de.malteharms.check.pages.reminder.presentation.components.ReminderFilterRow
 import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
-import de.malteharms.check.presentation.components.TopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +42,7 @@ fun ReminderDetailsPage(
     }
 
     Scaffold(
-        topBar = { TopBar(navController, "Alle Reminder") },
+        topBar = { de.malteharms.pages.components.presentation.TopBar(navController, "Alle Reminder") },
     ) { paddingValues ->
 
         LazyColumn(

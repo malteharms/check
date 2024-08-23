@@ -1,4 +1,4 @@
-package de.malteharms.check.presentation.components
+package de.malteharms.pages.components.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

@@ -8,10 +8,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import de.malteharms.database.tables.ReminderCategory
-import de.malteharms.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
-import de.malteharms.check.presentation.components.ItemRow
+import de.malteharms.pages.components.presentation.ItemRow
 import de.malteharms.utils.model.DateExt
 import java.time.temporal.ChronoUnit
 

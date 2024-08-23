@@ -1,6 +1,7 @@
-package de.malteharms.check.data
+package de.malteharms.pages.components.data
 
-import de.malteharms.check.R
+import de.malteharms.pages.R
+
 
 data class NavigationItem(
     val label : String = "",

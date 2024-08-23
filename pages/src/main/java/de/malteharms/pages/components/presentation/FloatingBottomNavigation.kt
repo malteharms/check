@@ -1,18 +1,14 @@
-package de.malteharms.check.presentation.components
+package de.malteharms.pages.components.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import de.malteharms.check.data.NavigationItem
 import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
@@ -22,10 +18,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.platform.LocalConfiguration
-import de.malteharms.check.data.getBottomNavigationItems
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,9 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import de.malteharms.check.data.NAVIGATION_BAR_BOTTOM_SPACE
-import de.malteharms.check.data.NAVIGATION_BAR_INNER_HEIGHT
-import de.malteharms.check.data.NAVIGATION_BAR_WIDTH_PADDING
+import de.malteharms.pages.components.data.NavigationItem
+import de.malteharms.pages.components.data.getBottomNavigationItems
 
 
 @Composable
@@ -47,7 +40,7 @@ fun FloatingBottomNavigation(
 
     val configuration = LocalConfiguration.current
     val screenWidth: Int = configuration.screenWidthDp
-    val navigationWith: Double = screenWidth * NAVIGATION_BAR_WIDTH_PADDING
+    val navigationWith: Double = screenWidth * 0.8
 
 
     Column(
@@ -59,7 +52,7 @@ fun FloatingBottomNavigation(
             modifier = Modifier
                 .clip(shape = MaterialTheme.shapes.large)
                 .width(navigationWith.dp)
-                .height(NAVIGATION_BAR_INNER_HEIGHT.dp)
+                .height(50.dp)
                 .background(MaterialTheme.colorScheme.surface),
 
         ) {
@@ -121,7 +114,7 @@ fun FloatingBottomNavigation(
             }
         }
 
-        Spacer(modifier = Modifier.height(NAVIGATION_BAR_BOTTOM_SPACE.dp))
+        Spacer(modifier = Modifier.height(45.dp))
     }
 
 }

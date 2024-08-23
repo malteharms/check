@@ -24,15 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.malteharms.check.data.Screens
-import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.components.ReminderBottomSheet
 import de.malteharms.check.pages.reminder.presentation.components.ReminderItemRow
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddButton
-import de.malteharms.check.presentation.components.FloatingBottomNavigation
-import de.malteharms.check.presentation.components.TopBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,9 +46,13 @@ fun ReminderPage(
     }
 
     Scaffold (
-        topBar = { TopBar(navController, "Reminder") },
+        topBar = { de.malteharms.pages.components.presentation.TopBar(navController, "Reminder") },
         bottomBar = {
-            FloatingBottomNavigation( navController, getBottomNavigationItems(), "Reminder")
+            de.malteharms.pages.components.presentation.FloatingBottomNavigation(
+                navController,
+                de.malteharms.pages.components.data.getBottomNavigationItems(),
+                "Reminder"
+            )
         },
         floatingActionButton = {
             AddButton(
@@ -85,7 +85,7 @@ fun ReminderPage(
                     contentAlignment = Alignment.Center
                 ) {
                     TextButton(
-                        onClick = { navController.navigate(Screens.ReminderDetailsRoute.route) }
+                        onClick = { navController.navigate(de.malteharms.pages.components.data.Screens.ReminderDetailsRoute.route) }
                     ) {
                         Text(text = "zeig' mir alle Reminder", color = Color.Gray)
                     }

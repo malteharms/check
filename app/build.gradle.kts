@@ -63,9 +63,27 @@ android {
 
 dependencies {
 
-    // modules
+    /* Display all pages */
+    implementation(project(":pages"))
+
+    /* TODO
+     * Currently some providers are still located
+     * in the app module, which logic is defined
+     * in the utils module. Consider to outsource
+     * this into a specialized module.
+     */
     implementation(project(":utils"))
+
+    /*
+     * During startup the database interface needs
+     * to be created.
+     */
     implementation(project(":database"))
+
+    /*
+     * During startup the notification channel
+     * needs to be created.
+     */
     implementation(project(":notification"))
 
     implementation(libs.androidx.core.ktx)
@@ -77,8 +95,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
+    // viewmodel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    // Room is needed here to initialize the database dao
     implementation(libs.androidx.room.ktx)
 
     // navigation

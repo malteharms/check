@@ -1,4 +1,4 @@
-package de.malteharms.check.pages.home.ui
+package de.malteharms.pages.home.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
@@ -11,9 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
-import de.malteharms.check.data.getBottomNavigationItems
-import de.malteharms.check.presentation.components.FloatingBottomNavigation
-import de.malteharms.check.presentation.components.TopBar
+import de.malteharms.pages.components.data.getBottomNavigationItems
+import de.malteharms.pages.components.presentation.FloatingBottomNavigation
+import de.malteharms.pages.components.presentation.TopBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

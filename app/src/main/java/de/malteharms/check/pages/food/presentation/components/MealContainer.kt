@@ -27,11 +27,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.malteharms.check.R
-import de.malteharms.check.data.database.tables.MealItem
 
 @Composable
 fun MealContainer(
-    item: MealItem
+    item: de.malteharms.database.tables.MealItem
 ) {
 
     // TODO load person information from database
@@ -111,7 +110,7 @@ fun MealContainer(
 @Preview
 @Composable
 fun MealContainerPreview() {
-    val item = MealItem(
+    val item = de.malteharms.database.tables.MealItem(
         title = "Pfannkuchen",
         recipeLink = "https://github.com",
         imageFile = "01.png",

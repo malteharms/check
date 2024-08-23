@@ -2,8 +2,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlin)
 
-    id("com.google.devtools.ksp")
-
     alias(libs.plugins.kotlinSerialization)
 }
 
@@ -67,6 +65,8 @@ dependencies {
 
     // modules
     implementation(project(":utils"))
+    implementation(project(":database"))
+    implementation(project(":notification"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -79,9 +79,7 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // room database
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
 
     // navigation
     implementation(libs.androidx.navigation.compose)

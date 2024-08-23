@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.malteharms.check.data.Screens
-import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
@@ -46,7 +45,7 @@ fun ReminderPage(
 ) {
     val sheetState = rememberModalBottomSheetState()
 
-    var currentEditItem: ReminderItem? by remember {
+    var currentEditItem: de.malteharms.database.tables.ReminderItem? by remember {
         mutableStateOf(null)
     }
 

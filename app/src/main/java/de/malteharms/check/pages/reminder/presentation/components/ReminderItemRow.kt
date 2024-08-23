@@ -8,8 +8,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import de.malteharms.check.data.database.tables.ReminderCategory
-import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.database.tables.ReminderCategory
+import de.malteharms.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.getIconIdByReminderCategory
 import de.malteharms.check.presentation.components.ItemRow
 import de.malteharms.utils.model.DateExt
@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit
 fun ReminderItemRow(
     onClick: () -> Unit,
     hasNotifications: Boolean,
-    item: ReminderItem
+    item: de.malteharms.database.tables.ReminderItem
 ) {
 
     ItemRow(
@@ -58,11 +58,11 @@ fun ReminderItemRowPreview() {
     ReminderItemRow(
         {  },
         hasNotifications = true,
-        ReminderItem(
+        de.malteharms.database.tables.ReminderItem(
             id = 0,
             title = "Personalausweis",
             dueDate = DateExt.now().plus(value = 1, unit = ChronoUnit.DAYS),
-            category = ReminderCategory.GENERAL,
+            category = de.malteharms.database.tables.ReminderCategory.GENERAL,
             creationDate = DateExt.now(),
             lastUpdate = DateExt.now(),
             todoRelation = null

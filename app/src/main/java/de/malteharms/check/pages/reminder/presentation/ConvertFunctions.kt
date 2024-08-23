@@ -1,19 +1,19 @@
 package de.malteharms.check.pages.reminder.presentation
 
-import de.malteharms.check.data.database.tables.ReminderCategory
-import de.malteharms.check.data.database.tables.NotificationItem
+import de.malteharms.database.tables.ReminderCategory
+import de.malteharms.database.tables.NotificationItem
 import java.time.temporal.ChronoUnit
 
-fun getCategoryRepresentation(category: ReminderCategory): String {
+fun getCategoryRepresentation(category: de.malteharms.database.tables.ReminderCategory): String {
     return when(category) {
-        ReminderCategory.GENERAL -> "Allgemein"
-        ReminderCategory.BIRTHDAY -> "Geburtstag"
-        ReminderCategory.IMPORTANT_APPOINTMENT -> "Wichtiger Termin"
+        de.malteharms.database.tables.ReminderCategory.GENERAL -> "Allgemein"
+        de.malteharms.database.tables.ReminderCategory.BIRTHDAY -> "Geburtstag"
+        de.malteharms.database.tables.ReminderCategory.IMPORTANT_APPOINTMENT -> "Wichtiger Termin"
     }
 }
 
 fun getNotificationText(
-    notification: NotificationItem
+    notification: de.malteharms.database.tables.NotificationItem
 ): String {
 
     if (notification.valueBeforeDue == 0L)

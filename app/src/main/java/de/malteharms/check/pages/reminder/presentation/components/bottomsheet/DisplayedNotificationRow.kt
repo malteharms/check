@@ -14,14 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.data.database.tables.NotificationItem
+import de.malteharms.database.tables.NotificationItem
 
 @Composable
 fun DisplayedNotificationRow(
     modifier: Modifier,
     arrangement: Arrangement.Horizontal,
     isFirstRow: Boolean,
-    currentNotification: NotificationItem?,
+    currentNotification: de.malteharms.database.tables.NotificationItem?,
     openAddReminderDialog: () -> Unit,
     removeNotification: () -> Unit
 ) {

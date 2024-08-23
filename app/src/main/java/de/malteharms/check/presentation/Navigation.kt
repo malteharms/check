@@ -20,12 +20,9 @@ import de.malteharms.check.pages.reminder.data.ReminderState
 import de.malteharms.check.pages.reminder.presentation.ReminderDetailsPage
 import de.malteharms.check.pages.reminder.presentation.ReminderPage
 import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
-import de.malteharms.check.pages.settings.data.SettingsState
-import de.malteharms.check.pages.settings.presentation.SettingsPage
-import de.malteharms.check.pages.settings.presentation.SettingsViewModel
-import de.malteharms.check.pages.todo.data.TodoState
 import de.malteharms.check.pages.todo.presentation.Todo
-import de.malteharms.check.pages.todo.presentation.TodoViewModel
+import de.malteharms.pages.todo.data.TodoState
+import de.malteharms.pages.todo.presentation.TodoViewModel
 import de.malteharms.check.pages.welcome.ui.Welcome
 
 @Composable
@@ -35,13 +32,11 @@ fun Navigation(
     utilityViewModel: UtilityViewModel,
     reminderViewModel: ReminderViewModel,
     todoViewModel: TodoViewModel,
-    settingsViewModel: SettingsViewModel
 ) {
     val authState: AuthState by authViewModel.state.collectAsState()
 
     val reminderState: ReminderState by reminderViewModel.state.collectAsState()
     val todoState: TodoState by todoViewModel.state.collectAsState()
-    val settingsState: SettingsState by settingsViewModel.state.collectAsState()
 
     NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {
 
@@ -67,13 +62,7 @@ fun Navigation(
             route = NestedRoutes.MainRoute.route
         ) {
             // general pages available in main route
-            composable(Screens.SettingsRoute.route) {
-                SettingsPage(
-                    navController = navController,
-                    state = settingsState,
-                    onEvent = settingsViewModel::onEvent
-                )
-            }
+            composable(Screens.SettingsRoute.route) {  }
 
             // pages available through bottom navigation
             composable(Screens.HomeRoute.route) { Home(navController) }

@@ -1,4 +1,4 @@
-package de.malteharms.check.pages.todo.presentation.components
+package de.malteharms.pages.todo.presentation.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,12 +8,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import de.malteharms.utils.model.Priority
-import de.malteharms.check.data.database.tables.TodoItem
+import de.malteharms.database.tables.TodoItem
 import de.malteharms.check.presentation.components.ItemRow
 
 @Composable
 fun TodoItemRow(
-    item: TodoItem,
+    item: de.malteharms.database.tables.TodoItem,
     hasNotifications: Boolean,
     onClick: () -> Unit
 ) {
@@ -46,7 +46,7 @@ fun TodoItemRow(
 @Composable
 fun TodoItemRowPreview() {
 
-    val item = TodoItem(
+    val item = de.malteharms.database.tables.TodoItem(
         title = "Waschmaschine ausräumen",
         group = 0L,
         priority = Priority.NORMAL

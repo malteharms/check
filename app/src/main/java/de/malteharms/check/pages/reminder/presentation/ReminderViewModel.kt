@@ -4,14 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.CheckApp
-import de.malteharms.check.data.notification.dataclasses.NotificationChannel
-import de.malteharms.check.data.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.data.ReminderState
-import de.malteharms.check.data.database.tables.ReminderCategory
-import de.malteharms.check.data.database.tables.NotificationItem
-import de.malteharms.check.data.notification.NotificationHandler
 import de.malteharms.check.di.AppModule
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
+import de.malteharms.database.tables.NotificationChannel
+import de.malteharms.database.tables.NotificationItem
+import de.malteharms.notification.data.NotificationHandler.Companion.scheduleNotification
 import de.malteharms.utils.model.DateExt
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +19,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -35,7 +32,7 @@ class ReminderViewModel(
 
     private val dao = app.db.itemDao()
 
-    private val _reminderFilter: MutableStateFlow<List<ReminderCategory>> = MutableStateFlow(
+    private val _reminderFilter: MutableStateFlow<List<de.malteharms.database.tables.ReminderCategory>> = MutableStateFlow(
         emptyList()
     )
 
@@ -118,7 +115,7 @@ class ReminderViewModel(
 
                 val now = DateExt.now()
 
-                val newReminderItem = ReminderItem(
+                val newReminderItem = de.malteharms.database.tables.ReminderItem(
                     title = title,
                     dueDate = dueDate,
                     category = category,
@@ -133,7 +130,7 @@ class ReminderViewModel(
 
                     // add notifications to database and schedule them
                     notifications.forEach { reminderNotification ->
-                        val notification: NotificationItem? = NotificationHandler.scheduleNotification(
+                        val notification: NotificationItem? = scheduleNotification(
                             alarmScheduler = CheckApp.appModule.notificationScheduler,
                             type = NotificationChannel.REMINDER,
                             connectedItem = newReminderItem,
@@ -152,7 +149,7 @@ class ReminderViewModel(
             is ReminderEvent.UpdateItem -> {
                 val title: String = state.value.title
                 val dueDate: DateExt = state.value.dueDate
-                val category: ReminderCategory = state.value.category
+                val category: de.malteharms.database.tables.ReminderCategory = state.value.category
 
                 val notifications = state.value.notifications
                 val notificationsToRemove = state.value.notificationsToDelete
@@ -162,7 +159,7 @@ class ReminderViewModel(
                     return
                 }
 
-                val updatedReminderItem = ReminderItem(
+                val updatedReminderItem = de.malteharms.database.tables.ReminderItem(
                     id = event.itemToUpdate.id,
                     title = title,
                     dueDate = dueDate,
@@ -194,7 +191,7 @@ class ReminderViewModel(
                             null
                         } else reminderNotification.notificationId
 
-                        val notification: NotificationItem? = NotificationHandler.scheduleNotification(
+                        val notification: NotificationItem? = scheduleNotification(
                             alarmScheduler = CheckApp.appModule.notificationScheduler,
                             type = NotificationChannel.REMINDER,
                             connectedItem = updatedReminderItem,
@@ -291,7 +288,7 @@ class ReminderViewModel(
         _reminderState.update { it.copy(
             title = "",
             dueDate = DateExt.now(),
-            category = ReminderCategory.GENERAL,
+            category = de.malteharms.database.tables.ReminderCategory.GENERAL,
             notifications = listOf(),
             newNotifications = listOf(),
             notificationsToDelete = listOf(),

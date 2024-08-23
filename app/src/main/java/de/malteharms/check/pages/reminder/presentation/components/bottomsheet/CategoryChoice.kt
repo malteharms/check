@@ -14,18 +14,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.malteharms.check.data.database.tables.ReminderCategory
-import de.malteharms.check.data.database.tables.ReminderItem
+import de.malteharms.database.tables.ReminderCategory
+import de.malteharms.database.tables.ReminderItem
 import de.malteharms.check.pages.reminder.domain.ReminderEvent
 import de.malteharms.check.pages.reminder.presentation.getCategoryRepresentation
 @Composable
 fun CategoryChoice(
-    item: ReminderItem?,
+    item: de.malteharms.database.tables.ReminderItem?,
     onEvent: (ReminderEvent) -> Unit,
     editable: Boolean
 ) {
     var selectedCategory by remember {
-        mutableStateOf(item?.category ?: ReminderCategory.GENERAL)
+        mutableStateOf(item?.category ?: de.malteharms.database.tables.ReminderCategory.GENERAL)
     }
 
     Row(
@@ -34,7 +34,7 @@ fun CategoryChoice(
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        ReminderCategory.entries.forEach { category ->
+        de.malteharms.database.tables.ReminderCategory.entries.forEach { category ->
 
             FilterChip(
                 onClick = {

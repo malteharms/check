@@ -12,13 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import de.malteharms.check.data.database.tables.NotificationItem
+import de.malteharms.database.tables.NotificationItem
 import de.malteharms.check.pages.reminder.presentation.getNotificationText
 
 @Composable
 fun LoadedNotificationRow(
-    reminderNotification: NotificationItem,
-    onDelete: (NotificationItem) -> Unit
+    reminderNotification: de.malteharms.database.tables.NotificationItem,
+    onDelete: (de.malteharms.database.tables.NotificationItem) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),

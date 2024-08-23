@@ -5,9 +5,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
-import de.malteharms.check.data.NOTIFICATION_REMINDER_CHANNEL_ID
 import de.malteharms.check.di.AppModule
 import de.malteharms.check.di.AppModuleImpl
+import de.malteharms.notification.data.NOTIFICATION_REMINDER_CHANNEL_ID
 
 class CheckApp: Application() {
 

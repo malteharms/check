@@ -3,7 +3,7 @@ package de.malteharms.check.data.provider
 import android.net.Uri
 import android.content.Context
 import android.provider.ContactsContract
-import de.malteharms.check.data.database.tables.Birthday
+import de.malteharms.database.tables.Birthday
 import de.malteharms.utils.model.DateExt
 import java.time.LocalDate
 
@@ -11,7 +11,7 @@ class ContactsProvider(
     private val context: Context
 ) {
 
-    fun getContactBirthdays(): List<Birthday> {
+    fun getContactBirthdays(): List<de.malteharms.database.tables.Birthday> {
         val contentResolver = context.contentResolver
 
         val uri: Uri = ContactsContract.Data.CONTENT_URI
@@ -27,7 +27,7 @@ class ContactsProvider(
         val selection = ContactsContract.Data.MIMETYPE + "= ? AND " + ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
         val selectionArgs = arrayOf(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
 
-        val contacts = mutableListOf<Birthday>()
+        val contacts = mutableListOf<de.malteharms.database.tables.Birthday>()
 
         contentResolver.query(
             uri,
@@ -63,11 +63,13 @@ class ContactsProvider(
                 val dayIndex: Int = if (noYearPassed) 3 else 2
                 val day: Int = bDaySplit[dayIndex].toInt()
 
-                contacts.add(Birthday(
-                    id = cId,
-                    name = name,
-                    birthday = DateExt.from(year, month, day)
-                ))
+                contacts.add(
+                    de.malteharms.database.tables.Birthday(
+                        id = cId,
+                        name = name,
+                        birthday = DateExt.from(year, month, day)
+                    )
+                )
             }
         }
 

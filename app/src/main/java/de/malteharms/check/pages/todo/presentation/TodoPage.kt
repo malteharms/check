@@ -25,11 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.malteharms.check.data.database.tables.TodoItem
+import de.malteharms.database.tables.TodoItem
 import de.malteharms.check.data.getBottomNavigationItems
 import de.malteharms.check.pages.reminder.presentation.components.bottomsheet.AddButton
-import de.malteharms.check.pages.todo.data.TodoState
-import de.malteharms.check.pages.todo.domain.TodoEvent
+import de.malteharms.pages.todo.data.TodoState
+import de.malteharms.pages.todo.domain.TodoEvent
 import de.malteharms.check.presentation.components.FloatingBottomNavigation
 import de.malteharms.check.presentation.components.TopBar
 

@@ -66,7 +66,7 @@ fun Todo(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            items(state.items) { todoItem ->
+            items(state.items) { _ ->
                 // todo ItemRow
             }
 

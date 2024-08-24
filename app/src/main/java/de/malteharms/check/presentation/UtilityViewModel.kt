@@ -4,15 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.CheckApp
-import de.malteharms.check.data.database.insertReminderItemForBirthday
-import de.malteharms.check.data.database.tables.Birthday
-import de.malteharms.check.data.database.tables.ReminderItem
-import de.malteharms.check.data.database.updateReminderItemForBirthday
-import de.malteharms.check.domain.CheckDao
-import de.malteharms.check.pages.reminder.data.calculateCorrectYearOfNextBirthday
-import de.malteharms.check.pages.reminder.data.checkIfBirthdayNeedsToBeUpdated
-import de.malteharms.check.pages.settings.data.ReminderSettings
-import de.malteharms.check.pages.settings.data.SettingValue
+import de.malteharms.database.tables.Birthday
 import kotlinx.coroutines.launch
 
 class UtilityViewModel: ViewModel() {
@@ -23,21 +15,17 @@ class UtilityViewModel: ViewModel() {
 
     fun syncBirthdaysFromContacts() {
 
-        val dao: CheckDao = CheckApp.appModule.db.itemDao()
+        val dao: de.malteharms.database.CheckDao = CheckApp.appModule.db.itemDao()
 
-        var allowedToSyncContacts: SettingValue? = null
-
-        viewModelScope.launch {
-            allowedToSyncContacts =
-                dao.getSettingsValue(ReminderSettings.SYNC_BIRTHDAYS_THROUGH_CONTACTS)
-        }
+        // TODO load from settings
+        var allowedToSyncContacts = null
 
         if (allowedToSyncContacts == null) {
             Log.w(TAG, "Settings not yet loaded")
             return
         }
 
-        if (!allowedToSyncContacts?.boolean!!) {
+        if (allowedToSyncContacts as Nothing) {
             Log.w(TAG, "Not allowed to sync Contacts!")
             return
         }
@@ -46,7 +34,7 @@ class UtilityViewModel: ViewModel() {
 
         birthdays.forEach{
             // check, if birthday already exists
-            val existingBirthday: Birthday? = dao.getBirthday(it.id)
+            val existingBirthday: de.malteharms.database.tables.Birthday? = dao.getBirthday(it.id)
 
             // if there is no birthday which was already saved in database,
             // create a row for for the birthday and the corresponding
@@ -54,7 +42,7 @@ class UtilityViewModel: ViewModel() {
             if (existingBirthday == null) {
                 viewModelScope.launch {
                     dao.insertBirthday(it)
-                    insertReminderItemForBirthday(dao, it)
+                    de.malteharms.database.insertReminderItemForBirthday(dao, it)
                 }
                 return@forEach
             }
@@ -69,9 +57,7 @@ class UtilityViewModel: ViewModel() {
             //  load overdue from settings
 
             // TODD birthday from contacts is not updated in database
-            val needsUpdate: Boolean = checkIfBirthdayNeedsToBeUpdated(
-                dateToReview = existingBirthday.birthday
-            )
+            val needsUpdate: Boolean = existingBirthday.birthday.hasPassed()
 
             // if nothing has changed, continue with the next birthday item
             if ((existingBirthday.birthday == it.birthday && existingBirthday.name == it.name) && !needsUpdate) {
@@ -79,8 +65,8 @@ class UtilityViewModel: ViewModel() {
             }
 
             viewModelScope.launch {
-                val linkedReminder: ReminderItem? = dao.getReminderItemForBirthdayId(it.id)
-                updateReminderItemForBirthday(dao, linkedReminder!!.id, it)
+                val linkedReminder: de.malteharms.database.tables.ReminderItem? = dao.getReminderItemForBirthdayId(it.id)
+                de.malteharms.database.updateReminderItemForBirthday(dao, linkedReminder!!.id, it)
                 Log.i(TAG, "Updated reminder item with ID ${linkedReminder.id} because birthday data changed")
             }
         }

@@ -3,9 +3,11 @@ package de.malteharms.check.data.provider
 import android.net.Uri
 import android.content.Context
 import android.provider.ContactsContract
-import de.malteharms.check.data.database.tables.Birthday
+import de.malteharms.database.tables.Birthday
+import de.malteharms.utils.model.DateExt
 import java.time.LocalDate
 
+/* TODO outsource into core module */
 class ContactsProvider(
     private val context: Context
 ) {
@@ -62,11 +64,13 @@ class ContactsProvider(
                 val dayIndex: Int = if (noYearPassed) 3 else 2
                 val day: Int = bDaySplit[dayIndex].toInt()
 
-                contacts.add(Birthday(
-                    id = cId,
-                    name = name,
-                    birthday = LocalDate.of(year, month, day).atStartOfDay()
-                ))
+                contacts.add(
+                    de.malteharms.database.tables.Birthday(
+                        id = cId,
+                        name = name,
+                        birthday = DateExt.from(year, month, day)
+                    )
+                )
             }
         }
 

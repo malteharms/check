@@ -15,3 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Check"
 include(":app")
+include(":core")
+include(":pages")
+include(":database")
+include(":notification")

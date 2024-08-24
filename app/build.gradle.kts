@@ -2,8 +2,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlin)
 
-    id("com.google.devtools.ksp")
-
     alias(libs.plugins.kotlinSerialization)
 }
 
@@ -26,7 +24,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("../keystore.jks")
+            storeFile = file("../check.jks")
             storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
             keyAlias = "check-android"
             keyPassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
@@ -64,6 +62,30 @@ android {
 }
 
 dependencies {
+
+    /* Display all pages */
+    implementation(project(":pages"))
+    implementation(project(":core"))
+
+    /* TODO
+     * Currently some providers are still located
+     * in the app module, which logic is defined
+     * in the utils module. Consider to outsource
+     * this into a specialized module.
+     */
+
+    /*
+     * During startup the database interface needs
+     * to be created.
+     */
+    implementation(project(":database"))
+
+    /*
+     * During startup the notification channel
+     * needs to be created.
+     */
+    implementation(project(":notification"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -73,17 +95,14 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
+    // viewmodel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // room database
+    // Room is needed here to initialize the database dao
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
 
     // navigation
     implementation(libs.androidx.navigation.compose)
-
-    // date picker
-    implementation(libs.datetime)
 
     // permission
     implementation(libs.accompanist.permissions)

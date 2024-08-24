@@ -29,10 +29,6 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".data.broadcastReceiver.ReminderNotificationReceiver"
-            android:enabled="true"/>
-
     </application>
 
 </manifest>

@@ -20,13 +20,11 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import de.malteharms.check.data.notification.NotificationHandler
-import de.malteharms.check.pages.auth.AuthViewModel
-import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
-import de.malteharms.check.pages.settings.presentation.SettingsViewModel
-import de.malteharms.check.pages.todo.presentation.TodoViewModel
+import de.malteharms.pages.auth.AuthViewModel
+import de.malteharms.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.presentation.UtilityViewModel
 import de.malteharms.check.presentation.viewModelFactory
+import de.malteharms.notification.data.NotificationHandler
 
 
 class MainActivity : ComponentActivity() {
@@ -48,23 +46,7 @@ class MainActivity : ComponentActivity() {
 
                 val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
                 val utilityViewModel: UtilityViewModel = viewModel<UtilityViewModel>()
-                val todoViewModel: TodoViewModel = viewModel<TodoViewModel>()
-
-                /*
-                * The SettingsViewModel will work as a bridge between the Settings UI and
-                * the database, where all settings are stored.
-                * The Settings need to be loaded at first to guarantee, that other
-                * functions and ViewModels can load the settings from the database
-                 */
-                val settingsViewModel: SettingsViewModel = viewModel<SettingsViewModel>(
-                    factory = viewModelFactory { SettingsViewModel(
-                        dao = CheckApp.appModule.db.itemDao(),
-                        syncContacts = utilityViewModel::syncBirthdaysFromContacts
-                    ) }
-                )
-
-                // try to load all settings from database
-                settingsViewModel.loadSettingsFromDatabase()
+                val todoViewModel: de.malteharms.pages.todo.presentation.TodoViewModel = viewModel<de.malteharms.pages.todo.presentation.TodoViewModel>()
 
                 /*
                 * The ReminderViewModel will provide the state for showing the ReminderPage.
@@ -73,7 +55,8 @@ class MainActivity : ComponentActivity() {
                 */
                 val reminderViewModel: ReminderViewModel = viewModel<ReminderViewModel>(
                     factory = viewModelFactory { ReminderViewModel(
-                        app = CheckApp.appModule
+                        dao = CheckApp.appModule.db.itemDao(),
+                        notificationScheduler = CheckApp.appModule.notificationScheduler
                     ) }
                 )
 
@@ -114,8 +97,7 @@ class MainActivity : ComponentActivity() {
                                 authViewModel = authViewModel,
                                 utilityViewModel = utilityViewModel,
                                 reminderViewModel = reminderViewModel,
-                                todoViewModel = todoViewModel,
-                                settingsViewModel = settingsViewModel
+                                todoViewModel = todoViewModel
                             )
                         }
                     }

@@ -7,11 +7,12 @@ import de.malteharms.database.tables.Birthday
 import de.malteharms.utils.model.DateExt
 import java.time.LocalDate
 
+/* TODO outsource into core module */
 class ContactsProvider(
     private val context: Context
 ) {
 
-    fun getContactBirthdays(): List<de.malteharms.database.tables.Birthday> {
+    fun getContactBirthdays(): List<Birthday> {
         val contentResolver = context.contentResolver
 
         val uri: Uri = ContactsContract.Data.CONTENT_URI
@@ -27,7 +28,7 @@ class ContactsProvider(
         val selection = ContactsContract.Data.MIMETYPE + "= ? AND " + ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
         val selectionArgs = arrayOf(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
 
-        val contacts = mutableListOf<de.malteharms.database.tables.Birthday>()
+        val contacts = mutableListOf<Birthday>()
 
         contentResolver.query(
             uri,

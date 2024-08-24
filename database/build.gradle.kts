@@ -16,6 +16,15 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../check.jks")
+            storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+            keyAlias = "check-android"
+            keyPassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

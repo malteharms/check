@@ -104,9 +104,6 @@ dependencies {
     // navigation
     implementation(libs.androidx.navigation.compose)
 
-    // date picker
-    implementation(libs.datetime)
-
     // permission
     implementation(libs.accompanist.permissions)
 

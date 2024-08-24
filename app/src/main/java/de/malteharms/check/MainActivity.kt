@@ -20,8 +20,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import de.malteharms.check.pages.auth.AuthViewModel
-import de.malteharms.check.pages.reminder.presentation.ReminderViewModel
+import de.malteharms.pages.auth.AuthViewModel
+import de.malteharms.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.presentation.UtilityViewModel
 import de.malteharms.check.presentation.viewModelFactory
 import de.malteharms.notification.data.NotificationHandler
@@ -55,7 +55,8 @@ class MainActivity : ComponentActivity() {
                 */
                 val reminderViewModel: ReminderViewModel = viewModel<ReminderViewModel>(
                     factory = viewModelFactory { ReminderViewModel(
-                        app = CheckApp.appModule
+                        dao = CheckApp.appModule.db.itemDao(),
+                        notificationScheduler = CheckApp.appModule.notificationScheduler
                     ) }
                 )
 

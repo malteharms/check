@@ -65,6 +65,7 @@ dependencies {
 
     /* Display all pages */
     implementation(project(":pages"))
+    implementation(project(":core"))
 
     /* TODO
      * Currently some providers are still located
@@ -72,7 +73,6 @@ dependencies {
      * in the utils module. Consider to outsource
      * this into a specialized module.
      */
-    implementation(project(":utils"))
 
     /*
      * During startup the database interface needs

@@ -53,7 +53,7 @@ dependencies {
 
     implementation(project(":database"))
     implementation(project(":notification"))
-    implementation(project(":utils"))
+    implementation(project(":core"))
 
     // core
     implementation(libs.androidx.core.ktx)

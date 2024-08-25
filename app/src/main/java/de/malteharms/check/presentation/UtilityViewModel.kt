@@ -30,7 +30,7 @@ class UtilityViewModel: ViewModel() {
             return
         }
 
-        val birthdays: List<Birthday> = CheckApp.appModule.contactsProvider.getContactBirthdays()
+        val birthdays: List<Birthday> = CheckApp.appModule.contactsProvider.getBirthdaysFromContacts()
 
         birthdays.forEach{
             // check, if birthday already exists

@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import de.malteharms.database.tables.ReminderCategory
+import de.malteharms.database.tables.ReminderItem
 import de.malteharms.pages.reminder.data.ReminderState
 import de.malteharms.pages.reminder.domain.ReminderEvent
 import de.malteharms.pages.reminder.presentation.components.bottomsheet.CategoryChoice
@@ -41,7 +43,7 @@ import java.time.LocalDate
 
 @Composable
 fun ReminderBottomSheet(
-    item: de.malteharms.database.tables.ReminderItem?,
+    item: ReminderItem?,
     state: ReminderState,
     onEvent: (ReminderEvent) -> Unit
 ) {
@@ -157,7 +159,6 @@ fun ReminderBottomSheet(
             }
         }
     }
-
 }
 
 
@@ -165,10 +166,10 @@ fun ReminderBottomSheet(
 @Composable
 fun ReminderBottomSheetPreview() {
 
-    val sampleItem = de.malteharms.database.tables.ReminderItem(
+    val sampleItem = ReminderItem(
         id = -1,
         title = "Perso",
-        category = de.malteharms.database.tables.ReminderCategory.GENERAL,
+        category = ReminderCategory.GENERAL,
         todoRelation = null,
         dueDate = DateExt.now(),
         creationDate = DateExt.now(),

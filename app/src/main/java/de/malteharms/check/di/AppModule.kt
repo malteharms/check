@@ -30,7 +30,7 @@ class AppModuleImpl(
     }
 
     override val contactsProvider: ContactsProvider by lazy {
-        ContactsProvider(context)
+        ContactsProvider(context.contentResolver)
     }
 
 }

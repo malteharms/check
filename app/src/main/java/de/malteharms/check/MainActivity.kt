@@ -25,6 +25,7 @@ import de.malteharms.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.presentation.UtilityViewModel
 import de.malteharms.check.presentation.viewModelFactory
 import de.malteharms.notification.data.NotificationHandler
+import de.malteharms.pages.todo.presentation.TodoViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
 
                 val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
                 val utilityViewModel: UtilityViewModel = viewModel<UtilityViewModel>()
-                val todoViewModel: de.malteharms.pages.todo.presentation.TodoViewModel = viewModel<de.malteharms.pages.todo.presentation.TodoViewModel>()
+                val todoViewModel: TodoViewModel = viewModel<TodoViewModel>()
 
                 /*
                 * The ReminderViewModel will provide the state for showing the ReminderPage.

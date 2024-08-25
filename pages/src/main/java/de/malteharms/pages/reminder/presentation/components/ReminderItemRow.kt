@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit
 fun ReminderItemRow(
     onClick: () -> Unit,
     hasNotifications: Boolean,
-    item: de.malteharms.database.tables.ReminderItem
+    item: ReminderItem
 ) {
 
     ItemRow(

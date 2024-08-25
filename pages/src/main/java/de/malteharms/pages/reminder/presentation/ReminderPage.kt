@@ -22,8 +22,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import de.malteharms.database.tables.ReminderItem
+import de.malteharms.pages.R
+import de.malteharms.pages.components.data.Screens
+import de.malteharms.pages.components.data.getBottomNavigationItems
+import de.malteharms.pages.components.presentation.FloatingBottomNavigation
+import de.malteharms.pages.components.presentation.TopBar
 import de.malteharms.pages.reminder.data.ReminderState
 import de.malteharms.pages.reminder.domain.ReminderEvent
 import de.malteharms.pages.reminder.presentation.components.ReminderBottomSheet
@@ -39,36 +46,42 @@ fun ReminderPage(
     onEvent: (ReminderEvent) -> Unit,
     hasNotifications: (Long) -> Boolean,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    // string resources
+    val strReminderTitle = stringResource(R.string.reminder_title)
+    val strAddReminder = stringResource(R.string.add_reminder)
+    val strShowAllReminder = stringResource(R.string.show_all_reminder)
 
-    var currentEditItem: de.malteharms.database.tables.ReminderItem? by remember {
+    // states
+    val sheetState = rememberModalBottomSheetState()
+    var currentEditItem: ReminderItem? by remember {
         mutableStateOf(null)
     }
 
     Scaffold (
-        topBar = { de.malteharms.pages.components.presentation.TopBar(navController, "Reminder") },
+        topBar = { TopBar(navController, strReminderTitle) },
         bottomBar = {
-            de.malteharms.pages.components.presentation.FloatingBottomNavigation(
+            FloatingBottomNavigation(
                 navController,
-                de.malteharms.pages.components.data.getBottomNavigationItems(),
-                "Reminder"
+                getBottomNavigationItems(),
+                currentItem = strReminderTitle
             )
         },
         floatingActionButton = {
             AddButton(
-                text = "Reminder hinzufügen",
+                text = strAddReminder,
                 onClick = { onEvent(ReminderEvent.ShowNewDialog) }
             )
         }
     ){ paddingValues ->
         LazyColumn (
             contentPadding = paddingValues,
-            modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
             items(state.items) { reminderItem ->
-
                 ReminderItemRow(
                     item = reminderItem,
                     hasNotifications = hasNotifications(reminderItem.id),
@@ -85,9 +98,9 @@ fun ReminderPage(
                     contentAlignment = Alignment.Center
                 ) {
                     TextButton(
-                        onClick = { navController.navigate(de.malteharms.pages.components.data.Screens.ReminderDetailsRoute.route) }
+                        onClick = { navController.navigate(Screens.ReminderDetailsRoute.route) }
                     ) {
-                        Text(text = "zeig' mir alle Reminder", color = Color.Gray)
+                        Text(text = strShowAllReminder, color = Color.Gray)
                     }
                 }
             }

@@ -20,12 +20,12 @@ import de.malteharms.pages.reminder.domain.ReminderEvent
 import de.malteharms.pages.reminder.presentation.getCategoryRepresentation
 @Composable
 fun CategoryChoice(
-    item: de.malteharms.database.tables.ReminderItem?,
+    item: ReminderItem?,
     onEvent: (ReminderEvent) -> Unit,
     editable: Boolean
 ) {
     var selectedCategory by remember {
-        mutableStateOf(item?.category ?: de.malteharms.database.tables.ReminderCategory.GENERAL)
+        mutableStateOf(item?.category ?: ReminderCategory.GENERAL)
     }
 
     Row(

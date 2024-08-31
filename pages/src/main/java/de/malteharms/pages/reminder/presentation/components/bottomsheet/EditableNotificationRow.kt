@@ -28,10 +28,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import de.malteharms.pages.R
 import de.malteharms.pages.reminder.data.ReminderState
 import de.malteharms.pages.reminder.domain.ReminderEvent
 import de.malteharms.pages.reminder.presentation.getNotificationIntervalRepresentation
@@ -47,6 +49,12 @@ fun EditableNotificationRow(
     state: ReminderState,
     onEvent: (ReminderEvent) -> Unit
 ) {
+
+    val warnSpecifyDate: String = stringResource(R.string.specify_a_date)
+    val warnOnlyDigits: String = stringResource(R.string.only_digits)
+    val warnDateTodayOrFuture: String = stringResource(R.string.date_is_today_or_in_future)
+
+
     var showNotificationDialog by remember {
         mutableStateOf(false)
     }
@@ -116,7 +124,7 @@ fun EditableNotificationRow(
                 tint = MaterialTheme.colorScheme.onBackground
             ) },
             title = { Text(
-                text = "Benachrichtige mich",
+                text = stringResource(R.string.notify_me),
                 color = MaterialTheme.colorScheme.onBackground
             ) },
             text = {
@@ -137,17 +145,7 @@ fun EditableNotificationRow(
                             maxLines = 1,
                             onValueChange = { newValue ->
                                 value = newValue
-
-                                warning = if (newValue.text.isEmpty()) {
-                                    "Bitte gebe ein Zeitpunkt an"
-                                } else if (!newValue.text.all { it.isDigit() }) {
-                                    "Nur Ziffern sind erlaubt"
-                                } else {
-                                    if (newValue.text.toInt() < 0)
-                                        "Zeitpunkt muss heute oder in der Zukunft liegen"
-                                    else
-                                        ""
-                                }
+                                warning = getWarning(newValue)
                             }
                         )
 
@@ -201,5 +199,17 @@ fun EditableNotificationRow(
             }
         )
     }
+}
 
+private fun getWarning(input: TextFieldValue): String {
+    return if (input.text.isEmpty()) {
+        warnSpecifyDate
+    } else if (!input.text.all { it.isDigit() }) {
+        warnOnlyDigits
+    } else {
+        if (input.text.toInt() < 0)
+            warnDateTodayOrFuture
+        else
+            ""
+    }
 }

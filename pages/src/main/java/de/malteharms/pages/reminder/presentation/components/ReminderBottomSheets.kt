@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.malteharms.database.tables.ReminderCategory
 import de.malteharms.database.tables.ReminderItem
+import de.malteharms.pages.R
 import de.malteharms.pages.reminder.data.ReminderState
 import de.malteharms.pages.reminder.domain.ReminderEvent
 import de.malteharms.pages.reminder.presentation.components.bottomsheet.CategoryChoice
@@ -106,7 +108,10 @@ fun ReminderBottomSheet(
             horizontalArrangement = editableRowArrangement
         ) {
             Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
-            Text(text = formattedDate, color = if (editable) { MaterialTheme.colorScheme.onBackground } else Color.Gray)
+            Text(
+                text = formattedDate,
+                color = if (editable) { MaterialTheme.colorScheme.onBackground } else Color.Gray
+            )
         }
 
         EditableNotificationRow(
@@ -127,7 +132,7 @@ fun ReminderBottomSheet(
                     onClick = { onEvent(ReminderEvent.SaveItem) },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) { Text(
-                    text = "Reminder speichern",
+                    text = stringResource(R.string.save_reminder),
                     color = MaterialTheme.colorScheme.onSecondary
                 ) }
             } else {
@@ -135,7 +140,7 @@ fun ReminderBottomSheet(
                     onClick = { onEvent(ReminderEvent.RemoveItem(item)) },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) { Text(
-                    text = "Reminder löschen",
+                    text = stringResource(R.string.remove_reminder),
                     color = MaterialTheme.colorScheme.onError
                 ) }
             }
@@ -144,15 +149,13 @@ fun ReminderBottomSheet(
         MaterialDialog(
             dialogState = dateDialogState,
             buttons = {
-                positiveButton(text = "Ok")
-                negativeButton(text = "Cancel")
+                positiveButton(text = stringResource(R.string.okay))
+                negativeButton(text = stringResource(R.string.cancel))
             }
         ) {
-            val currentDate = LocalDate.now()
-
             datepicker(
-                initialDate = currentDate,
-                title = "Wähle ein Datum",
+                initialDate = LocalDate.now(),
+                title = stringResource(R.string.choose_a_date),
             ) { newDate: LocalDate ->
                 pickedDate = DateExt(newDate.atStartOfDay())
                 onEvent(ReminderEvent.SetDueDate(pickedDate))

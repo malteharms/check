@@ -7,12 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
+import de.malteharms.database.tables.todo.TodoItem
 import de.malteharms.utils.model.Priority
 import de.malteharms.pages.components.presentation.ItemRow
 
 @Composable
 fun TodoItemRow(
-    item: de.malteharms.database.tables.TodoItem,
+    item: TodoItem,
     hasNotifications: Boolean,
     onClick: () -> Unit
 ) {
@@ -45,7 +46,7 @@ fun TodoItemRow(
 @Composable
 fun TodoItemRowPreview() {
 
-    val item = de.malteharms.database.tables.TodoItem(
+    val item = TodoItem(
         title = "Waschmaschine ausräumen",
         group = 0L,
         priority = Priority.NORMAL

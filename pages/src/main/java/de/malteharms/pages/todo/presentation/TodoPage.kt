@@ -25,10 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import de.malteharms.database.tables.TodoItem
+import de.malteharms.database.tables.todo.TodoItem
+import de.malteharms.pages.components.data.getBottomNavigationItems
+import de.malteharms.pages.components.presentation.FloatingBottomNavigation
+import de.malteharms.pages.components.presentation.TopBar
 import de.malteharms.pages.reminder.presentation.components.bottomsheet.AddButton
 import de.malteharms.pages.todo.data.TodoState
 import de.malteharms.pages.todo.domain.TodoEvent
+import de.malteharms.pages.todo.presentation.components.TodoItemRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -46,11 +50,11 @@ fun Todo(
     }
 
     Scaffold(
-        topBar = { de.malteharms.pages.components.presentation.TopBar(navController, title = "ToDo") },
+        topBar = { TopBar(navController, title = "ToDo") },
         bottomBar = {
-            de.malteharms.pages.components.presentation.FloatingBottomNavigation(
+            FloatingBottomNavigation(
                 navController,
-                de.malteharms.pages.components.data.getBottomNavigationItems(),
+                getBottomNavigationItems(),
                 "ToDo"
             )
         },
@@ -63,12 +67,18 @@ fun Todo(
     ) { paddingValues ->
         LazyColumn (
             contentPadding = paddingValues,
-            modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            items(state.items) { _ ->
-                // todo ItemRow
+            items(state.items) { item ->
+                TodoItemRow(
+                    item = item,
+                    hasNotifications = true,
+                    onClick = {  }
+                )
             }
 
             item {

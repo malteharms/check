@@ -1,10 +1,10 @@
 package de.malteharms.pages.todo.data
 
-import de.malteharms.database.tables.TodoItem
+import de.malteharms.database.tables.todo.TodoItem
 
 data class TodoState(
 
-    val items: List<de.malteharms.database.tables.TodoItem> = emptyList(),
+    val items: List<TodoItem> = emptyList(),
 
     val isAddingItem: Boolean = false,
     val isEditingItem: Boolean = false

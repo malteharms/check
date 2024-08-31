@@ -145,7 +145,16 @@ fun EditableNotificationRow(
                             maxLines = 1,
                             onValueChange = { newValue ->
                                 value = newValue
-                                warning = getWarning(newValue)
+                                warning = if (newValue.text.isEmpty()) {
+                                    warnSpecifyDate
+                                } else if (!newValue.text.all { it.isDigit() }) {
+                                    warnOnlyDigits
+                                } else {
+                                    if (newValue.text.toInt() < 0)
+                                        warnDateTodayOrFuture
+                                    else
+                                        ""
+                                }
                             }
                         )
 
@@ -198,18 +207,5 @@ fun EditableNotificationRow(
                 }
             }
         )
-    }
-}
-
-private fun getWarning(input: TextFieldValue): String {
-    return if (input.text.isEmpty()) {
-        warnSpecifyDate
-    } else if (!input.text.all { it.isDigit() }) {
-        warnOnlyDigits
-    } else {
-        if (input.text.toInt() < 0)
-            warnDateTodayOrFuture
-        else
-            ""
     }
 }

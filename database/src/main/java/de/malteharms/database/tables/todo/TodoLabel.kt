@@ -1,4 +1,4 @@
-package de.malteharms.database.tables
+package de.malteharms.database.tables.todo
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

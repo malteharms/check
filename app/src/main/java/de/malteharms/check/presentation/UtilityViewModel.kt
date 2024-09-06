@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.malteharms.check.CheckApp
 import de.malteharms.database.tables.Birthday
+import de.malteharms.database.tables.reminder.ReminderItem
 import kotlinx.coroutines.launch
 
 class UtilityViewModel: ViewModel() {
@@ -65,7 +66,7 @@ class UtilityViewModel: ViewModel() {
             }
 
             viewModelScope.launch {
-                val linkedReminder: de.malteharms.database.tables.ReminderItem? = dao.getReminderItemForBirthdayId(it.id)
+                val linkedReminder: ReminderItem? = dao.getReminderItemForBirthdayId(it.id)
                 de.malteharms.database.updateReminderItemForBirthday(dao, linkedReminder!!.id, it)
                 Log.i(TAG, "Updated reminder item with ID ${linkedReminder.id} because birthday data changed")
             }

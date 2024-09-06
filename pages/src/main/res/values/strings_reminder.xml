@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- General -->
-    <string name="title">Title</string>
-    <string name="okay">Okay</string>
-    <string name="cancel">Cancel</string>
-    <string name="notify_me">Notify me</string>
-
-    <!-- Page Strings -->
     <string name="reminder_title">Reminder</string>
-    <string name="add_reminder">Add Reminder</string>
-    <string name="show_all_reminder">Show all Reminder</string>
-    <string name="save_reminder">Save Reminder</string>
-    <string name="remove_reminder">Remove Reminder</string>
-    <string name="choose_a_date">Choose a date</string>
-
-    <!-- Warnings in the notification alert -->
-    <string name="specify_a_date">Please specity a date</string>
-    <string name="only_digits">Only digits are allowed</string>
-    <string name="date_is_today_or_in_future">Date must be today or in future</string>
 
 </resources>

@@ -21,9 +21,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import de.malteharms.pages.auth.AuthViewModel
-import de.malteharms.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.check.presentation.UtilityViewModel
-import de.malteharms.check.presentation.viewModelFactory
 import de.malteharms.notification.data.NotificationHandler
 import de.malteharms.pages.todo.presentation.TodoViewModel
 
@@ -48,18 +46,6 @@ class MainActivity : ComponentActivity() {
                 val authViewModel: AuthViewModel = viewModel<AuthViewModel>()
                 val utilityViewModel: UtilityViewModel = viewModel<UtilityViewModel>()
                 val todoViewModel: TodoViewModel = viewModel<TodoViewModel>()
-
-                /*
-                * The ReminderViewModel will provide the state for showing the ReminderPage.
-                * A user has the possibility to load birthdays from contacts. To always stay
-                * up to date, the birthdays will be synced when starting the application
-                */
-                val reminderViewModel: ReminderViewModel = viewModel<ReminderViewModel>(
-                    factory = viewModelFactory { ReminderViewModel(
-                        dao = CheckApp.appModule.db.itemDao(),
-                        notificationScheduler = CheckApp.appModule.notificationScheduler
-                    ) }
-                )
 
                 // TODO #8
                 //  add possibility to ignore birthdays from contacts
@@ -97,7 +83,6 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 authViewModel = authViewModel,
                                 utilityViewModel = utilityViewModel,
-                                reminderViewModel = reminderViewModel,
                                 todoViewModel = todoViewModel
                             )
                         }

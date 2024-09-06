@@ -13,10 +13,6 @@ import de.malteharms.pages.ui.Cash
 import de.malteharms.pages.food.presentation.Food
 import de.malteharms.pages.auth.login.presentation.LoginPage
 import de.malteharms.pages.auth.register.presentation.RegisterPage
-import de.malteharms.pages.reminder.data.ReminderState
-import de.malteharms.pages.reminder.presentation.ReminderDetailsPage
-import de.malteharms.pages.reminder.presentation.ReminderPage
-import de.malteharms.pages.reminder.presentation.ReminderViewModel
 import de.malteharms.pages.todo.presentation.Todo
 import de.malteharms.pages.todo.data.TodoState
 import de.malteharms.pages.todo.presentation.TodoViewModel
@@ -30,12 +26,9 @@ fun Navigation(
     navController: NavHostController,
     authViewModel: AuthViewModel,
     utilityViewModel: UtilityViewModel,
-    reminderViewModel: ReminderViewModel,
     todoViewModel: TodoViewModel,
 ) {
     val authState: AuthState by authViewModel.state.collectAsState()
-
-    val reminderState: ReminderState by reminderViewModel.state.collectAsState()
     val todoState: TodoState by todoViewModel.state.collectAsState()
 
     NavHost(navController = navController, startDestination = NestedRoutes.MainRoute.route) {
@@ -75,24 +68,7 @@ fun Navigation(
                 )
             }
 
-            composable(Screens.ReminderRoute.route) {
-                ReminderPage(
-                    navController = navController,
-                    state = reminderState,
-                    hasNotifications = reminderViewModel::hasNotifications,
-                    onEvent = reminderViewModel::onEvent
-                )
-            }
-
-            composable(Screens.ReminderDetailsRoute.route) {
-                ReminderDetailsPage(
-                    navController = navController,
-                    state = reminderState,
-                    onEvent = reminderViewModel::onEvent,
-                    hasNotifications = reminderViewModel::hasNotifications
-                )
-            }
-
+            composable(Screens.ReminderRoute.route) {}
             composable(Screens.FoodRoute.route) { Food(navController = navController) }
 
         }

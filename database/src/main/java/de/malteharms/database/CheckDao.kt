@@ -5,46 +5,40 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
+import androidx.room.Upsert
 import de.malteharms.database.tables.Birthday
 import de.malteharms.database.tables.NotificationChannel
 import de.malteharms.database.tables.NotificationItem
-import de.malteharms.database.tables.ReminderCategory
-import de.malteharms.database.tables.ReminderItem
+import de.malteharms.database.tables.reminder.ReminderItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CheckDao {
 
-    /* REMINDER ITEM QUERY'S */
+    // BIRTHDAY QUERIES
     @Insert
-    suspend fun insertReminderItem(reminderItem: ReminderItem): Long
+    suspend fun insertBirthday(item: Birthday)
 
-    @Update
-    suspend fun updateReminderItem(reminderItem: ReminderItem)
+    @Query("SELECT * FROM birthdays WHERE id = :birthdayId")
+    fun getBirthday(birthdayId: Long): Birthday?
+
+    // REMINDER QUERIES
+    @Upsert
+    suspend fun upsertReminder(item: ReminderItem): Long
 
     @Delete
-    suspend fun removeReminderItem(reminderItem: ReminderItem)
+    suspend fun removeReminder(item: ReminderItem)
 
-    @Query("SELECT * FROM reminder_items ORDER BY dueDate ASC")
-    fun getAllReminderItems(): Flow<List<ReminderItem>>
+    @Query("DELETE FROM reminders WHERE id = :id")
+    suspend fun removeReminderById(id: Long)
 
-    @Query("SELECT * FROM reminder_items ORDER BY dueDate ASC LIMIT :limit")
-    fun getAllReminderItemsLimited(limit: Int): Flow<List<ReminderItem>>
+    @Query("SELECT * FROM reminders WHERE due > :today ORDER BY due ASC LIMIT :limit")
+    fun getAllReminders(limit: Int?, today: Long): Flow<List<ReminderItem>>
 
-    @Query("SELECT * FROM reminder_items WHERE category IN (:categories) ORDER BY dueDate ASC")
-    fun getFilteredReminderItems(categories: List<ReminderCategory>): Flow<List<de.malteharms.database.tables.ReminderItem>>
+    @Query("SELECT * FROM reminders WHERE id = :reminderId")
+    fun getReminder(reminderId: Long): ReminderItem?
 
-    @Query("SELECT * FROM reminder_items WHERE category IN (:categories) ORDER BY dueDate ASC LIMIT :limit")
-    fun getFilteredReminderItemsLimited(categories: List<ReminderCategory>, limit: Int): Flow<List<de.malteharms.database.tables.ReminderItem>>
-
-    @Query("SELECT * FROM reminder_items WHERE birthdayRelation = :birthdayId LIMIT 1")
-    fun getReminderItemForBirthdayId(birthdayId: Long): ReminderItem?
-
-    @Query("SELECT * FROM reminder_items WHERE id = :reminderId")
-    fun getReminderItemById(reminderId: Long): ReminderItem?
-
-    /* NOTIFICATION QUERY'S */
+    // NOTIFICATION QUERIES
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertNotification(notification: NotificationItem)
 
@@ -55,18 +49,9 @@ interface CheckDao {
     fun getAllNotifications(): List<NotificationItem>
 
     @Query("DELETE FROM notifications WHERE connectedItem = :connectedItemId AND channel = :channel")
-    fun removeNotificationsForConnectedItem(channel: NotificationChannel, connectedItemId: Long)
+    fun removeNotificationsForConnectedItem(connectedItemId: Long)
 
-    @Query("SELECT * FROM notifications WHERE connectedItem = :itemId  AND channel = :channel ORDER BY notificationDate")
-    fun getNotificationsForConnectedItem(channel: NotificationChannel, itemId: Long): List<NotificationItem>
-
-    @Query("SELECT * FROM notifications WHERE notificationDate < :timestamp")
-    fun getOverdueNotifications(timestamp: Long): List<NotificationItem>
-
-    @Insert
-    suspend fun insertBirthday(item: Birthday)
-
-    @Query("SELECT * FROM birthdays WHERE id = :birthdayId")
-    fun getBirthday(birthdayId: Long): Birthday?
+    @Query("SELECT * FROM notifications WHERE connectedItem = :itemId ORDER BY notificationDate")
+    fun getNotificationsForConnectedItem(itemId: Long): List<NotificationItem>
 
 }

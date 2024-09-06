@@ -3,86 +3,91 @@ package de.malteharms.pages.components.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import de.malteharms.pages.components.data.Screens
 
 @Composable
 fun TopBar(
     navController: NavController,
     title: String,
-    showSearchBar: Boolean = true
+    navigateBack: Boolean = false
 ) {
 
     val backgroundColor: Color = MaterialTheme.colorScheme.background
     val onBackGroundColor: Color = MaterialTheme.colorScheme.onBackground
 
-    var search by remember {
-        mutableStateOf("")
-    }
-
     Box (
         modifier = Modifier
             .background(backgroundColor)
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(horizontal = 20.dp, vertical = 10.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(
-                text = title,
-                color = onBackGroundColor,
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                fontWeight = FontWeight.Bold
-            )
 
-            if (showSearchBar) {
-                CustomTextField(
-                    value = search,
-                    onValueChange = { newValue -> search = newValue},
-                    placeholderText = "Search for Todos, Reminder, ...",
-                    trailingIcon = {
-                        IconButton(onClick = {
-                            navController.navigate(Screens.SettingsRoute.route)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Face,
-                                contentDescription = null,
-                                tint = onBackGroundColor
-                            )
-                        }
-                    },
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.large)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(vertical = 3.dp, horizontal = 5.dp)
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+
+            // Icon for navigate back and title of the page
+            Row (verticalAlignment = Alignment.CenterVertically){
+                if (navigateBack) {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = onBackGroundColor
+                        )
+                    }
+                }
+                Text(
+                    text = title,
+                    color = onBackGroundColor,
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.Bold
                 )
             }
 
-            // HorizontalDivider()
-        }
-    }
+            // Profile icon to navigate to the profile and settings screen
+            IconButton(onClick = { navController.navigate(Screens.SettingsRoute.route) }) {
+                Icon(
+                    imageVector = Icons.Filled.Face,
+                    contentDescription = null,
+                    tint = onBackGroundColor
+                )
+            }
 
+        }
+
+        // HorizontalDivider()
+    }
 }
+
+@Preview
+@Composable
+fun AppBarPreview() {
+    TopBar(
+        rememberNavController(),
+        "Home",
+        true
+    )
+}
+

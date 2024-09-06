@@ -8,7 +8,7 @@ import de.malteharms.notification.domain.AlarmScheduler
 import de.malteharms.database.Notificationable
 import de.malteharms.database.tables.NotificationChannel
 import de.malteharms.database.tables.NotificationItem
-import de.malteharms.database.tables.ReminderItem
+import de.malteharms.database.tables.reminder.ReminderItem
 import de.malteharms.utils.logic.timeBetween
 import de.malteharms.utils.model.DateExt
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -97,7 +97,7 @@ class NotificationHandler {
 
         private fun scheduleReminderNotification(
             alarmScheduler: AlarmScheduler,
-            reminderItem: de.malteharms.database.tables.ReminderItem,
+            reminderItem: ReminderItem,
             notificationDate: DateExt,
             notificationId: Int?
         ): de.malteharms.database.tables.NotificationItem? {

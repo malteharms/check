@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import de.malteharms.pages.components.data.NavigationItem
@@ -41,7 +40,6 @@ fun FloatingBottomNavigation(
     val configuration = LocalConfiguration.current
     val screenWidth: Int = configuration.screenWidthDp
     val navigationWith: Double = screenWidth * 0.8
-
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -65,7 +63,8 @@ fun FloatingBottomNavigation(
                     var color: Color = MaterialTheme.colorScheme.onSurface
                     var icon: Int = item.icon
 
-                    if (item.label == currentItem) {
+                    val isActiveItem: Boolean = item.label == currentItem
+                    if (isActiveItem) {
                         color = MaterialTheme.colorScheme.primary
                         icon = item.iconSelected
                     }
@@ -74,6 +73,7 @@ fun FloatingBottomNavigation(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxSize()
+                            .padding(vertical = 15.dp)
                             .clickable(
                                 onClick = {
                                     // navigate to the new selected page
@@ -84,28 +84,17 @@ fun FloatingBottomNavigation(
                             )
                     ) {
 
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                        ) {
+                        Row() {
                             Image(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1.0f)
-                                    .padding(top = 10.dp),
+                                modifier = Modifier.fillMaxSize(),
                                 painter = painterResource(id = icon),
                                 contentDescription = null,
                                 colorFilter = ColorFilter.tint(color),
-                            ) // Image
-
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
-                                text = item.label,
-                                color = color,
-                                textAlign = TextAlign.Center,
-                                fontSize = MaterialTheme.typography.labelMedium.fontSize
                             )
+
+                            if (isActiveItem) {
+                                Text(text = item.label)
+                            }
                         }
 
                     }
@@ -116,12 +105,11 @@ fun FloatingBottomNavigation(
 
         Spacer(modifier = Modifier.height(45.dp))
     }
-
 }
 
 
 @Preview
 @Composable
 fun BottomNavigationPreview() {
-    FloatingBottomNavigation( rememberNavController(), getBottomNavigationItems(), "Home" )
+    FloatingBottomNavigation( rememberNavController(), getBottomNavigationItems(), "Home")
 }
